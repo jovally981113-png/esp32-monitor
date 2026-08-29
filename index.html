@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 
 <head>
@@ -6,9 +7,9 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+   content="width=device-width, initial-scale=1.0">
 
-<title>ESP32 智慧監測平台</title>
+<title>ESP32 智慧環境監測平台</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -27,10 +28,15 @@ body {
         "Microsoft JhengHei",
         sans-serif;
 
-    background: #f1f5f9;
+    background: #eef2f7;
 
     color: #1e293b;
 }
+
+
+/* =====================================
+   頂部
+===================================== */
 
 header {
 
@@ -38,7 +44,7 @@ header {
 
     color: white;
 
-    padding: 25px;
+    padding: 30px 20px;
 
     text-align: center;
 }
@@ -47,15 +53,22 @@ header h1 {
 
     margin: 0;
 
-    font-size: 30px;
+    font-size: 32px;
 }
 
 header p {
 
-    margin-top: 8px;
+    margin: 8px 0 0;
 
     opacity: 0.8;
+
+    font-size: 16px;
 }
+
+
+/* =====================================
+   主要內容
+===================================== */
 
 .container {
 
@@ -66,28 +79,40 @@ header p {
     padding: 25px;
 }
 
+
+/* =====================================
+   系統狀態
+===================================== */
+
 .status {
 
     background: white;
 
-    padding: 15px 20px;
+    border-radius: 15px;
 
-    border-radius: 12px;
+    padding: 18px 22px;
 
     margin-bottom: 20px;
 
     box-shadow:
         0 4px 12px rgba(0,0,0,0.08);
+
+    font-size: 16px;
 }
+
+
+/* =====================================
+   即時數據卡片
+===================================== */
 
 .cards {
 
     display: grid;
 
     grid-template-columns:
-        repeat(auto-fit, minmax(250px, 1fr));
+        repeat(4, 1fr);
 
-    gap: 20px;
+    gap: 18px;
 
     margin-bottom: 20px;
 }
@@ -96,39 +121,51 @@ header p {
 
     background: white;
 
-    padding: 25px;
-
     border-radius: 15px;
+
+    padding: 25px;
 
     box-shadow:
         0 4px 12px rgba(0,0,0,0.08);
+
+    text-align: center;
 }
 
-.card h2 {
+.card-title {
 
-    margin-top: 0;
+    color: #64748b;
 
-    font-size: 18px;
+    font-size: 17px;
+
+    margin-bottom: 12px;
+}
+
+.card-value {
+
+    font-size: 36px;
+
+    font-weight: bold;
+}
+
+.card-unit {
+
+    font-size: 17px;
 
     color: #64748b;
 }
 
-.value {
 
-    font-size: 40px;
-
-    font-weight: bold;
-
-    margin-top: 10px;
-}
+/* =====================================
+   圖表
+===================================== */
 
 .chart-card {
 
     background: white;
 
-    padding: 25px;
-
     border-radius: 15px;
+
+    padding: 25px;
 
     margin-bottom: 20px;
 
@@ -136,136 +173,291 @@ header p {
         0 4px 12px rgba(0,0,0,0.08);
 }
 
-.chart-container {
+.chart-card h2 {
 
-    height: 350px;
+    margin-top: 0;
+
+    font-size: 21px;
 }
 
-.stats {
+.chart-container {
+
+    position: relative;
+
+    height: 330px;
+}
+
+
+/* =====================================
+   統計
+===================================== */
+
+.stats-title {
+
+    margin-top: 0;
+
+    margin-bottom: 20px;
+}
+
+.stats-grid {
 
     display: grid;
 
     grid-template-columns:
-        repeat(auto-fit, minmax(180px, 1fr));
+        repeat(4, 1fr);
 
     gap: 15px;
 }
 
-.stat {
+.stat-box {
 
     background: #f8fafc;
 
-    padding: 20px;
+    border-radius: 12px;
 
-    border-radius: 10px;
+    padding: 20px;
 
     text-align: center;
 }
 
-.stat-title {
+.stat-box h3 {
+
+    margin: 0 0 15px;
+
+    font-size: 18px;
+}
+
+.stat-row {
+
+    margin: 8px 0;
+
+    color: #475569;
+}
+
+.stat-number {
+
+    font-weight: bold;
+
+    color: #0f172a;
+}
+
+
+/* =====================================
+   手機版
+===================================== */
+
+@media (max-width: 900px) {
+
+    .cards {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+    .stats-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .cards {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .stats-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    header h1 {
+
+        font-size: 25px;
+
+    }
+
+    .container {
+
+        padding: 15px;
+
+    }
+
+}
+
+
+/* =====================================
+   頁尾
+===================================== */
+
+footer {
+
+    text-align: center;
+
+    padding: 25px;
 
     color: #64748b;
 
-    margin-bottom: 8px;
-}
-
-.stat-value {
-
-    font-size: 24px;
-
-    font-weight: bold;
+    font-size: 14px;
 }
 
 </style>
 
 </head>
 
-
 <body>
 
+<!-- ==================================
+     網站標題
+================================== -->
 
 <header>
 
 <h1>ESP32 智慧環境監測平台</h1>
 
-<p>IoT Environmental Monitoring System</p>
+<p>
+IoT Environmental Monitoring System
+</p>
 
 </header>
 
-
 <div class="container">
 
+<!-- ==================================
+     系統狀態
+================================== -->
 
 <div class="status">
 
-    🟢 系統狀態：
+```
+🟢 系統狀態：
 
-    <strong id="status">
-        正在讀取資料...
-    </strong>
+<strong id="status">
+    正在連線...
+</strong>
+
+<br><br>
+
+🕒 最後更新：
+
+<strong id="updateTime">
+    --
+</strong>
+```
 
 </div>
 
+<!-- ==================================
+     四個即時數據
+================================== -->
 
 <div class="cards">
 
+<!-- 溫度 -->
 
 <div class="card">
 
-<h2>🌡️ 目前溫度</h2>
+<div class="card-title">
+🌡️ 溫度
+</div>
 
-<div class="value">
+<div class="card-value">
 
 <span id="temperature">
-    --
+--
 </span>
 
+</div>
+
+<div class="card-unit">
 °C
-
 </div>
 
 </div>
 
+<!-- 濕度 -->
 
 <div class="card">
 
-<h2>💧 目前濕度</h2>
+<div class="card-title">
+💧 濕度
+</div>
 
-<div class="value">
+<div class="card-value">
 
 <span id="humidity">
-    --
+--
 </span>
 
+</div>
+
+<div class="card-unit">
 %
-
 </div>
 
 </div>
 
+<!-- 光照 -->
 
 <div class="card">
 
-<h2>🕒 最後更新</h2>
+<div class="card-title">
+☀️ 光照
+</div>
 
-<div class="value"
-     style="font-size:22px">
+<div class="card-value">
 
-<span id="updateTime">
-    --
+<span id="light">
+--
 </span>
 
 </div>
 
+<div class="card-unit">
+Lux
 </div>
 
+</div>
+
+<!-- CO2 -->
+
+<div class="card">
+
+<div class="card-title">
+🌫️ CO₂ 濃度
+</div>
+
+<div class="card-value">
+
+<span id="co2">
+--
+</span>
 
 </div>
 
+<div class="card-unit">
+ppm
+</div>
+
+</div>
+
+</div>
+
+<!-- ==================================
+     溫度圖表
+================================== -->
 
 <div class="chart-card">
 
-<h2>📈 溫度變化</h2>
+<h2>🌡️ 溫度變化</h2>
 
 <div class="chart-container">
 
@@ -275,10 +467,13 @@ header p {
 
 </div>
 
+<!-- ==================================
+     濕度圖表
+================================== -->
 
 <div class="chart-card">
 
-<h2>📈 濕度變化</h2>
+<h2>💧 濕度變化</h2>
 
 <div class="chart-container">
 
@@ -288,154 +483,300 @@ header p {
 
 </div>
 
+<!-- ==================================
+     光照圖表
+================================== -->
 
 <div class="chart-card">
 
-<h2>📊 數據統計</h2>
+<h2>☀️ 光照變化</h2>
 
-<div class="stats">
+<div class="chart-container">
 
-
-<div class="stat">
-
-<div class="stat-title">
-溫度最大值
-</div>
-
-<div class="stat-value"
-     id="tempMax">
---
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-title">
-溫度最小值
-</div>
-
-<div class="stat-value"
-     id="tempMin">
---
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-title">
-溫度平均值
-</div>
-
-<div class="stat-value"
-     id="tempAvg">
---
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-title">
-濕度最大值
-</div>
-
-<div class="stat-value"
-     id="humMax">
---
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-title">
-濕度最小值
-</div>
-
-<div class="stat-value"
-     id="humMin">
---
-</div>
-
-</div>
-
-
-<div class="stat">
-
-<div class="stat-title">
-濕度平均值
-</div>
-
-<div class="stat-value"
-     id="humAvg">
---
-</div>
-
-</div>
-
+<canvas id="lightChart"></canvas>
 
 </div>
 
 </div>
 
+<!-- ==================================
+     CO2圖表
+================================== -->
+
+<div class="chart-card">
+
+<h2>🌫️ CO₂ 濃度變化</h2>
+
+<div class="chart-container">
+
+<canvas id="co2Chart"></canvas>
 
 </div>
 
+</div>
+
+<!-- ==================================
+     統計資料
+================================== -->
+
+<div class="chart-card">
+
+<h2 class="stats-title">
+📊 數據統計
+</h2>
+
+<div class="stats-grid">
+
+<!-- 溫度統計 -->
+
+<div class="stat-box">
+
+<h3>🌡️ 溫度</h3>
+
+<div class="stat-row">
+
+最高： <span
+class="stat-number"
+id="tempMax">
+-------------
+
+</span>
+
+</div>
+
+<div class="stat-row">
+
+最低： <span
+class="stat-number"
+id="tempMin">
+-------------
+
+</span>
+
+</div>
+
+<div class="stat-row">
+
+平均： <span
+class="stat-number"
+id="tempAvg">
+-------------
+
+</span>
+
+</div>
+
+</div>
+
+<!-- 濕度統計 -->
+
+<div class="stat-box">
+
+<h3>💧 濕度</h3>
+
+<div class="stat-row">
+
+最高： <span
+class="stat-number"
+id="humMax">
+------------
+
+</span>
+
+</div>
+
+<div class="stat-row">
+
+最低： <span
+class="stat-number"
+id="humMin">
+------------
+
+</span>
+
+</div>
+
+<div class="stat-row">
+
+平均： <span
+class="stat-number"
+id="humAvg">
+------------
+
+</span>
+
+</div>
+
+</div>
+
+<!-- 光照統計 -->
+
+<div class="stat-box">
+
+<h3>☀️ 光照</h3>
+
+<div class="stat-row">
+
+最高： <span
+class="stat-number"
+id="lightMax">
+--------------
+
+</span>
+
+</div>
+
+<div class="stat-row">
+
+最低： <span
+class="stat-number"
+id="lightMin">
+--------------
+
+</span>
+
+</div>
+
+<div class="stat-row">
+
+平均： <span
+class="stat-number"
+id="lightAvg">
+--------------
+
+</span>
+
+</div>
+
+</div>
+
+<!-- CO2統計 -->
+
+<div class="stat-box">
+
+<h3>🌫️ CO₂</h3>
+
+<div class="stat-row">
+
+最高： <span
+class="stat-number"
+id="co2Max">
+------------
+
+</span>
+
+</div>
+
+<div class="stat-row">
+
+最低： <span
+class="stat-number"
+id="co2Min">
+------------
+
+</span>
+
+</div>
+
+<div class="stat-row">
+
+平均： <span
+class="stat-number"
+id="co2Avg">
+------------
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+
+ESP32 IoT Environmental Monitoring Platform
+
+</footer>
 
 <script>
 
 
-// =====================================
+// =====================================================
 // ThingSpeak 設定
-// =====================================
+// =====================================================
 
-// ★★★★★
-// 把這裡改成你的 Channel ID
-// ★★★★★
+// ★★★★★★★★★★★★★★★★★★★★★★★★★★★
+// 把下面的數字改成你的 ThingSpeak Channel ID
+// ★★★★★★★★★★★★★★★★★★★★★★★★★★★
 
 const CHANNEL_ID = "3474112";
 
 
-// 如果你的 Channel 是 Public
-// 可以先不用 Read API Key
-
-const READ_API_KEY = "";
-
-
-// =====================================
+// =====================================================
 // ThingSpeak API
-// =====================================
+// =====================================================
 
 const API_URL =
 `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?results=20`;
 
 
-// =====================================
-// 圖表
-// =====================================
+// =====================================================
+// 圖表變數
+// =====================================================
 
 let temperatureChart;
 
 let humidityChart;
 
+let lightChart;
 
-// =====================================
-// 讀取資料
-// =====================================
+let co2Chart;
+
+
+// =====================================================
+// 計算平均值
+// =====================================================
+
+function average(array) {
+
+    if (array.length === 0) {
+
+        return 0;
+
+    }
+
+    const sum =
+        array.reduce(
+            (a, b) => a + b,
+            0
+        );
+
+    return sum / array.length;
+}
+
+
+// =====================================================
+// 讀取 ThingSpeak
+// =====================================================
 
 async function getData() {
 
     try {
 
-        document.getElementById("status")
-            .textContent = "正在取得資料...";
+        document.getElementById(
+            "status"
+        ).textContent =
+            "正在取得 ThingSpeak 資料...";
 
+
+        // ---------------------------------------------
+        // 取得資料
+        // ---------------------------------------------
 
         const response =
             await fetch(API_URL);
@@ -444,7 +785,7 @@ async function getData() {
         if (!response.ok) {
 
             throw new Error(
-                "無法取得 ThingSpeak 資料"
+                "ThingSpeak 連線失敗"
             );
 
         }
@@ -453,6 +794,10 @@ async function getData() {
         const data =
             await response.json();
 
+
+        // ---------------------------------------------
+        // 確認資料
+        // ---------------------------------------------
 
         if (
             !data.feeds ||
@@ -466,67 +811,170 @@ async function getData() {
         }
 
 
-        // =================================
-        // 資料處理
-        // =================================
-
         const feeds =
             data.feeds;
 
 
+        // =================================================
+        // 時間
+        // =================================================
+
         const labels =
             feeds.map(
+
                 item =>
-                new Date(item.created_at)
-                .toLocaleTimeString()
+
+                new Date(
+                    item.created_at
+                ).toLocaleTimeString()
+
             );
 
+
+        // =================================================
+        // Field 1 → 溫度
+        // =================================================
 
         const temperatures =
-            feeds.map(
+            feeds
+
+            .map(
                 item =>
                 Number(item.field1)
+            )
+
+            .filter(
+                value =>
+                !isNaN(value)
             );
 
+
+        // =================================================
+        // Field 2 → 濕度
+        // =================================================
 
         const humidities =
-            feeds.map(
+            feeds
+
+            .map(
                 item =>
                 Number(item.field2)
+            )
+
+            .filter(
+                value =>
+                !isNaN(value)
             );
 
 
-        // =================================
+        // =================================================
+        // Field 3 → 光照
+        // =================================================
+
+        const lights =
+            feeds
+
+            .map(
+                item =>
+                Number(item.field3)
+            )
+
+            .filter(
+                value =>
+                !isNaN(value)
+            );
+
+
+        // =================================================
+        // Field 4 → CO2
+        // =================================================
+
+        const co2Values =
+            feeds
+
+            .map(
+                item =>
+                Number(item.field4)
+            )
+
+            .filter(
+                value =>
+                !isNaN(value)
+            );
+
+
+        // =================================================
         // 最新資料
-        // =================================
+        // =================================================
 
         const latest =
             feeds[feeds.length - 1];
 
 
-        const latestTemperature =
-            Number(latest.field1);
+        // 溫度
+
+        if (latest.field1 !== null) {
+
+            document.getElementById(
+                "temperature"
+            ).textContent =
+                Number(
+                    latest.field1
+                ).toFixed(1);
+
+        }
 
 
-        const latestHumidity =
-            Number(latest.field2);
+        // 濕度
+
+        if (latest.field2 !== null) {
+
+            document.getElementById(
+                "humidity"
+            ).textContent =
+                Number(
+                    latest.field2
+                ).toFixed(1);
+
+        }
 
 
-        document.getElementById(
-            "temperature"
-        ).textContent =
-            latestTemperature.toFixed(1);
+        // 光照
+
+        if (latest.field3 !== null) {
+
+            document.getElementById(
+                "light"
+            ).textContent =
+                Number(
+                    latest.field3
+                ).toFixed(0);
+
+        }
 
 
-        document.getElementById(
-            "humidity"
-        ).textContent =
-            latestHumidity.toFixed(1);
+        // CO2
 
+        if (latest.field4 !== null) {
+
+            document.getElementById(
+                "co2"
+            ).textContent =
+                Number(
+                    latest.field4
+                ).toFixed(0);
+
+        }
+
+
+        // =================================================
+        // 最後更新時間
+        // =================================================
 
         document.getElementById(
             "updateTime"
         ).textContent =
+
             new Date(
                 latest.created_at
             ).toLocaleString();
@@ -538,88 +986,157 @@ async function getData() {
             "資料連線正常";
 
 
-        // =================================
-        // 統計
-        // =================================
+        // =================================================
+        // 溫度統計
+        // =================================================
 
-        const tempMax =
-            Math.max(...temperatures);
+        if (temperatures.length > 0) {
 
-
-        const tempMin =
-            Math.min(...temperatures);
-
-
-        const tempAvg =
-            temperatures.reduce(
-                (a,b) => a+b,
-                0
-            ) / temperatures.length;
+            document.getElementById(
+                "tempMax"
+            ).textContent =
+                Math.max(
+                    ...temperatures
+                ).toFixed(1)
+                + " °C";
 
 
-        const humMax =
-            Math.max(...humidities);
+            document.getElementById(
+                "tempMin"
+            ).textContent =
+                Math.min(
+                    ...temperatures
+                ).toFixed(1)
+                + " °C";
 
 
-        const humMin =
-            Math.min(...humidities);
+            document.getElementById(
+                "tempAvg"
+            ).textContent =
+                average(
+                    temperatures
+                ).toFixed(1)
+                + " °C";
+
+        }
 
 
-        const humAvg =
-            humidities.reduce(
-                (a,b) => a+b,
-                0
-            ) / humidities.length;
+        // =================================================
+        // 濕度統計
+        // =================================================
+
+        if (humidities.length > 0) {
+
+            document.getElementById(
+                "humMax"
+            ).textContent =
+                Math.max(
+                    ...humidities
+                ).toFixed(1)
+                + " %";
 
 
-        document.getElementById(
-            "tempMax"
-        ).textContent =
-            tempMax.toFixed(1) + " °C";
+            document.getElementById(
+                "humMin"
+            ).textContent =
+                Math.min(
+                    ...humidities
+                ).toFixed(1)
+                + " %";
 
 
-        document.getElementById(
-            "tempMin"
-        ).textContent =
-            tempMin.toFixed(1) + " °C";
+            document.getElementById(
+                "humAvg"
+            ).textContent =
+                average(
+                    humidities
+                ).toFixed(1)
+                + " %";
+
+        }
 
 
-        document.getElementById(
-            "tempAvg"
-        ).textContent =
-            tempAvg.toFixed(1) + " °C";
+        // =================================================
+        // 光照統計
+        // =================================================
+
+        if (lights.length > 0) {
+
+            document.getElementById(
+                "lightMax"
+            ).textContent =
+                Math.max(
+                    ...lights
+                ).toFixed(0)
+                + " Lux";
 
 
-        document.getElementById(
-            "humMax"
-        ).textContent =
-            humMax.toFixed(1) + " %";
+            document.getElementById(
+                "lightMin"
+            ).textContent =
+                Math.min(
+                    ...lights
+                ).toFixed(0)
+                + " Lux";
 
 
-        document.getElementById(
-            "humMin"
-        ).textContent =
-            humMin.toFixed(1) + " %";
+            document.getElementById(
+                "lightAvg"
+            ).textContent =
+                average(
+                    lights
+                ).toFixed(0)
+                + " Lux";
+
+        }
 
 
-        document.getElementById(
-            "humAvg"
-        ).textContent =
-            humAvg.toFixed(1) + " %";
+        // =================================================
+        // CO2 統計
+        // =================================================
+
+        if (co2Values.length > 0) {
+
+            document.getElementById(
+                "co2Max"
+            ).textContent =
+                Math.max(
+                    ...co2Values
+                ).toFixed(0)
+                + " ppm";
 
 
-        // =================================
+            document.getElementById(
+                "co2Min"
+            ).textContent =
+                Math.min(
+                    ...co2Values
+                ).toFixed(0)
+                + " ppm";
+
+
+            document.getElementById(
+                "co2Avg"
+            ).textContent =
+                average(
+                    co2Values
+                ).toFixed(0)
+                + " ppm";
+
+        }
+
+
+        // =================================================
         // 更新圖表
-        // =================================
+        // =================================================
 
         updateCharts(
             labels,
-            temperatures,
-            humidities
+            feeds
         );
 
 
-    } catch(error) {
+    } catch (error) {
 
         console.error(error);
 
@@ -629,26 +1146,35 @@ async function getData() {
         ).textContent =
             "資料讀取失敗";
 
-
     }
 
 }
 
 
-// =====================================
-// 圖表函式
-// =====================================
+// =====================================================
+// 建立 / 更新圖表
+// =====================================================
 
 function updateCharts(
     labels,
-    temperatures,
-    humidities
+    feeds
 ) {
 
 
-    // =================================
-    // 溫度圖
-    // =================================
+    // =================================================
+    // 溫度
+    // =================================================
+
+    const temperatures =
+        feeds.map(
+
+            item =>
+            item.field1 === null
+            ? null
+            : Number(item.field1)
+
+        );
+
 
     if (temperatureChart) {
 
@@ -694,8 +1220,23 @@ function updateCharts(
 
                     responsive: true,
 
-                    maintainAspectRatio:
-                        false
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+
+                            title: {
+
+                                display: true,
+
+                                text: "°C"
+
+                            }
+
+                        }
+
+                    }
 
                 }
 
@@ -704,9 +1245,20 @@ function updateCharts(
         );
 
 
-    // =================================
-    // 濕度圖
-    // =================================
+    // =================================================
+    // 濕度
+    // =================================================
+
+    const humidities =
+        feeds.map(
+
+            item =>
+            item.field2 === null
+            ? null
+            : Number(item.field2)
+
+        );
+
 
     if (humidityChart) {
 
@@ -752,8 +1304,191 @@ function updateCharts(
 
                     responsive: true,
 
-                    maintainAspectRatio:
-                        false
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+
+                            title: {
+
+                                display: true,
+
+                                text: "%"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+
+    // =================================================
+    // 光照
+    // =================================================
+
+    const lights =
+        feeds.map(
+
+            item =>
+            item.field3 === null
+            ? null
+            : Number(item.field3)
+
+        );
+
+
+    if (lightChart) {
+
+        lightChart.destroy();
+
+    }
+
+
+    lightChart =
+        new Chart(
+
+            document.getElementById(
+                "lightChart"
+            ),
+
+            {
+
+                type: "line",
+
+                data: {
+
+                    labels: labels,
+
+                    datasets: [{
+
+                        label:
+                            "Light Lux",
+
+                        data:
+                            lights,
+
+                        borderWidth: 2,
+
+                        tension: 0.3,
+
+                        fill: false
+
+                    }]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+
+                            title: {
+
+                                display: true,
+
+                                text: "Lux"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        );
+
+
+    // =================================================
+    // CO2
+    // =================================================
+
+    const co2 =
+        feeds.map(
+
+            item =>
+            item.field4 === null
+            ? null
+            : Number(item.field4)
+
+        );
+
+
+    if (co2Chart) {
+
+        co2Chart.destroy();
+
+    }
+
+
+    co2Chart =
+        new Chart(
+
+            document.getElementById(
+                "co2Chart"
+            ),
+
+            {
+
+                type: "line",
+
+                data: {
+
+                    labels: labels,
+
+                    datasets: [{
+
+                        label:
+                            "CO2 ppm",
+
+                        data:
+                            co2,
+
+                        borderWidth: 2,
+
+                        tension: 0.3,
+
+                        fill: false
+
+                    }]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+
+                            title: {
+
+                                display: true,
+
+                                text: "ppm"
+
+                            }
+
+                        }
+
+                    }
 
                 }
 
@@ -764,16 +1499,16 @@ function updateCharts(
 }
 
 
-// =====================================
+// =====================================================
 // 第一次讀取
-// =====================================
+// =====================================================
 
 getData();
 
 
-// =====================================
-// 每 15 秒更新一次
-// =====================================
+// =====================================================
+// 每 15 秒自動更新
+// =====================================================
 
 setInterval(
     getData,
@@ -782,7 +1517,6 @@ setInterval(
 
 
 </script>
-
 
 </body>
 
