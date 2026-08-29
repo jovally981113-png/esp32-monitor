@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 
@@ -38,9 +39,10 @@ body {
         Arial,
         sans-serif;
 
-    background: #edf2f7;
+    /* ★ 網站底色：青綠色 */
+    background: #dff5ef;
 
-    color: #172033;
+    color: #173b36;
 }
 
 
@@ -70,7 +72,8 @@ body {
 
     flex-shrink: 0;
 
-    background: #0d172b;
+    /* ★ 深青綠色標題 */
+    background: #087f6f;
 
     color: white;
 
@@ -81,6 +84,9 @@ body {
     justify-content: space-between;
 
     padding: 0 32px;
+
+    box-shadow:
+        0 3px 10px rgba(0, 80, 70, 0.18);
 
 }
 
@@ -103,7 +109,7 @@ body {
 
     font-size: 13px;
 
-    color: #b9c5d8;
+    color: #cceee8;
 
 }
 
@@ -118,13 +124,13 @@ body {
 
     line-height: 22px;
 
-    color: #cbd5e1;
+    color: #d9f5ef;
 
 }
 
 .status-ok {
 
-    color: #4ade80;
+    color: #a7f3d0;
 
     font-weight: bold;
 
@@ -198,7 +204,10 @@ body {
     justify-content: center;
 
     box-shadow:
-        0 3px 12px rgba(15, 23, 42, 0.08);
+        0 3px 12px rgba(0, 100, 85, 0.10);
+
+    border-left:
+        5px solid #18a999;
 
     cursor: pointer;
 
@@ -216,10 +225,12 @@ body {
     transform: translateY(-3px);
 
     box-shadow:
-        0 7px 18px rgba(15, 23, 42, 0.14);
+        0 7px 18px rgba(0, 100, 85, 0.18);
 
 }
 
+
+/* 圖示 */
 
 .sensor-icon {
 
@@ -230,14 +241,18 @@ body {
 }
 
 
+/* 名稱 */
+
 .sensor-name {
 
     font-size: 15px;
 
-    color: #64748b;
+    color: #5f7f78;
 
 }
 
+
+/* 數值 */
 
 .sensor-value {
 
@@ -247,14 +262,18 @@ body {
 
     margin-top: 4px;
 
+    color: #087f6f;
+
 }
 
+
+/* 單位 */
 
 .sensor-unit {
 
     font-size: 12px;
 
-    color: #94a3b8;
+    color: #8ba9a3;
 
     margin-top: 2px;
 
@@ -301,7 +320,7 @@ body {
     padding: 13px 15px;
 
     box-shadow:
-        0 3px 12px rgba(15, 23, 42, 0.08);
+        0 3px 12px rgba(0, 100, 85, 0.10);
 
     display: flex;
 
@@ -325,6 +344,8 @@ body {
     display: flex;
 
     align-items: center;
+
+    color: #174f47;
 
 }
 
@@ -359,7 +380,7 @@ body {
     padding: 16px;
 
     box-shadow:
-        0 3px 12px rgba(15, 23, 42, 0.08);
+        0 3px 12px rgba(0, 100, 85, 0.10);
 
     display: flex;
 
@@ -377,6 +398,8 @@ body {
     font-weight: bold;
 
     margin-bottom: 12px;
+
+    color: #087f6f;
 
 }
 
@@ -407,9 +430,9 @@ body {
 
     padding: 7px 3px;
 
-    background: #e5ebf3;
+    background: #d8eee9;
 
-    color: #334155;
+    color: #24564f;
 
     cursor: pointer;
 
@@ -422,14 +445,16 @@ body {
 
 .data-selector button:hover {
 
-    background: #d5deea;
+    background: #bfe4dc;
 
 }
 
 
+/* ★ 選中的按鈕 */
+
 .data-selector button.active {
 
-    background: #101a30;
+    background: #087f6f;
 
     color: white;
 
@@ -445,7 +470,7 @@ body {
     padding: 9px 0;
 
     border-top:
-        1px solid #e5eaf1;
+        1px solid #dceeea;
 
 }
 
@@ -457,6 +482,8 @@ body {
     font-weight: bold;
 
     margin-bottom: 5px;
+
+    color: #24564f;
 
 }
 
@@ -473,7 +500,7 @@ body {
 
     font-size: 13px;
 
-    color: #64748b;
+    color: #66837d;
 
 }
 
@@ -482,7 +509,7 @@ body {
 
     font-weight: bold;
 
-    color: #172033;
+    color: #087f6f;
 
 }
 
@@ -501,7 +528,7 @@ body {
 
     font-size: 10px;
 
-    color: #94a3b8;
+    color: #65938a;
 
 }
 
@@ -622,7 +649,6 @@ body {
 
 <header class="header">
 
-
     <div class="title-area">
 
         <h1>
@@ -659,7 +685,6 @@ body {
         </span>
 
     </div>
-
 
 </header>
 
@@ -879,8 +904,6 @@ body {
     </div>
 
 
-    <!-- 資料筆數 -->
-
     <div class="data-selector">
 
         <button
@@ -913,9 +936,7 @@ body {
     </div>
 
 
-    <!-- =================================================
-         溫度
-    ================================================== -->
+    <!-- 溫度 -->
 
     <div class="stat-section">
 
@@ -968,9 +989,7 @@ body {
     </div>
 
 
-    <!-- =================================================
-         濕度
-    ================================================== -->
+    <!-- 濕度 -->
 
     <div class="stat-section">
 
@@ -1023,9 +1042,7 @@ body {
     </div>
 
 
-    <!-- =================================================
-         光照
-    ================================================== -->
+    <!-- 光照 -->
 
     <div class="stat-section">
 
@@ -1078,9 +1095,7 @@ body {
     </div>
 
 
-    <!-- =================================================
-         CO2
-    ================================================== -->
+    <!-- CO2 -->
 
     <div class="stat-section">
 
@@ -1139,10 +1154,6 @@ body {
 </main>
 
 
-<!-- =====================================================
-     頁尾
-===================================================== -->
-
 <footer class="footer">
 
     ESP32 IoT Environmental Monitoring Platform
@@ -1155,19 +1166,10 @@ body {
 
 <script>
 
+
 /* =====================================================
    ★★★ ThingSpeak 設定 ★★★
 ===================================================== */
-
-
-/*
-   把下面的「你的Channel_ID」
-   改成你的 ThingSpeak Channel ID
-
-   例如：
-
-   const CHANNEL_ID = "1234567";
-*/
 
 const CHANNEL_ID = "3474112";
 
@@ -1184,11 +1186,8 @@ let resultCount = 20;
 ===================================================== */
 
 let temperatureChart = null;
-
 let humidityChart = null;
-
 let lightChart = null;
-
 let co2Chart = null;
 
 
@@ -1249,35 +1248,14 @@ function updateStatistics(
 
     }
 
+    document.getElementById(maxID).textContent =
+        Math.max(...values).toFixed(decimals) + unit;
 
-    document.getElementById(
-        maxID
-    ).textContent =
+    document.getElementById(minID).textContent =
+        Math.min(...values).toFixed(decimals) + unit;
 
-        Math.max(
-            ...values
-        ).toFixed(decimals)
-        + unit;
-
-
-    document.getElementById(
-        minID
-    ).textContent =
-
-        Math.min(
-            ...values
-        ).toFixed(decimals)
-        + unit;
-
-
-    document.getElementById(
-        avgID
-    ).textContent =
-
-        getAverage(
-            values
-        ).toFixed(decimals)
-        + unit;
+    document.getElementById(avgID).textContent =
+        getAverage(values).toFixed(decimals) + unit;
 
 }
 
@@ -1290,28 +1268,17 @@ function changeResults(count) {
 
     resultCount = count;
 
+    document
+        .querySelectorAll(".data-selector button")
+        .forEach(button => {
+
+            button.classList.remove("active");
+
+        });
 
     document
-        .querySelectorAll(
-            ".data-selector button"
-        )
-        .forEach(
-            button => {
-
-                button.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-
-    document.getElementById(
-        "btn" + count
-    ).classList.add(
-        "active"
-    );
-
+        .getElementById("btn" + count)
+        .classList.add("active");
 
     loadData();
 
@@ -1326,17 +1293,12 @@ async function loadData() {
 
     try {
 
-
-        document.getElementById(
-            "status"
-        ).textContent =
+        document.getElementById("status").textContent =
             "讀取中...";
 
 
         const response =
-            await fetch(
-                getAPI()
-            );
+            await fetch(getAPI());
 
 
         if (!response.ok) {
@@ -1368,158 +1330,94 @@ async function loadData() {
             data.feeds;
 
 
-        /* =================================================
-           最新資料
-        ================================================= */
+        /* 最新資料 */
 
         const latest =
-            feeds[
-                feeds.length - 1
-            ];
+            feeds[feeds.length - 1];
 
 
-        /* =================================================
-           溫度
-        ================================================= */
+        /* 溫度 */
 
-        if (
-            latest.field1 !== null
-        ) {
+        if (latest.field1 !== null) {
 
-            document.getElementById(
-                "temperature"
-            ).textContent =
-                Number(
-                    latest.field1
-                ).toFixed(1);
+            document.getElementById("temperature")
+                .textContent =
+                Number(latest.field1).toFixed(1);
 
         }
 
 
-        /* =================================================
-           濕度
-        ================================================= */
+        /* 濕度 */
 
-        if (
-            latest.field2 !== null
-        ) {
+        if (latest.field2 !== null) {
 
-            document.getElementById(
-                "humidity"
-            ).textContent =
-                Number(
-                    latest.field2
-                ).toFixed(1);
+            document.getElementById("humidity")
+                .textContent =
+                Number(latest.field2).toFixed(1);
 
         }
 
 
-        /* =================================================
-           光照
-        ================================================= */
+        /* 光照 */
 
-        if (
-            latest.field3 !== null
-        ) {
+        if (latest.field3 !== null) {
 
-            document.getElementById(
-                "light"
-            ).textContent =
-                Number(
-                    latest.field3
-                ).toFixed(0);
+            document.getElementById("light")
+                .textContent =
+                Number(latest.field3).toFixed(0);
 
         }
 
 
-        /* =================================================
-           CO2
-        ================================================= */
+        /* CO2 */
 
-        if (
-            latest.field4 !== null
-        ) {
+        if (latest.field4 !== null) {
 
-            document.getElementById(
-                "co2"
-            ).textContent =
-                Number(
-                    latest.field4
-                ).toFixed(0);
+            document.getElementById("co2")
+                .textContent =
+                Number(latest.field4).toFixed(0);
 
         }
 
 
-        /* =================================================
-           更新時間
-        ================================================= */
+        /* 更新時間 */
 
-        document.getElementById(
-            "updateTime"
-        ).textContent =
-
+        document.getElementById("updateTime")
+            .textContent =
             new Date(
                 latest.created_at
-            ).toLocaleTimeString(
-                "zh-TW"
-            );
+            ).toLocaleTimeString("zh-TW");
 
 
         /* =================================================
-           取得統計資料
+           統計資料
         ================================================= */
 
         const temperatures =
             feeds
-                .map(
-                    item =>
-                        Number(item.field1)
-                )
-                .filter(
-                    value =>
-                        !isNaN(value)
-                );
+                .map(item => Number(item.field1))
+                .filter(value => !isNaN(value));
 
 
         const humidities =
             feeds
-                .map(
-                    item =>
-                        Number(item.field2)
-                )
-                .filter(
-                    value =>
-                        !isNaN(value)
-                );
+                .map(item => Number(item.field2))
+                .filter(value => !isNaN(value));
 
 
         const lights =
             feeds
-                .map(
-                    item =>
-                        Number(item.field3)
-                )
-                .filter(
-                    value =>
-                        !isNaN(value)
-                );
+                .map(item => Number(item.field3))
+                .filter(value => !isNaN(value));
 
 
         const co2Values =
             feeds
-                .map(
-                    item =>
-                        Number(item.field4)
-                )
-                .filter(
-                    value =>
-                        !isNaN(value)
-                );
+                .map(item => Number(item.field4))
+                .filter(value => !isNaN(value));
 
 
-        /* =================================================
-           統計
-        ================================================= */
+        /* 統計 */
 
         updateStatistics(
             temperatures,
@@ -1561,34 +1459,25 @@ async function loadData() {
         );
 
 
-        /* =================================================
-           時間標籤
-        ================================================= */
+        /* 時間標籤 */
 
         const labels =
-            feeds.map(
-                item => {
+            feeds.map(item => {
 
-                    return new Date(
-                        item.created_at
-                    ).toLocaleTimeString(
-                        "zh-TW",
-                        {
-                            hour:
-                                "2-digit",
+                return new Date(
+                    item.created_at
+                ).toLocaleTimeString(
+                    "zh-TW",
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    }
+                );
 
-                            minute:
-                                "2-digit"
-                        }
-                    );
-
-                }
-            );
+            });
 
 
-        /* =================================================
-           更新圖表
-        ================================================= */
+        /* 更新圖表 */
 
         createCharts(
             labels,
@@ -1596,28 +1485,20 @@ async function loadData() {
         );
 
 
-        /* =================================================
-           系統正常
-        ================================================= */
+        /* 系統正常 */
 
-        document.getElementById(
-            "status"
-        ).textContent =
+        document.getElementById("status")
+            .textContent =
             "資料連線正常";
-
 
     }
 
     catch (error) {
 
-        console.error(
-            error
-        );
+        console.error(error);
 
-
-        document.getElementById(
-            "status"
-        ).textContent =
+        document.getElementById("status")
+            .textContent =
             "資料讀取失敗";
 
     }
@@ -1633,11 +1514,6 @@ function createCharts(
     labels,
     feeds
 ) {
-
-
-    /* =================================================
-       先刪除舊圖
-    ================================================= */
 
     if (temperatureChart)
         temperatureChart.destroy();
@@ -1723,11 +1599,9 @@ function createCharts(
 
     temperatureChart =
         new Chart(
-
             document.getElementById(
                 "temperatureChart"
             ),
-
             {
 
                 type: "line",
@@ -1741,12 +1615,9 @@ function createCharts(
                         data:
                             feeds.map(
                                 item =>
-                                    item.field1
-                                    == null
+                                    item.field1 == null
                                     ? null
-                                    : Number(
-                                        item.field1
-                                      )
+                                    : Number(item.field1)
                             ),
 
                         borderWidth: 2,
@@ -1759,11 +1630,9 @@ function createCharts(
 
                 },
 
-                options:
-                    commonOptions
+                options: commonOptions
 
             }
-
         );
 
 
@@ -1773,11 +1642,9 @@ function createCharts(
 
     humidityChart =
         new Chart(
-
             document.getElementById(
                 "humidityChart"
             ),
-
             {
 
                 type: "line",
@@ -1791,12 +1658,9 @@ function createCharts(
                         data:
                             feeds.map(
                                 item =>
-                                    item.field2
-                                    == null
+                                    item.field2 == null
                                     ? null
-                                    : Number(
-                                        item.field2
-                                      )
+                                    : Number(item.field2)
                             ),
 
                         borderWidth: 2,
@@ -1809,11 +1673,9 @@ function createCharts(
 
                 },
 
-                options:
-                    commonOptions
+                options: commonOptions
 
             }
-
         );
 
 
@@ -1823,11 +1685,9 @@ function createCharts(
 
     lightChart =
         new Chart(
-
             document.getElementById(
                 "lightChart"
             ),
-
             {
 
                 type: "line",
@@ -1841,12 +1701,9 @@ function createCharts(
                         data:
                             feeds.map(
                                 item =>
-                                    item.field3
-                                    == null
+                                    item.field3 == null
                                     ? null
-                                    : Number(
-                                        item.field3
-                                      )
+                                    : Number(item.field3)
                             ),
 
                         borderWidth: 2,
@@ -1859,11 +1716,9 @@ function createCharts(
 
                 },
 
-                options:
-                    commonOptions
+                options: commonOptions
 
             }
-
         );
 
 
@@ -1873,11 +1728,9 @@ function createCharts(
 
     co2Chart =
         new Chart(
-
             document.getElementById(
                 "co2Chart"
             ),
-
             {
 
                 type: "line",
@@ -1891,12 +1744,9 @@ function createCharts(
                         data:
                             feeds.map(
                                 item =>
-                                    item.field4
-                                    == null
+                                    item.field4 == null
                                     ? null
-                                    : Number(
-                                        item.field4
-                                      )
+                                    : Number(item.field4)
                             ),
 
                         borderWidth: 2,
@@ -1909,11 +1759,9 @@ function createCharts(
 
                 },
 
-                options:
-                    commonOptions
+                options: commonOptions
 
             }
-
         );
 
 }
@@ -1941,3 +1789,4 @@ setInterval(
 </body>
 
 </html>
+```
