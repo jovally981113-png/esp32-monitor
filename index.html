@@ -39,7 +39,6 @@ body {
         Arial,
         sans-serif;
 
-    /* ★ 網站底色：青綠色 */
     background: #dff5ef;
 
     color: #173b36;
@@ -72,7 +71,6 @@ body {
 
     flex-shrink: 0;
 
-    /* ★ 深青綠色標題 */
     background: #087f6f;
 
     color: white;
@@ -91,7 +89,7 @@ body {
 }
 
 
-/* 標題 */
+/* ★ 標題保持原本大小 */
 
 .title-area h1 {
 
@@ -107,22 +105,24 @@ body {
 
     margin: 4px 0 0;
 
-    font-size: 13px;
+    font-size: 15px;
 
     color: #cceee8;
 
 }
 
 
-/* 狀態 */
+/* =====================================================
+   系統狀態 ★ 放大
+===================================================== */
 
 .system-area {
 
     text-align: right;
 
-    font-size: 13px;
+    font-size: 16px;
 
-    line-height: 22px;
+    line-height: 25px;
 
     color: #d9f5ef;
 
@@ -150,11 +150,8 @@ body {
     display: grid;
 
     grid-template-columns:
-
         22%
-
         minmax(0, 1fr)
-
         23%;
 
     gap: 14px;
@@ -175,7 +172,6 @@ body {
     display: grid;
 
     grid-template-rows:
-
         repeat(4, minmax(0, 1fr));
 
     gap: 14px;
@@ -218,8 +214,6 @@ body {
 }
 
 
-/* 滑鼠移過去 */
-
 .sensor-card:hover {
 
     transform: translateY(-3px);
@@ -230,52 +224,52 @@ body {
 }
 
 
-/* 圖示 */
+/* 圖示 ★ 放大 */
 
 .sensor-icon {
 
-    font-size: 34px;
+    font-size: 40px;
 
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 
 }
 
 
-/* 名稱 */
+/* 感測器名稱 ★ 放大 */
 
 .sensor-name {
 
-    font-size: 15px;
+    font-size: 19px;
 
     color: #5f7f78;
 
 }
 
 
-/* 數值 */
+/* 即時數值 ★ 放大 */
 
 .sensor-value {
 
-    font-size: 32px;
+    font-size: 38px;
 
     font-weight: bold;
 
-    margin-top: 4px;
+    margin-top: 5px;
 
     color: #087f6f;
 
 }
 
 
-/* 單位 */
+/* 單位 ★ 放大 */
 
 .sensor-unit {
 
-    font-size: 12px;
+    font-size: 15px;
 
     color: #8ba9a3;
 
-    margin-top: 2px;
+    margin-top: 3px;
 
 }
 
@@ -329,15 +323,15 @@ body {
 }
 
 
-/* 圖表標題 */
+/* 圖表標題 ★ 放大 */
 
 .chart-title {
 
-    height: 25px;
+    height: 30px;
 
     flex-shrink: 0;
 
-    font-size: 15px;
+    font-size: 19px;
 
     font-weight: bold;
 
@@ -389,11 +383,11 @@ body {
 }
 
 
-/* 統計標題 */
+/* 統計標題 ★ 放大 */
 
 .right-title {
 
-    font-size: 20px;
+    font-size: 23px;
 
     font-weight: bold;
 
@@ -405,7 +399,7 @@ body {
 
 
 /* =====================================================
-   資料筆數按鈕
+   資料筆數按鈕 ★ 放大
 ===================================================== */
 
 .data-selector {
@@ -428,7 +422,7 @@ body {
 
     border-radius: 7px;
 
-    padding: 7px 3px;
+    padding: 9px 3px;
 
     background: #d8eee9;
 
@@ -436,7 +430,7 @@ body {
 
     cursor: pointer;
 
-    font-size: 12px;
+    font-size: 15px;
 
     transition: 0.2s;
 
@@ -449,8 +443,6 @@ body {
 
 }
 
-
-/* ★ 選中的按鈕 */
 
 .data-selector button.active {
 
@@ -467,7 +459,7 @@ body {
 
 .stat-section {
 
-    padding: 9px 0;
+    padding: 10px 0;
 
     border-top:
         1px solid #dceeea;
@@ -475,18 +467,22 @@ body {
 }
 
 
+/* 統計名稱 ★ 放大 */
+
 .stat-name {
 
-    font-size: 15px;
+    font-size: 18px;
 
     font-weight: bold;
 
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 
     color: #24564f;
 
 }
 
+
+/* 統計列 ★ 放大 */
 
 .stat-row {
 
@@ -496,18 +492,22 @@ body {
 
     align-items: center;
 
-    padding: 3px 0;
+    padding: 4px 0;
 
-    font-size: 13px;
+    font-size: 16px;
 
     color: #66837d;
 
 }
 
 
+/* 統計數值 ★ 放大 */
+
 .stat-value {
 
     font-weight: bold;
+
+    font-size: 17px;
 
     color: #087f6f;
 
@@ -520,13 +520,13 @@ body {
 
 .footer {
 
-    height: 22px;
+    height: 25px;
 
     flex-shrink: 0;
 
     text-align: center;
 
-    font-size: 10px;
+    font-size: 12px;
 
     color: #65938a;
 
@@ -547,23 +547,90 @@ body {
 
     }
 
+
+    /* ★ 標題仍維持較大的標題 */
+
     .title-area h1 {
 
         font-size: 22px;
 
     }
 
+
+    /* 其他文字放大 */
+
+    .title-area p {
+
+        font-size: 14px;
+
+    }
+
+    .system-area {
+
+        font-size: 15px;
+
+    }
+
     .sensor-value {
 
-        font-size: 27px;
+        font-size: 32px;
+
+    }
+
+    .sensor-name {
+
+        font-size: 17px;
 
     }
 
     .sensor-icon {
 
-        font-size: 29px;
+        font-size: 34px;
 
     }
+
+    .sensor-unit {
+
+        font-size: 14px;
+
+    }
+
+    .chart-title {
+
+        font-size: 17px;
+
+    }
+
+    .right-title {
+
+        font-size: 21px;
+
+    }
+
+    .stat-name {
+
+        font-size: 17px;
+
+    }
+
+    .stat-row {
+
+        font-size: 15px;
+
+    }
+
+    .stat-value {
+
+        font-size: 16px;
+
+    }
+
+    .data-selector button {
+
+        font-size: 14px;
+
+    }
+
 
     .main {
 
@@ -821,8 +888,6 @@ body {
 <section class="center-panel">
 
 
-    <!-- 溫度圖 -->
-
     <div class="chart-card">
 
         <div class="chart-title">
@@ -837,8 +902,6 @@ body {
 
     </div>
 
-
-    <!-- 濕度圖 -->
 
     <div class="chart-card">
 
@@ -855,8 +918,6 @@ body {
     </div>
 
 
-    <!-- 光照圖 -->
-
     <div class="chart-card">
 
         <div class="chart-title">
@@ -871,8 +932,6 @@ body {
 
     </div>
 
-
-    <!-- CO2圖 -->
 
     <div class="chart-card">
 
@@ -1171,7 +1230,8 @@ body {
    ★★★ ThingSpeak 設定 ★★★
 ===================================================== */
 
-const CHANNEL_ID = "3474112";
+const CHANNEL_ID = "3474112
+";
 
 
 /* =====================================================
@@ -1330,13 +1390,9 @@ async function loadData() {
             data.feeds;
 
 
-        /* 最新資料 */
-
         const latest =
             feeds[feeds.length - 1];
 
-
-        /* 溫度 */
 
         if (latest.field1 !== null) {
 
@@ -1347,8 +1403,6 @@ async function loadData() {
         }
 
 
-        /* 濕度 */
-
         if (latest.field2 !== null) {
 
             document.getElementById("humidity")
@@ -1357,8 +1411,6 @@ async function loadData() {
 
         }
 
-
-        /* 光照 */
 
         if (latest.field3 !== null) {
 
@@ -1369,8 +1421,6 @@ async function loadData() {
         }
 
 
-        /* CO2 */
-
         if (latest.field4 !== null) {
 
             document.getElementById("co2")
@@ -1380,18 +1430,12 @@ async function loadData() {
         }
 
 
-        /* 更新時間 */
-
         document.getElementById("updateTime")
             .textContent =
             new Date(
                 latest.created_at
             ).toLocaleTimeString("zh-TW");
 
-
-        /* =================================================
-           統計資料
-        ================================================= */
 
         const temperatures =
             feeds
@@ -1416,8 +1460,6 @@ async function loadData() {
                 .map(item => Number(item.field4))
                 .filter(value => !isNaN(value));
 
-
-        /* 統計 */
 
         updateStatistics(
             temperatures,
@@ -1459,8 +1501,6 @@ async function loadData() {
         );
 
 
-        /* 時間標籤 */
-
         const labels =
             feeds.map(item => {
 
@@ -1477,15 +1517,11 @@ async function loadData() {
             });
 
 
-        /* 更新圖表 */
-
         createCharts(
             labels,
             feeds
         );
 
-
-        /* 系統正常 */
 
         document.getElementById("status")
             .textContent =
@@ -1566,7 +1602,7 @@ function createCharts(
 
                     font: {
 
-                        size: 9
+                        size: 12
 
                     }
 
@@ -1580,7 +1616,7 @@ function createCharts(
 
                     font: {
 
-                        size: 9
+                        size: 12
 
                     }
 
