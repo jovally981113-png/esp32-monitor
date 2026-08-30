@@ -228,7 +228,7 @@ body {
 
 
 /* =====================================================
-   數值 + 單位
+   數值 + 單位同一排
 ===================================================== */
 
 .sensor-value {
@@ -264,7 +264,6 @@ body {
     color: #8ba9a3;
 
     margin-top: 0;
-
 }
 
 
@@ -378,7 +377,7 @@ body {
 
 
 /* =====================================================
-   資料筆數按鈕
+   時間選擇按鈕
 ===================================================== */
 
 .data-selector {
@@ -901,33 +900,37 @@ body {
     </div>
 
 
+    <!-- =================================================
+         時間選擇
+    ================================================= -->
+
     <div class="data-selector">
 
 
         <button
-            id="btn10"
-            onclick="changeResults(10)">
-
-            10筆
-
-        </button>
-
-
-        <button
-            id="btn20"
+            id="btn10min"
             class="active"
-            onclick="changeResults(20)">
+            onclick="changeTimeRange(10)">
 
-            20筆
+            10分鐘
 
         </button>
 
 
         <button
-            id="btn50"
-            onclick="changeResults(50)">
+            id="btn20min"
+            onclick="changeTimeRange(20)">
 
-            50筆
+            20分鐘
+
+        </button>
+
+
+        <button
+            id="btn60min"
+            onclick="changeTimeRange(60)">
+
+            1小時
 
         </button>
 
@@ -1207,10 +1210,16 @@ const READ_API_KEY = "IT0OTL4TT1QFKXO8";
 
 
 /* =====================================================
-   資料筆數
+   時間範圍
 ===================================================== */
 
-let resultCount = 20;
+/*
+   10  = 最近 10 分鐘
+   20  = 最近 20 分鐘
+   60  = 最近 1 小時
+*/
+
+let timeRangeMinutes = 10;
 
 
 
@@ -1232,13 +1241,21 @@ let co2Chart = null;
    ThingSpeak API
 ===================================================== */
 
+/*
+   為了可以從 ThingSpeak 抓取最近一小時的資料，
+   這裡先抓最多 1000 筆。
+
+   抓回來後，再由 JavaScript
+   按照時間範圍篩選。
+*/
+
 function getAPI() {
 
     return (
         `https://api.thingspeak.com/channels/` +
         `${CHANNEL_ID}/feeds.json` +
         `?api_key=${READ_API_KEY}` +
-        `&results=${resultCount}`
+        `&results=1000`
     );
 
 }
@@ -1315,13 +1332,15 @@ function updateStatistics(
 
 
 /* =====================================================
-   切換資料筆數
+   切換時間範圍
 ===================================================== */
 
-function changeResults(count) {
+function changeTimeRange(minutes) {
 
-    resultCount = count;
+    timeRangeMinutes = minutes;
 
+
+    /* 移除所有按鈕 active */
 
     document
         .querySelectorAll(
@@ -1336,12 +1355,34 @@ function changeResults(count) {
         });
 
 
-    document.getElementById(
-        "btn" + count
-    ).classList.add(
-        "active"
-    );
+    /* 設定目前按鈕 active */
 
+    if (minutes === 10) {
+
+        document
+            .getElementById("btn10min")
+            .classList.add("active");
+
+    }
+
+    else if (minutes === 20) {
+
+        document
+            .getElementById("btn20min")
+            .classList.add("active");
+
+    }
+
+    else if (minutes === 60) {
+
+        document
+            .getElementById("btn60min")
+            .classList.add("active");
+
+    }
+
+
+    /* 重新讀取資料 */
 
     loadData();
 
@@ -1370,6 +1411,10 @@ async function loadData() {
             "status-ok";
 
 
+
+        /* =================================================
+           從 ThingSpeak 取得資料
+        ================================================= */
 
         const response =
             await fetch(
@@ -1410,7 +1455,11 @@ async function loadData() {
 
 
 
-        const feeds =
+        /* =================================================
+           ThingSpeak 所有資料
+        ================================================= */
+
+        const allFeeds =
             data.feeds;
 
 
@@ -1420,6 +1469,74 @@ async function loadData() {
         ================================================= */
 
         const latest =
+            allFeeds[
+                allFeeds.length - 1
+            ];
+
+
+
+        /* =================================================
+           計算時間範圍
+        ================================================= */
+
+        const latestTime =
+            new Date(
+                latest.created_at
+            ).getTime();
+
+
+        const startTime =
+            latestTime -
+            (
+                timeRangeMinutes *
+                60 *
+                1000
+            );
+
+
+
+        /* =================================================
+           篩選指定時間內的資料
+        ================================================= */
+
+        const feeds =
+            allFeeds.filter(
+                item => {
+
+                    const itemTime =
+                        new Date(
+                            item.created_at
+                        ).getTime();
+
+                    return (
+                        itemTime >= startTime &&
+                        itemTime <= latestTime
+                    );
+
+                }
+            );
+
+
+
+        /* =================================================
+           如果時間範圍沒有資料
+        ================================================= */
+
+        if (feeds.length === 0) {
+
+            throw new Error(
+                "指定時間內沒有資料"
+            );
+
+        }
+
+
+
+        /* =================================================
+           最新資料
+        ================================================= */
+
+        const latestData =
             feeds[
                 feeds.length - 1
             ];
@@ -1431,15 +1548,15 @@ async function loadData() {
         ================================================= */
 
         if (
-            latest.field1 !== null &&
-            latest.field1 !== undefined
+            latestData.field1 !== null &&
+            latestData.field1 !== undefined
         ) {
 
             document.getElementById(
                 "temperature"
             ).textContent =
                 Number(
-                    latest.field1
+                    latestData.field1
                 ).toFixed(1);
 
         }
@@ -1451,15 +1568,15 @@ async function loadData() {
         ================================================= */
 
         if (
-            latest.field2 !== null &&
-            latest.field2 !== undefined
+            latestData.field2 !== null &&
+            latestData.field2 !== undefined
         ) {
 
             document.getElementById(
                 "humidity"
             ).textContent =
                 Number(
-                    latest.field2
+                    latestData.field2
                 ).toFixed(1);
 
         }
@@ -1471,15 +1588,15 @@ async function loadData() {
         ================================================= */
 
         if (
-            latest.field3 !== null &&
-            latest.field3 !== undefined
+            latestData.field3 !== null &&
+            latestData.field3 !== undefined
         ) {
 
             document.getElementById(
                 "light"
             ).textContent =
                 Number(
-                    latest.field3
+                    latestData.field3
                 ).toFixed(1);
 
         }
@@ -1489,30 +1606,37 @@ async function loadData() {
         /* =================================================
            CO2
            
-           1500 ppm 以上 → 紅色
+           >= 1500 ppm → 紅色
            1000～1499 ppm → 橘色
-           1000 ppm 以下 → 綠色
+           < 1000 ppm → 綠色
         ================================================= */
 
         if (
-            latest.field4 !== null &&
-            latest.field4 !== undefined
+            latestData.field4 !== null &&
+            latestData.field4 !== undefined
         ) {
 
             const co2Value =
-                Number(latest.field4);
+                Number(
+                    latestData.field4
+                );
+
 
             const co2Element =
-                document.getElementById("co2");
+                document.getElementById(
+                    "co2"
+                );
 
 
-            // 顯示 CO2 數值
+            /* 顯示數值 */
 
             co2Element.textContent =
                 co2Value.toFixed(0);
 
 
-            // 根據 CO2 濃度改變顏色
+            /* =================================================
+               CO2 顏色
+            ================================================= */
 
             if (co2Value >= 1500) {
 
@@ -1554,7 +1678,7 @@ async function loadData() {
         ).textContent =
 
             new Date(
-                latest.created_at
+                latestData.created_at
             ).toLocaleString(
                 "zh-TW",
                 {
@@ -1570,7 +1694,7 @@ async function loadData() {
 
 
         /* =================================================
-           統計資料
+           溫度資料
         ================================================= */
 
         const temperatures =
@@ -1585,6 +1709,11 @@ async function loadData() {
                 );
 
 
+
+        /* =================================================
+           濕度資料
+        ================================================= */
+
         const humidities =
             feeds
                 .map(
@@ -1597,6 +1726,11 @@ async function loadData() {
                 );
 
 
+
+        /* =================================================
+           光照資料
+        ================================================= */
+
         const lights =
             feeds
                 .map(
@@ -1608,6 +1742,11 @@ async function loadData() {
                         Number.isFinite(value)
                 );
 
+
+
+        /* =================================================
+           CO2 資料
+        ================================================= */
 
         const co2Values =
             feeds
@@ -1860,7 +1999,7 @@ function createCharts(
 
                 ticks: {
 
-                    maxTicksLimit: 6,
+                    maxTicksLimit: 8,
 
                     font: {
 
@@ -1896,8 +2035,7 @@ function createCharts(
 
     /* =================================================
        溫度圖
-       單位：°C
-    ================================================= */
+===================================================== */
 
     temperatureChart =
 
@@ -1917,7 +2055,8 @@ function createCharts(
 
                     datasets: [{
 
-                        label: "溫度 (°C)",
+                        label:
+                            "溫度 (°C)",
 
                         data:
                             feeds.map(
@@ -1954,8 +2093,7 @@ function createCharts(
 
     /* =================================================
        濕度圖
-       單位：%
-    ================================================= */
+===================================================== */
 
     humidityChart =
 
@@ -1975,7 +2113,8 @@ function createCharts(
 
                     datasets: [{
 
-                        label: "濕度 (%)",
+                        label:
+                            "濕度 (%)",
 
                         data:
                             feeds.map(
@@ -2012,8 +2151,7 @@ function createCharts(
 
     /* =================================================
        光照圖
-       單位：Lux
-    ================================================= */
+===================================================== */
 
     lightChart =
 
@@ -2033,7 +2171,8 @@ function createCharts(
 
                     datasets: [{
 
-                        label: "光照 (Lux)",
+                        label:
+                            "光照 (Lux)",
 
                         data:
                             feeds.map(
@@ -2070,8 +2209,7 @@ function createCharts(
 
     /* =================================================
        CO2 圖
-       單位：ppm
-    ================================================= */
+===================================================== */
 
     co2Chart =
 
@@ -2091,7 +2229,8 @@ function createCharts(
 
                     datasets: [{
 
-                        label: "CO₂ (ppm)",
+                        label:
+                            "CO₂ (ppm)",
 
                         data:
                             feeds.map(
