@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 
@@ -1178,17 +1179,11 @@ body {
 ===================================================== */
 
 /*
-   ⚠️ 只有這裡需要填你的 Read API Key
-
    Channel ID：
    3474112
 
    Read API Key：
-   到 ThingSpeak
-   → Channels
-   → 你的 Channel
-   → API Keys
-   → Read API Keys
+   IT0OTL4TT1QFKXO8
 */
 
 const CHANNEL_ID = "3474112";
@@ -1479,6 +1474,10 @@ async function loadData() {
 
         /* =================================================
            CO2
+           
+           1500 ppm 以上 → 紅色
+           1000～1499 ppm → 橘色
+           1000 ppm 以下 → 綠色
         ================================================= */
 
         if (
@@ -1486,12 +1485,47 @@ async function loadData() {
             latest.field4 !== undefined
         ) {
 
-            document.getElementById(
-                "co2"
-            ).textContent =
-                Number(
-                    latest.field4
-                ).toFixed(0);
+            const co2Value =
+                Number(latest.field4);
+
+            const co2Element =
+                document.getElementById("co2");
+
+
+            // 顯示 CO2 數值
+
+            co2Element.textContent =
+                co2Value.toFixed(0);
+
+
+            // 根據 CO2 濃度改變顏色
+
+            if (co2Value >= 1500) {
+
+                // 1500 ppm 以上 → 紅色
+
+                co2Element.style.color =
+                    "#dc2626";
+
+            }
+
+            else if (co2Value >= 1000) {
+
+                // 1000～1499 ppm → 橘色
+
+                co2Element.style.color =
+                    "#f97316";
+
+            }
+
+            else {
+
+                // 1000 ppm 以下 → 原本綠色
+
+                co2Element.style.color =
+                    "#087f6f";
+
+            }
 
         }
 
@@ -2085,7 +2119,7 @@ loadData();
 
 
 /* =====================================================
-   每 15 秒自動更新
+   每 5 秒自動更新
 ===================================================== */
 
 setInterval(
@@ -2102,3 +2136,4 @@ setInterval(
 </body>
 
 </html>
+```
