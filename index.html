@@ -8,7 +8,7 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>ESP32 智慧環境監測平台</title>
+<title>智慧微藻遮陽換氣系統</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -682,11 +682,11 @@ body {
     <div class="title-area">
 
         <h1>
-            ESP32 智慧環境監測平台
+            智慧微藻遮陽換氣系統
         </h1>
 
         <p>
-            IoT Environmental Monitoring Dashboard
+            Smart Microalgae Shading System
         </p>
 
     </div>
@@ -1214,9 +1214,13 @@ body {
 
 
 
+<!-- =====================================================
+     頁尾
+===================================================== -->
+
 <footer class="footer">
 
-    ESP32 IoT Environmental Monitoring Platform
+    Smart Microalgae Shading System
 
 </footer>
 
@@ -1292,12 +1296,6 @@ function getFeedsAPI() {
 
 /* =====================================================
    ThingSpeak 最新資料 API
-
-   ⭐ 重要
-
-   這個 API 專門拿「最新一筆」。
-
-   不再從歷史資料陣列猜哪一筆最新。
 ===================================================== */
 
 function getLatestAPI() {
@@ -1317,8 +1315,6 @@ function getLatestAPI() {
 
 /* =====================================================
    台灣時間
-
-   所有時間統一使用 Asia/Taipei
 ===================================================== */
 
 function formatTaiwanTime(date) {
@@ -1418,7 +1414,6 @@ function getAverage(values) {
         values.reduce(
 
             (a, b) =>
-
                 a + b,
 
             0
@@ -1599,8 +1594,6 @@ function changeTimeRange(minutes) {
 
 /* =====================================================
    讀取資料
-
-   ⭐ 這裡是本次最重要的修改
 ===================================================== */
 
 async function loadData() {
@@ -1609,7 +1602,7 @@ async function loadData() {
 
 
         /* =================================================
-           顯示讀取狀態
+           讀取狀態
         ================================================= */
 
         document.getElementById(
@@ -1626,12 +1619,7 @@ async function loadData() {
 
 
         /* =================================================
-           同時取得：
-
-           1. 歷史資料
-           2. 最新資料
-
-           最新資料由 last.json 負責。
+           同時取得歷史資料與最新資料
         ================================================= */
 
         const [
@@ -1643,19 +1631,25 @@ async function loadData() {
         ] = await Promise.all([
 
             fetch(
+
                 getFeedsAPI(),
+
                 {
                     cache:
                         "no-store"
                 }
+
             ),
 
             fetch(
+
                 getLatestAPI(),
+
                 {
                     cache:
                         "no-store"
                 }
+
             )
 
         ]);
@@ -1663,7 +1657,7 @@ async function loadData() {
 
 
         /* =================================================
-           檢查 API
+           HTTP檢查
         ================================================= */
 
         if (
@@ -1671,8 +1665,11 @@ async function loadData() {
         ) {
 
             throw new Error(
+
                 "ThingSpeak 歷史資料 HTTP " +
+
                 feedsResponse.status
+
             );
 
         }
@@ -1683,8 +1680,11 @@ async function loadData() {
         ) {
 
             throw new Error(
+
                 "ThingSpeak 最新資料 HTTP " +
+
                 latestResponse.status
+
             );
 
         }
@@ -1692,7 +1692,7 @@ async function loadData() {
 
 
         /* =================================================
-           解析 JSON
+           JSON
         ================================================= */
 
         const feedsData =
@@ -1705,7 +1705,7 @@ async function loadData() {
 
 
         /* =================================================
-           確認資料
+           資料確認
         ================================================= */
 
         if (
@@ -1740,9 +1740,7 @@ async function loadData() {
 
 
         /* =================================================
-           整理歷史資料
-
-           每一筆資料都建立 timestamp。
+           歷史資料整理
         ================================================= */
 
         const allFeeds =
@@ -1778,14 +1776,10 @@ async function loadData() {
         /* =================================================
            ⭐ 固定排序
 
-           永遠：
+           左 = 舊
+           右 = 新
 
-           舊 → 新
-
-           左邊 = 舊資料
-           右邊 = 新資料
-
-           不使用 reverse。
+           絕對不使用 reverse()
         ================================================= */
 
         allFeeds.sort(
@@ -1800,14 +1794,7 @@ async function loadData() {
 
 
         /* =================================================
-           ⭐ 最新資料
-
-           不再從 allFeeds 最後一筆判斷。
-
-           直接使用 ThingSpeak：
-
-           /feeds/last.json
-
+           最新資料時間
         ================================================= */
 
         const latestTimestamp =
@@ -1835,12 +1822,7 @@ async function loadData() {
         /* =================================================
            ⭐ 最後資料時間
 
-           只由 latestData 決定。
-
-           不使用 Date.now()
-           不使用瀏覽器時間。
-
-           因此不會再出現兩個時間交換。
+           完全以 ThingSpeak 為準
         ================================================= */
 
         document.getElementById(
@@ -1858,13 +1840,11 @@ async function loadData() {
 
 
         /* =================================================
-           最新數值
-
-           直接使用 ThingSpeak
-           最新一筆資料。
+           最新資料
         ================================================= */
 
-        const latest = latestData;
+        const latest =
+            latestData;
 
 
 
@@ -1998,7 +1978,7 @@ async function loadData() {
 
 
                 /* =========================================
-                   CO2 顏色
+                   CO2顏色
 
                    >= 1500 ppm
                    紅色
@@ -2044,13 +2024,9 @@ async function loadData() {
         /* =================================================
            ⭐ 圖表時間範圍
 
-           注意：
-
            不使用 Date.now()
 
-           改用 ThingSpeak 最新資料時間。
-
-           所以圖表跟資料時間完全一致。
+           以 ThingSpeak 最新資料為基準。
         ================================================= */
 
         const chartEndTime =
@@ -2074,15 +2050,7 @@ async function loadData() {
 
 
         /* =================================================
-           取得目前時間範圍內的資料
-
-           只保留：
-
-           chartStartTime
-           ↓
-           chartEndTime
-
-           並再次排序。
+           篩選時間範圍
         ================================================= */
 
         const feeds =
@@ -2283,7 +2251,7 @@ async function loadData() {
 
 
         /* =================================================
-           系統正常
+           正常
         ================================================= */
 
         document.getElementById(
@@ -2307,8 +2275,11 @@ async function loadData() {
 
 
         console.error(
+
             "ThingSpeak 錯誤：",
+
             error
+
         );
 
 
@@ -2387,19 +2358,7 @@ function createCharts(
 
 
     /* =================================================
-       共用設定
-
-       ⭐ 最重要：
-
-       X軸：
-
-       startTime → endTime
-
-       左 → 右
-
-       舊 → 新
-
-       完全不使用 reverse。
+       共用圖表設定
     ================================================= */
 
     function createCommonOptions(
@@ -2408,11 +2367,14 @@ function createCharts(
 
         return {
 
-            responsive: true,
+            responsive:
+                true,
 
-            maintainAspectRatio: false,
+            maintainAspectRatio:
+                false,
 
-            animation: false,
+            animation:
+                false,
 
             interaction: {
 
@@ -2453,9 +2415,11 @@ function createCharts(
                                 return formatTaiwanTime(
 
                                     new Date(
+
                                         context[0]
                                             .parsed
                                             .x
+
                                     )
 
                                 );
@@ -2478,9 +2442,11 @@ function createCharts(
                                 return (
 
                                     Number(
+
                                         context
                                             .parsed
                                             .y
+
                                     ).toFixed(
                                         decimals
                                     )
@@ -2973,9 +2939,7 @@ loadData();
 
 
 /* =====================================================
-   自動更新
-
-   每15秒更新一次
+   每15秒自動更新
 ===================================================== */
 
 setInterval(
