@@ -119,42 +119,6 @@
 
         /* ===== 左側感應卡 — 玻璃質感 ===== */
         .left-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-height: 0;
-        }
-
-        /* 新增標題列 */
-        .left-panel-header {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 10px 6px 6px;
-            background: rgba(255,255,255,0.6);
-            backdrop-filter: blur(4px);
-            border-radius: 30px;
-            color: var(--primary-dark);
-            font-weight: 600;
-            font-size: 18px;
-            letter-spacing: 1.5px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-            border: 1px solid rgba(10,122,106,0.08);
-        }
-        .left-panel-header span {
-            background: var(--primary);
-            color: white;
-            border-radius: 30px;
-            padding: 0 16px;
-            font-size: 14px;
-            line-height: 28px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-
-        .sensor-grid {
-            flex: 1;
             display: grid;
             grid-template-rows: repeat(4, 1fr);
             gap: 14px;
@@ -440,10 +404,8 @@
                 padding: 12px;
             }
             .left-panel {
-                height: 460px;
+                height: 440px;
                 margin-bottom: 16px;
-            }
-            .sensor-grid {
                 grid-template-rows: repeat(4, 1fr);
             }
             .center-panel {
@@ -497,34 +459,27 @@
     <!-- ===== MAIN ===== -->
     <main class="main">
 
-        <!-- 左：感測器 ＋ 標題 -->
+        <!-- 左：感測器 -->
         <section class="left-panel">
-            <!-- 新增「即時數據」標題列 -->
-            <div class="left-panel-header">
-                <span>即時數據</span> 
-                <span style="background: transparent; color: var(--text-muted); padding: 0; font-size: 14px; font-weight: 400;">LIVE</span>
+            <div class="sensor-card">
+                <div class="sensor-icon">🌡️</div>
+                <div class="sensor-name">溫度</div>
+                <div class="sensor-value"><span id="temperature">--</span><span class="sensor-unit">°C</span></div>
             </div>
-            <div class="sensor-grid">
-                <div class="sensor-card">
-                    <div class="sensor-icon">🌡️</div>
-                    <div class="sensor-name">溫度</div>
-                    <div class="sensor-value"><span id="temperature">--</span><span class="sensor-unit">°C</span></div>
-                </div>
-                <div class="sensor-card">
-                    <div class="sensor-icon">💧</div>
-                    <div class="sensor-name">濕度</div>
-                    <div class="sensor-value"><span id="humidity">--</span><span class="sensor-unit">%</span></div>
-                </div>
-                <div class="sensor-card">
-                    <div class="sensor-icon">☀️</div>
-                    <div class="sensor-name">光照</div>
-                    <div class="sensor-value"><span id="light">--</span><span class="sensor-unit">Lux</span></div>
-                </div>
-                <div class="sensor-card">
-                    <div class="sensor-icon">🌫️</div>
-                    <div class="sensor-name">CO₂ 濃度</div>
-                    <div class="sensor-value"><span id="co2">--</span><span class="sensor-unit">ppm</span></div>
-                </div>
+            <div class="sensor-card">
+                <div class="sensor-icon">💧</div>
+                <div class="sensor-name">濕度</div>
+                <div class="sensor-value"><span id="humidity">--</span><span class="sensor-unit">%</span></div>
+            </div>
+            <div class="sensor-card">
+                <div class="sensor-icon">☀️</div>
+                <div class="sensor-name">光照</div>
+                <div class="sensor-value"><span id="light">--</span><span class="sensor-unit">Lux</span></div>
+            </div>
+            <div class="sensor-card">
+                <div class="sensor-icon">🌫️</div>
+                <div class="sensor-name">CO₂ 濃度</div>
+                <div class="sensor-value"><span id="co2">--</span><span class="sensor-unit">ppm</span></div>
             </div>
         </section>
 
@@ -858,4 +813,27 @@
                 temperatureChart = buildChart('temperatureChart', '溫度', tempPoints, '°C', chartStartTime, chartEndTime, '#e74c3c');
                 humidityChart = buildChart('humidityChart', '濕度', humPoints, '%', chartStartTime, chartEndTime, '#3498db');
                 lightChart = buildChart('lightChart', '光照', lightPoints, 'Lux', chartStartTime, chartEndTime, '#f39c12');
-                co2Chart = buildChart('co2Chart', 'CO₂',
+                co2Chart = buildChart('co2Chart', 'CO₂', co2Points, 'ppm', chartStartTime, chartEndTime, '#2ecc71');
+
+                statusEl.textContent = '資料連線正常';
+                statusEl.className = 'status-ok';
+
+            } catch (err) {
+                console.error('ThingSpeak 錯誤:', err);
+                statusEl.textContent = '讀取失敗';
+                statusEl.className = 'status-error';
+            }
+        }
+
+        // ===== 啟動 =====
+        loadData();
+        setInterval(loadData, 15000);
+
+        // 初始化標籤
+        statRangeLabel.textContent = '(最近 10 分鐘)';
+        document.querySelector('#chartBtnGroup button[data-count="10"]')?.classList.add('active');
+        document.querySelector('#statBtnGroup button[data-min="10"]')?.classList.add('active');
+    })();
+</script>
+</body>
+</html>
