@@ -1,5 +1,5 @@
+```html
 <!DOCTYPE html>
-
 <html lang="zh-TW">
 
 <head>
@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-   content="width=device-width, initial-scale=1.0">
+      content="width=device-width, initial-scale=1.0">
 
 <title>智慧微藻遮陽換氣系統</title>
 
@@ -55,6 +55,7 @@ body {
     height: 100vh;
 
     display: flex;
+
     flex-direction: column;
 }
 
@@ -85,24 +86,30 @@ body {
         0 3px 10px rgba(0, 80, 70, 0.18);
 }
 
+
 .title-area h1 {
 
     margin: 0;
 
-    font-size: 30px;
+    font-size: 32px;
 
     letter-spacing: 1px;
 }
+
 
 .title-area p {
 
     margin: 5px 0 0;
 
-    font-size: 17px;
+    font-size: 18px;
 
     color: #cceee8;
 }
 
+
+/* =====================================================
+   系統狀態
+===================================================== */
 
 .system-area {
 
@@ -110,10 +117,11 @@ body {
 
     font-size: 18px;
 
-    line-height: 28px;
+    line-height: 29px;
 
     color: #d9f5ef;
 }
+
 
 .status-ok {
 
@@ -121,6 +129,7 @@ body {
 
     font-weight: bold;
 }
+
 
 .status-error {
 
@@ -201,6 +210,7 @@ body {
         box-shadow 0.2s;
 }
 
+
 .sensor-card:hover {
 
     transform: translateY(-3px);
@@ -209,21 +219,30 @@ body {
         0 7px 18px rgba(0, 100, 85, 0.18);
 }
 
+
 .sensor-icon {
 
-    font-size: 42px;
+    font-size: 45px;
 
-    margin-bottom: 5px;
+    margin-bottom: 7px;
 }
+
 
 .sensor-name {
 
-    font-size: 21px;
+    font-size: 23px;
 
     color: #5f7f78;
+
+    margin-bottom: 4px;
 }
 
-.sensor-value-row {
+
+/* =====================================================
+   數值 + 單位同一排
+===================================================== */
+
+.sensor-value {
 
     display: flex;
 
@@ -233,47 +252,23 @@ body {
 
     gap: 8px;
 
-    margin-top: 5px;
-}
-
-.sensor-value {
-
-    font-size: 40px;
+    font-size: 42px;
 
     font-weight: bold;
 
-    color: #087f6f;
+    margin-top: 4px;
 
-    transition: color 0.3s;
+    color: #087f6f;
 }
+
 
 .sensor-unit {
 
-    font-size: 20px;
+    font-size: 21px;
 
-    color: #66837d;
+    font-weight: normal;
 
-    font-weight: bold;
-}
-
-
-/* =====================================================
-   CO2 顏色
-===================================================== */
-
-.co2-green {
-
-    color: #087f6f !important;
-}
-
-.co2-orange {
-
-    color: #f59e0b !important;
-}
-
-.co2-red {
-
-    color: #dc2626 !important;
+    color: #8ba9a3;
 }
 
 
@@ -313,7 +308,7 @@ body {
 
     border-radius: 14px;
 
-    padding: 13px 15px;
+    padding: 15px 17px;
 
     box-shadow:
         0 3px 12px rgba(0, 100, 85, 0.10);
@@ -323,13 +318,14 @@ body {
     flex-direction: column;
 }
 
+
 .chart-title {
 
-    height: 36px;
+    height: 38px;
 
     flex-shrink: 0;
 
-    font-size: 21px;
+    font-size: 22px;
 
     font-weight: bold;
 
@@ -339,6 +335,7 @@ body {
 
     color: #174f47;
 }
+
 
 .chart-container {
 
@@ -364,7 +361,7 @@ body {
 
     border-radius: 14px;
 
-    padding: 16px;
+    padding: 18px;
 
     box-shadow:
         0 3px 12px rgba(0, 100, 85, 0.10);
@@ -374,20 +371,21 @@ body {
     flex-direction: column;
 }
 
+
 .right-title {
 
-    font-size: 25px;
+    font-size: 27px;
 
     font-weight: bold;
 
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 
     color: #087f6f;
 }
 
 
 /* =====================================================
-   統計時間按鈕
+   時間選擇
 ===================================================== */
 
 .data-selector {
@@ -397,18 +395,19 @@ body {
     grid-template-columns:
         repeat(3, 1fr);
 
-    gap: 7px;
+    gap: 8px;
 
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
+
 
 .data-selector button {
 
     border: none;
 
-    border-radius: 7px;
+    border-radius: 8px;
 
-    padding: 10px 3px;
+    padding: 11px 3px;
 
     background: #d8eee9;
 
@@ -416,17 +415,19 @@ body {
 
     cursor: pointer;
 
-    font-size: 17px;
+    font-size: 18px;
 
     font-weight: bold;
 
     transition: 0.2s;
 }
 
+
 .data-selector button:hover {
 
     background: #bfe4dc;
 }
+
 
 .data-selector button.active {
 
@@ -442,22 +443,24 @@ body {
 
 .stat-section {
 
-    padding: 10px 0;
+    padding: 11px 0;
 
     border-top:
         1px solid #dceeea;
 }
 
+
 .stat-name {
 
-    font-size: 20px;
+    font-size: 22px;
 
     font-weight: bold;
 
-    margin-bottom: 6px;
+    margin-bottom: 7px;
 
     color: #24564f;
 }
+
 
 .stat-row {
 
@@ -469,34 +472,35 @@ body {
 
     padding: 5px 0;
 
-    font-size: 17px;
+    font-size: 19px;
 
     color: #66837d;
 }
+
 
 .stat-value {
 
     font-weight: bold;
 
-    font-size: 18px;
+    font-size: 19px;
 
     color: #087f6f;
 }
 
 
 /* =====================================================
-   底部
+   頁尾
 ===================================================== */
 
 .footer {
 
-    height: 25px;
+    height: 28px;
 
     flex-shrink: 0;
 
     text-align: center;
 
-    font-size: 13px;
+    font-size: 14px;
 
     color: #65938a;
 }
@@ -515,70 +519,84 @@ body {
         padding: 0 20px;
     }
 
+
     .title-area h1 {
 
-        font-size: 25px;
+        font-size: 27px;
     }
+
 
     .title-area p {
 
-        font-size: 15px;
+        font-size: 16px;
     }
+
 
     .system-area {
 
         font-size: 16px;
     }
 
+
     .sensor-value {
 
-        font-size: 34px;
+        font-size: 37px;
     }
 
+
     .sensor-name {
+
+        font-size: 20px;
+    }
+
+
+    .sensor-icon {
+
+        font-size: 38px;
+    }
+
+
+    .sensor-unit {
 
         font-size: 18px;
     }
 
-    .sensor-icon {
 
-        font-size: 35px;
+    .chart-title {
+
+        font-size: 20px;
     }
 
-    .sensor-unit {
+
+    .right-title {
+
+        font-size: 24px;
+    }
+
+
+    .stat-name {
+
+        font-size: 19px;
+    }
+
+
+    .stat-row {
 
         font-size: 17px;
     }
 
-    .chart-title {
+
+    .stat-value {
 
         font-size: 18px;
     }
 
-    .right-title {
 
-        font-size: 22px;
-    }
-
-    .stat-name {
-
-        font-size: 18px;
-    }
-
-    .stat-row {
+    .data-selector button {
 
         font-size: 16px;
     }
 
-    .stat-value {
-
-        font-size: 17px;
-    }
-
-    .data-selector button {
-
-        font-size: 15px;
-    }
 
     .main {
 
@@ -587,11 +605,13 @@ body {
         gap: 10px;
     }
 
+
     .left-panel,
     .center-panel {
 
         gap: 10px;
     }
+
 }
 
 
@@ -607,15 +627,18 @@ body {
         overflow: auto;
     }
 
+
     .dashboard {
 
         height: auto;
     }
 
+
     .main {
 
         display: block;
     }
+
 
     .left-panel {
 
@@ -624,6 +647,7 @@ body {
         margin-bottom: 12px;
     }
 
+
     .center-panel {
 
         height: 700px;
@@ -631,19 +655,24 @@ body {
         margin-bottom: 12px;
     }
 
+
     .right-panel {
 
         min-height: 550px;
     }
+
 }
 
 </style>
 
 </head>
 
+
 <body>
 
+
 <div class="dashboard">
+
 
 <!-- =====================================================
      上方標題
@@ -651,46 +680,46 @@ body {
 
 <header class="header">
 
-```
-<div class="title-area">
+    <div class="title-area">
 
-    <h1>
-        智慧微藻遮陽換氣系統
-    </h1>
+        <h1>
+            智慧微藻遮陽換氣系統
+        </h1>
 
-    <p>
-        Smart Microalgae Shading System
-    </p>
+        <p>
+            Smart Microalgae Shading System
+        </p>
 
-</div>
+    </div>
 
 
-<div class="system-area">
+    <div class="system-area">
 
-    🟢 系統狀態：
+        🟢 系統狀態：
 
-    <span
-        id="status"
-        class="status-ok">
+        <span
+            id="status"
+            class="status-ok">
 
-        正在連線...
+            正在連線...
 
-    </span>
+        </span>
 
-    <br>
+        <br>
 
-    🕒 最後資料時間：
+        🕒 最後資料時間：
 
-    <span id="updateTime">
+        <span id="updateTime">
 
-        --
+            --
 
-    </span>
+        </span>
 
-</div>
-```
+    </div>
 
 </header>
+
+
 
 <!-- =====================================================
      主畫面
@@ -698,138 +727,128 @@ body {
 
 <main class="main">
 
+
 <!-- =====================================================
      左邊：即時數據
 ===================================================== -->
 
 <section class="left-panel">
 
-```
-<!-- 溫度 -->
 
-<div class="sensor-card">
+    <!-- 溫度 -->
 
-    <div class="sensor-icon">
-        🌡️
-    </div>
+    <div class="sensor-card">
 
-    <div class="sensor-name">
-        溫度
-    </div>
+        <div class="sensor-icon">
+            🌡️
+        </div>
 
-    <div class="sensor-value-row">
+        <div class="sensor-name">
+            溫度
+        </div>
 
-        <span
-            id="temperature"
-            class="sensor-value">
+        <div class="sensor-value">
 
-            --
+            <span id="temperature">
+                --
+            </span>
 
-        </span>
+            <span class="sensor-unit">
+                °C
+            </span>
 
-        <span class="sensor-unit">
-            °C
-        </span>
+        </div>
 
     </div>
 
-</div>
 
 
-<!-- 濕度 -->
+    <!-- 濕度 -->
 
-<div class="sensor-card">
+    <div class="sensor-card">
 
-    <div class="sensor-icon">
-        💧
-    </div>
+        <div class="sensor-icon">
+            💧
+        </div>
 
-    <div class="sensor-name">
-        濕度
-    </div>
+        <div class="sensor-name">
+            濕度
+        </div>
 
-    <div class="sensor-value-row">
+        <div class="sensor-value">
 
-        <span
-            id="humidity"
-            class="sensor-value">
+            <span id="humidity">
+                --
+            </span>
 
-            --
+            <span class="sensor-unit">
+                %
+            </span>
 
-        </span>
-
-        <span class="sensor-unit">
-            %
-        </span>
+        </div>
 
     </div>
 
-</div>
 
 
-<!-- 光照 -->
+    <!-- 光照 -->
 
-<div class="sensor-card">
+    <div class="sensor-card">
 
-    <div class="sensor-icon">
-        ☀️
-    </div>
+        <div class="sensor-icon">
+            ☀️
+        </div>
 
-    <div class="sensor-name">
-        光照
-    </div>
+        <div class="sensor-name">
+            光照
+        </div>
 
-    <div class="sensor-value-row">
+        <div class="sensor-value">
 
-        <span
-            id="light"
-            class="sensor-value">
+            <span id="light">
+                --
+            </span>
 
-            --
+            <span class="sensor-unit">
+                Lux
+            </span>
 
-        </span>
-
-        <span class="sensor-unit">
-            Lux
-        </span>
+        </div>
 
     </div>
 
-</div>
 
 
-<!-- CO2 -->
+    <!-- CO2 -->
 
-<div class="sensor-card">
+    <div class="sensor-card">
 
-    <div class="sensor-icon">
-        🌫️
-    </div>
+        <div class="sensor-icon">
+            🌫️
+        </div>
 
-    <div class="sensor-name">
-        CO₂ 濃度
-    </div>
+        <div class="sensor-name">
+            CO₂ 濃度
+        </div>
 
-    <div class="sensor-value-row">
+        <div class="sensor-value">
 
-        <span
-            id="co2"
-            class="sensor-value co2-green">
+            <span id="co2">
+                --
+            </span>
 
-            --
+            <span class="sensor-unit">
+                ppm
+            </span>
 
-        </span>
-
-        <span class="sensor-unit">
-            ppm
-        </span>
+        </div>
 
     </div>
 
-</div>
-```
 
 </section>
+
+
 
 <!-- =====================================================
      中間：4張圖
@@ -837,76 +856,81 @@ body {
 
 <section class="center-panel">
 
-```
-<!-- 溫度 -->
 
-<div class="chart-card">
+    <!-- 溫度 -->
 
-    <div class="chart-title">
-        🌡️ 溫度（°C）
-    </div>
+    <div class="chart-card">
 
-    <div class="chart-container">
+        <div class="chart-title">
+            🌡️ 溫度 (°C)
+        </div>
 
-        <canvas id="temperatureChart"></canvas>
+        <div class="chart-container">
 
-    </div>
+            <canvas id="temperatureChart"></canvas>
 
-</div>
-
-
-<!-- 濕度 -->
-
-<div class="chart-card">
-
-    <div class="chart-title">
-        💧 濕度（%）
-    </div>
-
-    <div class="chart-container">
-
-        <canvas id="humidityChart"></canvas>
+        </div>
 
     </div>
 
-</div>
 
 
-<!-- 光照 -->
+    <!-- 濕度 -->
 
-<div class="chart-card">
+    <div class="chart-card">
 
-    <div class="chart-title">
-        ☀️ 光照（Lux）
-    </div>
+        <div class="chart-title">
+            💧 濕度 (%)
+        </div>
 
-    <div class="chart-container">
+        <div class="chart-container">
 
-        <canvas id="lightChart"></canvas>
+            <canvas id="humidityChart"></canvas>
 
-    </div>
-
-</div>
-
-
-<!-- CO2 -->
-
-<div class="chart-card">
-
-    <div class="chart-title">
-        🌫️ CO₂（ppm）
-    </div>
-
-    <div class="chart-container">
-
-        <canvas id="co2Chart"></canvas>
+        </div>
 
     </div>
 
-</div>
-```
+
+
+    <!-- 光照 -->
+
+    <div class="chart-card">
+
+        <div class="chart-title">
+            ☀️ 光照 (Lux)
+        </div>
+
+        <div class="chart-container">
+
+            <canvas id="lightChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- CO2 -->
+
+    <div class="chart-card">
+
+        <div class="chart-title">
+            🌫️ CO₂ (ppm)
+        </div>
+
+        <div class="chart-container">
+
+            <canvas id="co2Chart"></canvas>
+
+        </div>
+
+    </div>
+
 
 </section>
+
+
 
 <!-- =====================================================
      右邊：統計資料
@@ -914,275 +938,297 @@ body {
 
 <aside class="right-panel">
 
-```
-<div class="right-title">
-    📊 數據統計
-</div>
 
-
-<div class="data-selector">
-
-
-    <button
-        id="btn10"
-        onclick="changeTimeRange(10)">
-
-        10分鐘
-
-    </button>
-
-
-    <button
-        id="btn30"
-        class="active"
-        onclick="changeTimeRange(30)">
-
-        30分鐘
-
-    </button>
-
-
-    <button
-        id="btn60"
-        onclick="changeTimeRange(60)">
-
-        1小時
-
-    </button>
-
-
-</div>
-
-
-
-<!-- 溫度統計 -->
-
-<div class="stat-section">
-
-    <div class="stat-name">
-        🌡️ 溫度
+    <div class="right-title">
+        📊 數據統計
     </div>
 
-    <div class="stat-row">
 
-        <span>最高</span>
+    <!-- 時間 -->
 
-        <span
-            class="stat-value"
-            id="tempMax">
+    <div class="data-selector">
 
-            --
 
-        </span>
+        <button
+            id="btn10min"
+            class="active"
+            onclick="changeTimeRange(10)">
+
+            10分鐘
+
+        </button>
+
+
+        <button
+            id="btn30min"
+            onclick="changeTimeRange(30)">
+
+            30分鐘
+
+        </button>
+
+
+        <button
+            id="btn60min"
+            onclick="changeTimeRange(60)">
+
+            1小時
+
+        </button>
+
 
     </div>
 
-    <div class="stat-row">
-
-        <span>最低</span>
-
-        <span
-            class="stat-value"
-            id="tempMin">
-
-            --
-
-        </span>
-
-    </div>
-
-    <div class="stat-row">
-
-        <span>平均</span>
-
-        <span
-            class="stat-value"
-            id="tempAvg">
-
-            --
-
-        </span>
-
-    </div>
-
-</div>
 
 
+    <!-- 溫度統計 -->
 
-<!-- 濕度統計 -->
+    <div class="stat-section">
 
-<div class="stat-section">
+        <div class="stat-name">
+            🌡️ 溫度
+        </div>
 
-    <div class="stat-name">
-        💧 濕度
-    </div>
 
-    <div class="stat-row">
+        <div class="stat-row">
 
-        <span>最高</span>
+            <span>最高</span>
 
-        <span
-            class="stat-value"
-            id="humMax">
+            <span
+                class="stat-value"
+                id="tempMax">
 
-            --
+                --
 
-        </span>
+            </span>
 
-    </div>
+        </div>
 
-    <div class="stat-row">
 
-        <span>最低</span>
+        <div class="stat-row">
 
-        <span
-            class="stat-value"
-            id="humMin">
+            <span>最低</span>
 
-            --
+            <span
+                class="stat-value"
+                id="tempMin">
 
-        </span>
+                --
+
+            </span>
+
+        </div>
+
+
+        <div class="stat-row">
+
+            <span>平均</span>
+
+            <span
+                class="stat-value"
+                id="tempAvg">
+
+                --
+
+            </span>
+
+        </div>
 
     </div>
 
-    <div class="stat-row">
-
-        <span>平均</span>
-
-        <span
-            class="stat-value"
-            id="humAvg">
-
-            --
-
-        </span>
-
-    </div>
-
-</div>
 
 
+    <!-- 濕度統計 -->
 
-<!-- 光照統計 -->
+    <div class="stat-section">
 
-<div class="stat-section">
+        <div class="stat-name">
+            💧 濕度
+        </div>
 
-    <div class="stat-name">
-        ☀️ 光照
-    </div>
 
-    <div class="stat-row">
+        <div class="stat-row">
 
-        <span>最高</span>
+            <span>最高</span>
 
-        <span
-            class="stat-value"
-            id="lightMax">
+            <span
+                class="stat-value"
+                id="humMax">
 
-            --
+                --
 
-        </span>
+            </span>
 
-    </div>
+        </div>
 
-    <div class="stat-row">
 
-        <span>最低</span>
+        <div class="stat-row">
 
-        <span
-            class="stat-value"
-            id="lightMin">
+            <span>最低</span>
 
-            --
+            <span
+                class="stat-value"
+                id="humMin">
 
-        </span>
+                --
 
-    </div>
+            </span>
 
-    <div class="stat-row">
+        </div>
 
-        <span>平均</span>
 
-        <span
-            class="stat-value"
-            id="lightAvg">
+        <div class="stat-row">
 
-            --
+            <span>平均</span>
 
-        </span>
+            <span
+                class="stat-value"
+                id="humAvg">
+
+                --
+
+            </span>
+
+        </div>
 
     </div>
 
-</div>
 
 
+    <!-- 光照統計 -->
 
-<!-- CO2 統計 -->
+    <div class="stat-section">
 
-<div class="stat-section">
+        <div class="stat-name">
+            ☀️ 光照
+        </div>
 
-    <div class="stat-name">
-        🌫️ CO₂
+
+        <div class="stat-row">
+
+            <span>最高</span>
+
+            <span
+                class="stat-value"
+                id="lightMax">
+
+                --
+
+            </span>
+
+        </div>
+
+
+        <div class="stat-row">
+
+            <span>最低</span>
+
+            <span
+                class="stat-value"
+                id="lightMin">
+
+                --
+
+            </span>
+
+        </div>
+
+
+        <div class="stat-row">
+
+            <span>平均</span>
+
+            <span
+                class="stat-value"
+                id="lightAvg">
+
+                --
+
+            </span>
+
+        </div>
+
     </div>
 
-    <div class="stat-row">
 
-        <span>最高</span>
 
-        <span
-            class="stat-value"
-            id="co2Max">
+    <!-- CO2 統計 -->
 
-            --
+    <div class="stat-section">
 
-        </span>
+        <div class="stat-name">
+            🌫️ CO₂
+        </div>
+
+
+        <div class="stat-row">
+
+            <span>最高</span>
+
+            <span
+                class="stat-value"
+                id="co2Max">
+
+                --
+
+            </span>
+
+        </div>
+
+
+        <div class="stat-row">
+
+            <span>最低</span>
+
+            <span
+                class="stat-value"
+                id="co2Min">
+
+                --
+
+            </span>
+
+        </div>
+
+
+        <div class="stat-row">
+
+            <span>平均</span>
+
+            <span
+                class="stat-value"
+                id="co2Avg">
+
+                --
+
+            </span>
+
+        </div>
 
     </div>
 
-    <div class="stat-row">
-
-        <span>最低</span>
-
-        <span
-            class="stat-value"
-            id="co2Min">
-
-            --
-
-        </span>
-
-    </div>
-
-    <div class="stat-row">
-
-        <span>平均</span>
-
-        <span
-            class="stat-value"
-            id="co2Avg">
-
-            --
-
-        </span>
-
-    </div>
-
-</div>
-```
 
 </aside>
 
+
 </main>
+
+
+
+<!-- =====================================================
+     頁尾
+===================================================== -->
 
 <footer class="footer">
 
-```
-ESP32 IoT Environmental Monitoring Platform
-```
+    Smart Microalgae Shading System
 
 </footer>
 
+
 </div>
+
+
 
 <script>
 
@@ -1197,27 +1243,27 @@ const READ_API_KEY = "IT0OTL4TT1QFKXO8";
 
 
 /* =====================================================
-   設定
+   台灣時區
 ===================================================== */
 
-/*
-   圖表永遠只顯示最近 10 筆
-*/
-
-const CHART_DATA_COUNT = 10;
+const TAIWAN_TIMEZONE =
+    "Asia/Taipei";
 
 
-/*
-   右側統計時間
-   預設：30分鐘
-*/
+/* =====================================================
+   時間範圍
 
-let statisticsMinutes = 30;
+   10 = 10分鐘
+   30 = 30分鐘
+   60 = 1小時
+===================================================== */
+
+let timeRangeMinutes = 10;
 
 
-/*
-   圖表
-*/
+/* =====================================================
+   圖表變數
+===================================================== */
 
 let temperatureChart = null;
 
@@ -1228,30 +1274,122 @@ let lightChart = null;
 let co2Chart = null;
 
 
-/*
-   保存所有取得的資料
-*/
+/* =====================================================
+   ThingSpeak 歷史資料 API
+===================================================== */
 
-let allFeeds = [];
+function getFeedsAPI() {
+
+    return (
+
+        `https://api.thingspeak.com/channels/` +
+
+        `${CHANNEL_ID}/feeds.json` +
+
+        `?api_key=${READ_API_KEY}` +
+
+        `&results=1000`
+
+    );
+
+}
 
 
 /* =====================================================
-   ThingSpeak API
+   ThingSpeak 最新資料 API
 ===================================================== */
 
-function getAPI() {
-
-    /*
-       為了讓統計可以正確計算時間範圍，
-
-       這裡一次抓取最近 1 小時的資料。
-    */
+function getLatestAPI() {
 
     return (
+
         `https://api.thingspeak.com/channels/` +
-        `${CHANNEL_ID}/feeds.json` +
-        `?api_key=${READ_API_KEY}` +
-        `&results=8000`
+
+        `${CHANNEL_ID}/feeds/last.json` +
+
+        `?api_key=${READ_API_KEY}`
+
+    );
+
+}
+
+
+/* =====================================================
+   台灣時間
+===================================================== */
+
+function formatTaiwanTime(date) {
+
+    return new Intl.DateTimeFormat(
+
+        "zh-TW",
+
+        {
+
+            timeZone:
+                TAIWAN_TIMEZONE,
+
+            year:
+                "numeric",
+
+            month:
+                "2-digit",
+
+            day:
+                "2-digit",
+
+            hour:
+                "2-digit",
+
+            minute:
+                "2-digit",
+
+            second:
+                "2-digit",
+
+            hour12:
+                false
+
+        }
+
+    ).format(date);
+
+}
+
+
+/* =====================================================
+   圖表時間
+===================================================== */
+
+function formatChartTime(timestamp) {
+
+    return new Intl.DateTimeFormat(
+
+        "zh-TW",
+
+        {
+
+            timeZone:
+                TAIWAN_TIMEZONE,
+
+            hour:
+                "2-digit",
+
+            minute:
+                "2-digit",
+
+            second:
+                "2-digit",
+
+            hour12:
+                false
+
+        }
+
+    ).format(
+
+        new Date(timestamp)
+
     );
 
 }
@@ -1263,357 +1401,210 @@ function getAPI() {
 
 function getAverage(values) {
 
-    if (values.length === 0) {
+    if (
+        values.length === 0
+    ) {
 
         return 0;
 
     }
 
+
     return (
+
         values.reduce(
-            (a, b) => a + b,
+
+            (a, b) =>
+                a + b,
+
             0
+
         )
+
         /
+
         values.length
+
     );
 
 }
 
 
 /* =====================================================
-   統計資料
+   統計
 ===================================================== */
 
 function updateStatistics(
+
     values,
+
     maxID,
+
     minID,
+
     avgID,
+
     unit,
+
     decimals
+
 ) {
 
-    if (values.length === 0) {
 
-        document.getElementById(maxID).textContent = "--";
+    if (
+        values.length === 0
+    ) {
 
-        document.getElementById(minID).textContent = "--";
+        document.getElementById(
+            maxID
+        ).textContent = "--";
 
-        document.getElementById(avgID).textContent = "--";
+
+        document.getElementById(
+            minID
+        ).textContent = "--";
+
+
+        document.getElementById(
+            avgID
+        ).textContent = "--";
+
 
         return;
 
     }
 
 
-    document.getElementById(maxID).textContent =
-        Math.max(...values).toFixed(decimals)
-        + unit;
+    document.getElementById(
+        maxID
+    ).textContent =
+
+        Math.max(
+            ...values
+        ).toFixed(decimals)
+
+        +
+
+        unit;
 
 
-    document.getElementById(minID).textContent =
-        Math.min(...values).toFixed(decimals)
-        + unit;
+    document.getElementById(
+        minID
+    ).textContent =
+
+        Math.min(
+            ...values
+        ).toFixed(decimals)
+
+        +
+
+        unit;
 
 
-    document.getElementById(avgID).textContent =
-        getAverage(values).toFixed(decimals)
-        + unit;
+    document.getElementById(
+        avgID
+    ).textContent =
+
+        getAverage(
+            values
+        ).toFixed(decimals)
+
+        +
+
+        unit;
 
 }
 
 
 /* =====================================================
-   切換統計時間
+   切換時間
 ===================================================== */
 
 function changeTimeRange(minutes) {
 
-    statisticsMinutes = minutes;
+    timeRangeMinutes =
+        minutes;
 
 
     document
         .querySelectorAll(
             ".data-selector button"
         )
-        .forEach(button => {
+        .forEach(
 
-            button.classList.remove(
-                "active"
-            );
+            button => {
 
-        });
-
-
-    document.getElementById(
-        "btn" + minutes
-    ).classList.add(
-        "active"
-    );
-
-
-    updateStatisticsByTime();
-
-}
-
-
-/* =====================================================
-   CO2 顏色
-===================================================== */
-
-function updateCO2Color(value) {
-
-    const co2Element =
-        document.getElementById("co2");
-
-
-    co2Element.classList.remove(
-        "co2-green",
-        "co2-orange",
-        "co2-red"
-    );
-
-
-    if (!Number.isFinite(value)) {
-
-        co2Element.classList.add(
-            "co2-green"
-        );
-
-        return;
-
-    }
-
-
-    /*
-       >= 1500 ppm
-       紅色
-    */
-
-    if (value >= 1500) {
-
-        co2Element.classList.add(
-            "co2-red"
-        );
-
-    }
-
-
-    /*
-       1000 ~ 1499 ppm
-       橘色
-    */
-
-    else if (value >= 1000) {
-
-        co2Element.classList.add(
-            "co2-orange"
-        );
-
-    }
-
-
-    /*
-       < 1000 ppm
-       綠色
-    */
-
-    else {
-
-        co2Element.classList.add(
-            "co2-green"
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   依照時間計算右側統計
-===================================================== */
-
-function updateStatisticsByTime() {
-
-    if (!allFeeds || allFeeds.length === 0) {
-
-        return;
-
-    }
-
-
-    /*
-       取得最新資料時間
-
-       注意：
-
-       不使用電腦現在時間。
-
-       直接使用 ThingSpeak 最新資料時間。
-    */
-
-    const latestFeed =
-        allFeeds[
-            allFeeds.length - 1
-        ];
-
-
-    const latestTime =
-        new Date(
-            latestFeed.created_at
-        );
-
-
-    /*
-       計算統計開始時間
-    */
-
-    const startTime =
-        latestTime.getTime()
-        -
-        statisticsMinutes * 60 * 1000;
-
-
-    /*
-       篩選時間範圍
-    */
-
-    const statisticFeeds =
-        allFeeds.filter(
-            item => {
-
-                const itemTime =
-                    new Date(
-                        item.created_at
-                    ).getTime();
-
-                return (
-                    itemTime >= startTime &&
-                    itemTime <= latestTime.getTime()
+                button.classList.remove(
+                    "active"
                 );
 
             }
+
         );
 
 
-    /*
-       溫度
-    */
+    if (
+        minutes === 10
+    ) {
 
-    const temperatures =
-        statisticFeeds
-            .map(
-                item =>
-                    Number(item.field1)
+        document
+            .getElementById(
+                "btn10min"
             )
-            .filter(
-                value =>
-                    Number.isFinite(value)
+            .classList.add(
+                "active"
             );
 
+    }
 
-    /*
-       濕度
-    */
 
-    const humidities =
-        statisticFeeds
-            .map(
-                item =>
-                    Number(item.field2)
+    else if (
+        minutes === 30
+    ) {
+
+        document
+            .getElementById(
+                "btn30min"
             )
-            .filter(
-                value =>
-                    Number.isFinite(value)
+            .classList.add(
+                "active"
             );
 
+    }
 
-    /*
-       光照
-    */
 
-    const lights =
-        statisticFeeds
-            .map(
-                item =>
-                    Number(item.field3)
+    else if (
+        minutes === 60
+    ) {
+
+        document
+            .getElementById(
+                "btn60min"
             )
-            .filter(
-                value =>
-                    Number.isFinite(value)
+            .classList.add(
+                "active"
             );
 
-
-    /*
-       CO2
-    */
-
-    const co2Values =
-        statisticFeeds
-            .map(
-                item =>
-                    Number(item.field4)
-            )
-            .filter(
-                value =>
-                    Number.isFinite(value)
-            );
+    }
 
 
-    /*
-       更新統計
-    */
-
-    updateStatistics(
-        temperatures,
-        "tempMax",
-        "tempMin",
-        "tempAvg",
-        " °C",
-        1
-    );
-
-
-    updateStatistics(
-        humidities,
-        "humMax",
-        "humMin",
-        "humAvg",
-        " %",
-        1
-    );
-
-
-    updateStatistics(
-        lights,
-        "lightMax",
-        "lightMin",
-        "lightAvg",
-        " Lux",
-        1
-    );
-
-
-    updateStatistics(
-        co2Values,
-        "co2Max",
-        "co2Min",
-        "co2Avg",
-        " ppm",
-        0
-    );
+    loadData();
 
 }
 
 
 /* =====================================================
-   讀取 ThingSpeak
+   讀取資料
 ===================================================== */
 
 async function loadData() {
 
     try {
+
+
+        /* =================================================
+           讀取狀態
+        ================================================= */
 
         document.getElementById(
             "status"
@@ -1627,76 +1618,235 @@ async function loadData() {
             "status-ok";
 
 
-        const response =
-            await fetch(
-                getAPI(),
+
+        /* =================================================
+           同時取得歷史資料與最新資料
+        ================================================= */
+
+        const [
+
+            feedsResponse,
+
+            latestResponse
+
+        ] = await Promise.all([
+
+            fetch(
+
+                getFeedsAPI(),
+
                 {
-                    cache: "no-store"
+                    cache:
+                        "no-store"
                 }
-            );
+
+            ),
+
+            fetch(
+
+                getLatestAPI(),
+
+                {
+                    cache:
+                        "no-store"
+                }
+
+            )
+
+        ]);
 
 
-        if (!response.ok) {
 
-            throw new Error(
-                "ThingSpeak HTTP " +
-                response.status
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
+        /* =================================================
+           HTTP檢查
+        ================================================= */
 
         if (
-            !data.feeds ||
-            data.feeds.length === 0
+            !feedsResponse.ok
         ) {
 
             throw new Error(
-                "ThingSpeak 沒有資料"
+
+                "ThingSpeak 歷史資料 HTTP " +
+
+                feedsResponse.status
+
             );
 
         }
 
 
-        /*
-           只保留有效資料
-        */
+        if (
+            !latestResponse.ok
+        ) {
 
-        allFeeds =
-            data.feeds
-                .filter(
-                    item =>
-                        item.created_at
+            throw new Error(
+
+                "ThingSpeak 最新資料 HTTP " +
+
+                latestResponse.status
+
+            );
+
+        }
+
+
+
+        /* =================================================
+           JSON
+        ================================================= */
+
+        const feedsData =
+            await feedsResponse.json();
+
+
+        const latestData =
+            await latestResponse.json();
+
+
+
+        /* =================================================
+           資料確認
+        ================================================= */
+
+        if (
+
+            !feedsData.feeds ||
+
+            feedsData.feeds.length === 0
+
+        ) {
+
+            throw new Error(
+                "ThingSpeak 沒有歷史資料"
+            );
+
+        }
+
+
+        if (
+
+            !latestData ||
+
+            !latestData.created_at
+
+        ) {
+
+            throw new Error(
+                "ThingSpeak 沒有最新資料"
+            );
+
+        }
+
+
+
+        /* =================================================
+           歷史資料整理
+        ================================================= */
+
+        const allFeeds =
+
+            feedsData.feeds
+
+                .map(item => {
+
+                    return {
+
+                        ...item,
+
+                        timestamp:
+
+                            new Date(
+                                item.created_at
+                            ).getTime()
+
+                    };
+
+                })
+
+                .filter(item =>
+
+                    Number.isFinite(
+                        item.timestamp
+                    )
+
                 );
 
 
-        /*
-           ------------------------------------------------
-           重要：
-           按照時間由舊 → 新排序
-           ------------------------------------------------
-        */
+
+        /* =================================================
+           ⭐ 固定排序
+
+           左 = 舊
+           右 = 新
+
+           絕對不使用 reverse()
+        ================================================= */
 
         allFeeds.sort(
+
             (a, b) =>
-                new Date(a.created_at)
-                -
-                new Date(b.created_at)
+
+                a.timestamp -
+                b.timestamp
+
         );
 
 
-        /*
+
+        /* =================================================
+           最新資料時間
+        ================================================= */
+
+        const latestTimestamp =
+
+            new Date(
+                latestData.created_at
+            ).getTime();
+
+
+
+        if (
+            !Number.isFinite(
+                latestTimestamp
+            )
+        ) {
+
+            throw new Error(
+                "最新資料時間格式錯誤"
+            );
+
+        }
+
+
+
+        /* =================================================
+           ⭐ 最後資料時間
+
+           完全以 ThingSpeak 為準
+        ================================================= */
+
+        document.getElementById(
+            "updateTime"
+        ).textContent =
+
+            formatTaiwanTime(
+
+                new Date(
+                    latestTimestamp
+                )
+
+            );
+
+
+
+        /* =================================================
            最新資料
-        */
+        ================================================= */
 
         const latest =
-            allFeeds[
-                allFeeds.length - 1
-            ];
+            latestData;
+
 
 
         /* =================================================
@@ -1708,14 +1858,27 @@ async function loadData() {
             latest.field1 !== undefined
         ) {
 
-            document.getElementById(
-                "temperature"
-            ).textContent =
+            const value =
+
                 Number(
                     latest.field1
-                ).toFixed(1);
+                );
+
+
+            if (
+                Number.isFinite(value)
+            ) {
+
+                document.getElementById(
+                    "temperature"
+                ).textContent =
+
+                    value.toFixed(1);
+
+            }
 
         }
+
 
 
         /* =================================================
@@ -1727,14 +1890,27 @@ async function loadData() {
             latest.field2 !== undefined
         ) {
 
-            document.getElementById(
-                "humidity"
-            ).textContent =
+            const value =
+
                 Number(
                     latest.field2
-                ).toFixed(1);
+                );
+
+
+            if (
+                Number.isFinite(value)
+            ) {
+
+                document.getElementById(
+                    "humidity"
+                ).textContent =
+
+                    value.toFixed(1);
+
+            }
 
         }
+
 
 
         /* =================================================
@@ -1746,14 +1922,27 @@ async function loadData() {
             latest.field3 !== undefined
         ) {
 
-            document.getElementById(
-                "light"
-            ).textContent =
+            const value =
+
                 Number(
                     latest.field3
-                ).toFixed(1);
+                );
+
+
+            if (
+                Number.isFinite(value)
+            ) {
+
+                document.getElementById(
+                    "light"
+                ).textContent =
+
+                    value.toFixed(1);
+
+            }
 
         }
+
 
 
         /* =================================================
@@ -1765,209 +1954,350 @@ async function loadData() {
             latest.field4 !== undefined
         ) {
 
-            const latestCO2 =
+            const co2Value =
+
                 Number(
                     latest.field4
                 );
 
 
-            document.getElementById(
-                "co2"
-            ).textContent =
-                latestCO2.toFixed(0);
+            if (
+                Number.isFinite(co2Value)
+            ) {
+
+                const co2Element =
+
+                    document.getElementById(
+                        "co2"
+                    );
 
 
-            updateCO2Color(
-                latestCO2
-            );
+                co2Element.textContent =
+
+                    co2Value.toFixed(0);
+
+
+
+                /* =========================================
+                   CO2顏色
+
+                   >= 1500 ppm
+                   紅色
+
+                   1000～1499 ppm
+                   橘色
+
+                   < 1000 ppm
+                   綠色
+                ========================================= */
+
+                if (
+                    co2Value >= 1500
+                ) {
+
+                    co2Element.style.color =
+                        "#dc2626";
+
+                }
+
+                else if (
+                    co2Value >= 1000
+                ) {
+
+                    co2Element.style.color =
+                        "#f97316";
+
+                }
+
+                else {
+
+                    co2Element.style.color =
+                        "#087f6f";
+
+                }
+
+            }
 
         }
 
 
+
         /* =================================================
-           最後資料時間
+           ⭐ 圖表時間範圍
 
-           ★ 只使用 ThingSpeak created_at
+           不使用 Date.now()
 
-           ★ 不使用 new Date() 當現在時間
+           以 ThingSpeak 最新資料為基準。
         ================================================= */
 
-        document.getElementById(
-            "updateTime"
-        ).textContent =
-            formatTaiwanTime(
-                latest.created_at
+        const chartEndTime =
+            latestTimestamp;
+
+
+        const chartStartTime =
+
+            chartEndTime -
+
+            (
+
+                timeRangeMinutes *
+
+                60 *
+
+                1000
+
             );
 
 
-        /* =================================================
-           右側統計
-        ================================================= */
-
-        updateStatisticsByTime();
-
 
         /* =================================================
-           圖表
-           
-           ★ 只取最後 10 筆
+           篩選時間範圍
         ================================================= */
 
-        const chartFeeds =
-            allFeeds.slice(
-                -CHART_DATA_COUNT
-            );
+        const feeds =
+
+            allFeeds
+
+                .filter(item =>
+
+                    item.timestamp >=
+                    chartStartTime
+
+                    &&
+
+                    item.timestamp <=
+                    chartEndTime
+
+                )
+
+                .sort(
+
+                    (a, b) =>
+
+                        a.timestamp -
+                        b.timestamp
+
+                );
 
 
-        /*
-           時間已經由舊 → 新
-           
-           所以最新資料永遠在最右邊。
-        */
 
-        const labels =
-            chartFeeds.map(
-                item =>
-                    formatChartTime(
-                        item.created_at
-                    )
-            );
+        /* =================================================
+           統計資料
+        ================================================= */
+
+        const temperatures =
+
+            feeds
+
+                .map(
+                    item =>
+                        Number(
+                            item.field1
+                        )
+                )
+
+                .filter(
+                    value =>
+                        Number.isFinite(
+                            value
+                        )
+                );
 
 
-        createCharts(
-            labels,
-            chartFeeds
+        const humidities =
+
+            feeds
+
+                .map(
+                    item =>
+                        Number(
+                            item.field2
+                        )
+                )
+
+                .filter(
+                    value =>
+                        Number.isFinite(
+                            value
+                        )
+                );
+
+
+        const lights =
+
+            feeds
+
+                .map(
+                    item =>
+                        Number(
+                            item.field3
+                        )
+                )
+
+                .filter(
+                    value =>
+                        Number.isFinite(
+                            value
+                        )
+                );
+
+
+        const co2Values =
+
+            feeds
+
+                .map(
+                    item =>
+                        Number(
+                            item.field4
+                        )
+                )
+
+                .filter(
+                    value =>
+                        Number.isFinite(
+                            value
+                        )
+                );
+
+
+
+        /* =================================================
+           更新統計
+        ================================================= */
+
+        updateStatistics(
+
+            temperatures,
+
+            "tempMax",
+
+            "tempMin",
+
+            "tempAvg",
+
+            " °C",
+
+            1
+
         );
 
 
+        updateStatistics(
+
+            humidities,
+
+            "humMax",
+
+            "humMin",
+
+            "humAvg",
+
+            " %",
+
+            1
+
+        );
+
+
+        updateStatistics(
+
+            lights,
+
+            "lightMax",
+
+            "lightMin",
+
+            "lightAvg",
+
+            " Lux",
+
+            1
+
+        );
+
+
+        updateStatistics(
+
+            co2Values,
+
+            "co2Max",
+
+            "co2Min",
+
+            "co2Avg",
+
+            " ppm",
+
+            0
+
+        );
+
+
+
         /* =================================================
-           系統正常
+           建立圖表
+        ================================================= */
+
+        createCharts(
+
+            feeds,
+
+            chartStartTime,
+
+            chartEndTime
+
+        );
+
+
+
+        /* =================================================
+           正常
         ================================================= */
 
         document.getElementById(
             "status"
         ).textContent =
+
             "資料連線正常";
 
 
         document.getElementById(
             "status"
         ).className =
+
             "status-ok";
+
 
 
     }
 
     catch (error) {
 
+
         console.error(
+
             "ThingSpeak 錯誤：",
+
             error
+
         );
 
 
         document.getElementById(
             "status"
         ).textContent =
+
             "資料讀取失敗";
 
 
         document.getElementById(
             "status"
         ).className =
+
             "status-error";
 
     }
-
-}
-
-
-/* =====================================================
-   台灣時間格式
-===================================================== */
-
-function formatTaiwanTime(dateString) {
-
-    const date =
-        new Date(dateString);
-
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return "--";
-
-    }
-
-
-    /*
-       使用 Asia/Taipei
-
-       不使用電腦目前時間。
-    */
-
-    return new Intl.DateTimeFormat(
-        "zh-TW",
-        {
-            timeZone: "Asia/Taipei",
-
-            year: "numeric",
-
-            month: "2-digit",
-
-            day: "2-digit",
-
-            hour: "2-digit",
-
-            minute: "2-digit",
-
-            second: "2-digit",
-
-            hour12: false
-        }
-    ).format(date);
-
-}
-
-
-/* =====================================================
-   圖表時間
-===================================================== */
-
-function formatChartTime(dateString) {
-
-    const date =
-        new Date(dateString);
-
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return "--";
-
-    }
-
-
-    return new Intl.DateTimeFormat(
-        "zh-TW",
-        {
-            timeZone: "Asia/Taipei",
-
-            hour: "2-digit",
-
-            minute: "2-digit",
-
-            second: "2-digit",
-
-            hour12: false
-        }
-    ).format(date);
 
 }
 
@@ -1977,112 +2307,221 @@ function formatChartTime(dateString) {
 ===================================================== */
 
 function createCharts(
-    labels,
-    feeds
+
+    feeds,
+
+    startTime,
+
+    endTime
+
 ) {
 
 
-    /*
+    /* =================================================
        刪除舊圖
-    */
+    ================================================= */
 
-    if (temperatureChart)
+    if (
+        temperatureChart
+    ) {
+
         temperatureChart.destroy();
 
+    }
 
-    if (humidityChart)
+
+    if (
+        humidityChart
+    ) {
+
         humidityChart.destroy();
 
+    }
 
-    if (lightChart)
+
+    if (
+        lightChart
+    ) {
+
         lightChart.destroy();
 
+    }
 
-    if (co2Chart)
+
+    if (
+        co2Chart
+    ) {
+
         co2Chart.destroy();
 
+    }
 
-    /*
-       共用設定
-    */
 
-    const commonOptions = {
 
-        responsive: true,
+    /* =================================================
+       共用圖表設定
+    ================================================= */
 
-        maintainAspectRatio: false,
+    function createCommonOptions(
+        unit
+    ) {
 
-        animation: {
+        return {
 
-            duration: 300
+            responsive:
+                true,
 
-        },
+            maintainAspectRatio:
+                false,
 
-        interaction: {
+            animation:
+                false,
 
-            mode: "index",
+            interaction: {
 
-            intersect: false
+                mode:
+                    "nearest",
 
-        },
-
-        plugins: {
-
-            legend: {
-
-                display: false
+                intersect:
+                    false
 
             },
 
-            tooltip: {
+            plugins: {
 
-                titleFont: {
+                legend: {
 
-                    size: 15
+                    display:
+                        false
 
                 },
 
-                bodyFont: {
 
-                    size: 15
+                tooltip: {
 
-                }
+                    callbacks: {
 
-            }
+                        title:
+                            function(context) {
 
-        },
+                                if (
+                                    !context.length
+                                ) {
 
-        scales: {
+                                    return "";
 
-            x: {
+                                }
 
-                reverse: false,
 
-                ticks: {
+                                return formatTaiwanTime(
 
-                    maxTicksLimit: 6,
+                                    new Date(
 
-                    font: {
+                                        context[0]
+                                            .parsed
+                                            .x
 
-                        size: 14
+                                    )
 
-                    },
+                                );
 
-                    autoSkip: true
+                            },
+
+
+                        label:
+                            function(context) {
+
+                                const decimals =
+
+                                    unit ===
+                                    "ppm"
+
+                                    ? 0
+                                    : 1;
+
+
+                                return (
+
+                                    Number(
+
+                                        context
+                                            .parsed
+                                            .y
+
+                                    ).toFixed(
+                                        decimals
+                                    )
+
+                                    +
+
+                                    " " +
+
+                                    unit
+
+                                );
+
+                            }
+
+                    }
 
                 }
 
             },
 
-            y: {
 
-                beginAtZero: false,
+            scales: {
 
-                ticks: {
+                x: {
 
-                    font: {
+                    type:
+                        "linear",
 
-                        size: 14
+                    min:
+                        startTime,
+
+                    max:
+                        endTime,
+
+                    ticks: {
+
+                        maxTicksLimit:
+                            7,
+
+                        font: {
+
+                            size:
+                                14
+
+                        },
+
+
+                        callback:
+                            function(value) {
+
+                                return formatChartTime(
+                                    value
+                                );
+
+                            }
+
+                    }
+
+                },
+
+
+                y: {
+
+                    beginAtZero:
+                        false,
+
+                    ticks: {
+
+                        font: {
+
+                            size:
+                                14
+
+                        }
 
                     }
 
@@ -2090,9 +2529,170 @@ function createCharts(
 
             }
 
-        }
+        };
 
-    };
+    }
+
+
+
+    /* =================================================
+       溫度資料
+    ================================================= */
+
+    const temperatureData =
+
+        feeds
+
+            .filter(item =>
+
+                item.field1 !== null &&
+
+                Number.isFinite(
+
+                    Number(
+                        item.field1
+                    )
+
+                )
+
+            )
+
+            .map(item => {
+
+                return {
+
+                    x:
+                        item.timestamp,
+
+                    y:
+                        Number(
+                            item.field1
+                        )
+
+                };
+
+            });
+
+
+
+    /* =================================================
+       濕度資料
+    ================================================= */
+
+    const humidityData =
+
+        feeds
+
+            .filter(item =>
+
+                item.field2 !== null &&
+
+                Number.isFinite(
+
+                    Number(
+                        item.field2
+                    )
+
+                )
+
+            )
+
+            .map(item => {
+
+                return {
+
+                    x:
+                        item.timestamp,
+
+                    y:
+                        Number(
+                            item.field2
+                        )
+
+                };
+
+            });
+
+
+
+    /* =================================================
+       光照資料
+    ================================================= */
+
+    const lightData =
+
+        feeds
+
+            .filter(item =>
+
+                item.field3 !== null &&
+
+                Number.isFinite(
+
+                    Number(
+                        item.field3
+                    )
+
+                )
+
+            )
+
+            .map(item => {
+
+                return {
+
+                    x:
+                        item.timestamp,
+
+                    y:
+                        Number(
+                            item.field3
+                        )
+
+                };
+
+            });
+
+
+
+    /* =================================================
+       CO2資料
+    ================================================= */
+
+    const co2Data =
+
+        feeds
+
+            .filter(item =>
+
+                item.field4 !== null &&
+
+                Number.isFinite(
+
+                    Number(
+                        item.field4
+                    )
+
+                )
+
+            )
+
+            .map(item => {
+
+                return {
+
+                    x:
+                        item.timestamp,
+
+                    y:
+                        Number(
+                            item.field4
+                        )
+
+                };
+
+            });
+
 
 
     /* =================================================
@@ -2109,48 +2709,49 @@ function createCharts(
 
             {
 
-                type: "line",
+                type:
+                    "line",
 
                 data: {
 
-                    labels: labels,
-
                     datasets: [{
 
-                        label: "溫度（°C）",
+                        label:
+                            "溫度 (°C)",
 
                         data:
-                            feeds.map(
-                                item =>
+                            temperatureData,
 
-                                    item.field1 == null
-                                    ? null
-                                    :
-                                    Number(
-                                        item.field1
-                                    )
-                            ),
+                        borderWidth:
+                            3,
 
-                        borderWidth: 3,
+                        pointRadius:
+                            3,
 
-                        pointRadius: 3,
+                        pointHoverRadius:
+                            6,
 
-                        pointHoverRadius: 6,
+                        tension:
+                            0.25,
 
-                        tension: 0.3,
-
-                        fill: false
+                        fill:
+                            false
 
                     }]
 
                 },
 
+
                 options:
-                    commonOptions
+
+                    createCommonOptions(
+                        "°C"
+                    )
 
             }
 
         );
+
 
 
     /* =================================================
@@ -2167,48 +2768,49 @@ function createCharts(
 
             {
 
-                type: "line",
+                type:
+                    "line",
 
                 data: {
 
-                    labels: labels,
-
                     datasets: [{
 
-                        label: "濕度（%）",
+                        label:
+                            "濕度 (%)",
 
                         data:
-                            feeds.map(
-                                item =>
+                            humidityData,
 
-                                    item.field2 == null
-                                    ? null
-                                    :
-                                    Number(
-                                        item.field2
-                                    )
-                            ),
+                        borderWidth:
+                            3,
 
-                        borderWidth: 3,
+                        pointRadius:
+                            3,
 
-                        pointRadius: 3,
+                        pointHoverRadius:
+                            6,
 
-                        pointHoverRadius: 6,
+                        tension:
+                            0.25,
 
-                        tension: 0.3,
-
-                        fill: false
+                        fill:
+                            false
 
                     }]
 
                 },
 
+
                 options:
-                    commonOptions
+
+                    createCommonOptions(
+                        "%"
+                    )
 
             }
 
         );
+
 
 
     /* =================================================
@@ -2225,52 +2827,53 @@ function createCharts(
 
             {
 
-                type: "line",
+                type:
+                    "line",
 
                 data: {
 
-                    labels: labels,
-
                     datasets: [{
 
-                        label: "光照（Lux）",
+                        label:
+                            "光照 (Lux)",
 
                         data:
-                            feeds.map(
-                                item =>
+                            lightData,
 
-                                    item.field3 == null
-                                    ? null
-                                    :
-                                    Number(
-                                        item.field3
-                                    )
-                            ),
+                        borderWidth:
+                            3,
 
-                        borderWidth: 3,
+                        pointRadius:
+                            3,
 
-                        pointRadius: 3,
+                        pointHoverRadius:
+                            6,
 
-                        pointHoverRadius: 6,
+                        tension:
+                            0.25,
 
-                        tension: 0.3,
-
-                        fill: false
+                        fill:
+                            false
 
                     }]
 
                 },
 
+
                 options:
-                    commonOptions
+
+                    createCommonOptions(
+                        "Lux"
+                    )
 
             }
 
         );
 
 
+
     /* =================================================
-       CO2 圖
+       CO2圖
     ================================================= */
 
     co2Chart =
@@ -2283,44 +2886,44 @@ function createCharts(
 
             {
 
-                type: "line",
+                type:
+                    "line",
 
                 data: {
 
-                    labels: labels,
-
                     datasets: [{
 
-                        label: "CO₂（ppm）",
+                        label:
+                            "CO₂ (ppm)",
 
                         data:
-                            feeds.map(
-                                item =>
+                            co2Data,
 
-                                    item.field4 == null
-                                    ? null
-                                    :
-                                    Number(
-                                        item.field4
-                                    )
-                            ),
+                        borderWidth:
+                            3,
 
-                        borderWidth: 3,
+                        pointRadius:
+                            3,
 
-                        pointRadius: 3,
+                        pointHoverRadius:
+                            6,
 
-                        pointHoverRadius: 6,
+                        tension:
+                            0.25,
 
-                        tension: 0.3,
-
-                        fill: false
+                        fill:
+                            false
 
                     }]
 
                 },
 
+
                 options:
-                    commonOptions
+
+                    createCommonOptions(
+                        "ppm"
+                    )
 
             }
 
@@ -2337,19 +2940,21 @@ loadData();
 
 
 /* =====================================================
-   每 5 秒自動更新
+   每15秒自動更新
 ===================================================== */
 
 setInterval(
 
     loadData,
 
-    5000
+    15000
 
 );
 
 </script>
 
+
 </body>
 
 </html>
+```
