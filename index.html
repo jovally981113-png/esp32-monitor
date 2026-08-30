@@ -119,6 +119,31 @@
 
         /* ===== 左側感應卡 — 玻璃質感 ===== */
         .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-height: 0;
+        }
+
+        /* 左側標題：即時數據 */
+        .left-panel-header {
+            flex-shrink: 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            letter-spacing: 1.5px;
+            padding: 6px 0 2px 6px;
+            border-bottom: 3px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .left-panel-header span {
+            font-size: 26px;
+        }
+
+        .left-panel-grid {
+            flex: 1;
             display: grid;
             grid-template-rows: repeat(4, 1fr);
             gap: 14px;
@@ -404,8 +429,11 @@
                 padding: 12px;
             }
             .left-panel {
-                height: 440px;
+                height: auto;
                 margin-bottom: 16px;
+            }
+            .left-panel-grid {
+                height: 440px;
                 grid-template-rows: repeat(4, 1fr);
             }
             .center-panel {
@@ -459,27 +487,32 @@
     <!-- ===== MAIN ===== -->
     <main class="main">
 
-        <!-- 左：感測器 -->
+        <!-- 左：感測器 + 即時數據標題 -->
         <section class="left-panel">
-            <div class="sensor-card">
-                <div class="sensor-icon">🌡️</div>
-                <div class="sensor-name">溫度</div>
-                <div class="sensor-value"><span id="temperature">--</span><span class="sensor-unit">°C</span></div>
+            <div class="left-panel-header">
+                <span>📊</span> 即時數據
             </div>
-            <div class="sensor-card">
-                <div class="sensor-icon">💧</div>
-                <div class="sensor-name">濕度</div>
-                <div class="sensor-value"><span id="humidity">--</span><span class="sensor-unit">%</span></div>
-            </div>
-            <div class="sensor-card">
-                <div class="sensor-icon">☀️</div>
-                <div class="sensor-name">光照</div>
-                <div class="sensor-value"><span id="light">--</span><span class="sensor-unit">Lux</span></div>
-            </div>
-            <div class="sensor-card">
-                <div class="sensor-icon">🌫️</div>
-                <div class="sensor-name">CO₂ 濃度</div>
-                <div class="sensor-value"><span id="co2">--</span><span class="sensor-unit">ppm</span></div>
+            <div class="left-panel-grid">
+                <div class="sensor-card">
+                    <div class="sensor-icon">🌡️</div>
+                    <div class="sensor-name">溫度</div>
+                    <div class="sensor-value"><span id="temperature">--</span><span class="sensor-unit">°C</span></div>
+                </div>
+                <div class="sensor-card">
+                    <div class="sensor-icon">💧</div>
+                    <div class="sensor-name">濕度</div>
+                    <div class="sensor-value"><span id="humidity">--</span><span class="sensor-unit">%</span></div>
+                </div>
+                <div class="sensor-card">
+                    <div class="sensor-icon">☀️</div>
+                    <div class="sensor-name">光照</div>
+                    <div class="sensor-value"><span id="light">--</span><span class="sensor-unit">Lux</span></div>
+                </div>
+                <div class="sensor-card">
+                    <div class="sensor-icon">🌫️</div>
+                    <div class="sensor-name">CO₂ 濃度</div>
+                    <div class="sensor-value"><span id="co2">--</span><span class="sensor-unit">ppm</span></div>
+                </div>
             </div>
         </section>
 
@@ -830,10 +863,4 @@
         setInterval(loadData, 15000);
 
         // 初始化標籤
-        statRangeLabel.textContent = '(最近 10 分鐘)';
-        document.querySelector('#chartBtnGroup button[data-count="10"]')?.classList.add('active');
-        document.querySelector('#statBtnGroup button[data-min="10"]')?.classList.add('active');
-    })();
-</script>
-</body>
-</html>
+        statRangeLabel.textContent
