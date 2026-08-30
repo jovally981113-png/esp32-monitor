@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 
 <head>
@@ -6,7 +7,7 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+   content="width=device-width, initial-scale=1.0">
 
 <title>智慧微藻遮陽換氣系統</title>
 
@@ -666,12 +667,9 @@ body {
 
 </head>
 
-
 <body>
 
-
 <div class="dashboard">
-
 
 <!-- =====================================================
      上方標題
@@ -679,46 +677,46 @@ body {
 
 <header class="header">
 
-    <div class="title-area">
+```
+<div class="title-area">
 
-        <h1>
-            智慧微藻遮陽換氣系統
-        </h1>
+    <h1>
+        智慧微藻遮陽換氣系統
+    </h1>
 
-        <p>
-            Smart Microalgae Shading System
-        </p>
+    <p>
+        Smart Microalgae Shading System
+    </p>
 
-    </div>
+</div>
 
 
-    <div class="system-area">
+<div class="system-area">
 
-        🟢 系統狀態：
+    🟢 系統狀態：
 
-        <span
-            id="status"
-            class="status-ok">
+    <span
+        id="status"
+        class="status-ok">
 
-            正在連線...
+        正在連線...
 
-        </span>
+    </span>
 
-        <br>
+    <br>
 
-        🕒 最後資料時間：
+    🕒 最後資料時間：
 
-        <span id="updateTime">
+    <span id="updateTime">
 
-            --
+        --
 
-        </span>
+    </span>
 
-    </div>
+</div>
+```
 
 </header>
-
-
 
 <!-- =====================================================
      主畫面
@@ -726,128 +724,125 @@ body {
 
 <main class="main">
 
-
 <!-- =====================================================
      左邊：即時數據
 ===================================================== -->
 
 <section class="left-panel">
 
+```
+<!-- 溫度 -->
 
-    <!-- 溫度 -->
+<div class="sensor-card">
 
-    <div class="sensor-card">
+    <div class="sensor-icon">
+        🌡️
+    </div>
 
-        <div class="sensor-icon">
-            🌡️
-        </div>
+    <div class="sensor-name">
+        溫度
+    </div>
 
-        <div class="sensor-name">
-            溫度
-        </div>
+    <div class="sensor-value">
 
-        <div class="sensor-value">
+        <span id="temperature">
+            --
+        </span>
 
-            <span id="temperature">
-                --
-            </span>
-
-            <span class="sensor-unit">
-                °C
-            </span>
-
-        </div>
+        <span class="sensor-unit">
+            °C
+        </span>
 
     </div>
 
+</div>
 
 
-    <!-- 濕度 -->
 
-    <div class="sensor-card">
+<!-- 濕度 -->
 
-        <div class="sensor-icon">
-            💧
-        </div>
+<div class="sensor-card">
 
-        <div class="sensor-name">
-            濕度
-        </div>
+    <div class="sensor-icon">
+        💧
+    </div>
 
-        <div class="sensor-value">
+    <div class="sensor-name">
+        濕度
+    </div>
 
-            <span id="humidity">
-                --
-            </span>
+    <div class="sensor-value">
 
-            <span class="sensor-unit">
-                %
-            </span>
+        <span id="humidity">
+            --
+        </span>
 
-        </div>
+        <span class="sensor-unit">
+            %
+        </span>
 
     </div>
 
+</div>
 
 
-    <!-- 光照 -->
 
-    <div class="sensor-card">
+<!-- 光照 -->
 
-        <div class="sensor-icon">
-            ☀️
-        </div>
+<div class="sensor-card">
 
-        <div class="sensor-name">
-            光照
-        </div>
+    <div class="sensor-icon">
+        ☀️
+    </div>
 
-        <div class="sensor-value">
+    <div class="sensor-name">
+        光照
+    </div>
 
-            <span id="light">
-                --
-            </span>
+    <div class="sensor-value">
 
-            <span class="sensor-unit">
-                Lux
-            </span>
+        <span id="light">
+            --
+        </span>
 
-        </div>
+        <span class="sensor-unit">
+            Lux
+        </span>
 
     </div>
 
+</div>
 
 
-    <!-- CO2 -->
 
-    <div class="sensor-card">
+<!-- CO2 -->
 
-        <div class="sensor-icon">
-            🌫️
-        </div>
+<div class="sensor-card">
 
-        <div class="sensor-name">
-            CO₂ 濃度
-        </div>
+    <div class="sensor-icon">
+        🌫️
+    </div>
 
-        <div class="sensor-value">
+    <div class="sensor-name">
+        CO₂ 濃度
+    </div>
 
-            <span id="co2">
-                --
-            </span>
+    <div class="sensor-value">
 
-            <span class="sensor-unit">
-                ppm
-            </span>
+        <span id="co2">
+            --
+        </span>
 
-        </div>
+        <span class="sensor-unit">
+            ppm
+        </span>
 
     </div>
 
+</div>
+```
 
 </section>
-
-
 
 <!-- =====================================================
      中間：4張圖
@@ -855,81 +850,79 @@ body {
 
 <section class="center-panel">
 
+```
+<!-- 溫度 -->
 
-    <!-- 溫度 -->
+<div class="chart-card">
 
-    <div class="chart-card">
+    <div class="chart-title">
+        🌡️ 溫度 (°C)
+    </div>
 
-        <div class="chart-title">
-            🌡️ 溫度 (°C)
-        </div>
+    <div class="chart-container">
 
-        <div class="chart-container">
-
-            <canvas id="temperatureChart"></canvas>
-
-        </div>
+        <canvas id="temperatureChart"></canvas>
 
     </div>
 
+</div>
 
 
-    <!-- 濕度 -->
 
-    <div class="chart-card">
+<!-- 濕度 -->
 
-        <div class="chart-title">
-            💧 濕度 (%)
-        </div>
+<div class="chart-card">
 
-        <div class="chart-container">
+    <div class="chart-title">
+        💧 濕度 (%)
+    </div>
 
-            <canvas id="humidityChart"></canvas>
+    <div class="chart-container">
 
-        </div>
+        <canvas id="humidityChart"></canvas>
 
     </div>
 
+</div>
 
 
-    <!-- 光照 -->
 
-    <div class="chart-card">
+<!-- 光照 -->
 
-        <div class="chart-title">
-            ☀️ 光照 (Lux)
-        </div>
+<div class="chart-card">
 
-        <div class="chart-container">
+    <div class="chart-title">
+        ☀️ 光照 (Lux)
+    </div>
 
-            <canvas id="lightChart"></canvas>
+    <div class="chart-container">
 
-        </div>
+        <canvas id="lightChart"></canvas>
 
     </div>
 
+</div>
 
 
-    <!-- CO2 -->
 
-    <div class="chart-card">
+<!-- CO2 -->
 
-        <div class="chart-title">
-            🌫️ CO₂ (ppm)
-        </div>
+<div class="chart-card">
 
-        <div class="chart-container">
+    <div class="chart-title">
+        🌫️ CO₂ (ppm)
+    </div>
 
-            <canvas id="co2Chart"></canvas>
+    <div class="chart-container">
 
-        </div>
+        <canvas id="co2Chart"></canvas>
 
     </div>
 
+</div>
+```
 
 </section>
-
-
 
 <!-- =====================================================
      右邊：統計資料
@@ -937,282 +930,279 @@ body {
 
 <aside class="right-panel">
 
+```
+<div class="right-title">
+    📊 數據統計
+</div>
 
-    <div class="right-title">
-        📊 數據統計
+
+<!-- 時間 -->
+
+<div class="data-selector">
+
+
+    <button
+        id="btn10min"
+        class="active"
+        onclick="changeTimeRange(10)">
+
+        10分鐘
+
+    </button>
+
+
+    <button
+        id="btn30min"
+        onclick="changeTimeRange(30)">
+
+        30分鐘
+
+    </button>
+
+
+    <button
+        id="btn60min"
+        onclick="changeTimeRange(60)">
+
+        1小時
+
+    </button>
+
+
+</div>
+
+
+
+<!-- 溫度統計 -->
+
+<div class="stat-section">
+
+    <div class="stat-name">
+        🌡️ 溫度
     </div>
 
 
-    <!-- 時間 -->
+    <div class="stat-row">
 
-    <div class="data-selector">
+        <span>最高</span>
 
+        <span
+            class="stat-value"
+            id="tempMax">
 
-        <button
-            id="btn10min"
-            class="active"
-            onclick="changeTimeRange(10)">
+            --
 
-            10分鐘
-
-        </button>
-
-
-        <button
-            id="btn30min"
-            onclick="changeTimeRange(30)">
-
-            30分鐘
-
-        </button>
-
-
-        <button
-            id="btn60min"
-            onclick="changeTimeRange(60)">
-
-            1小時
-
-        </button>
-
-
-    </div>
-
-
-
-    <!-- 溫度統計 -->
-
-    <div class="stat-section">
-
-        <div class="stat-name">
-            🌡️ 溫度
-        </div>
-
-
-        <div class="stat-row">
-
-            <span>最高</span>
-
-            <span
-                class="stat-value"
-                id="tempMax">
-
-                --
-
-            </span>
-
-        </div>
-
-
-        <div class="stat-row">
-
-            <span>最低</span>
-
-            <span
-                class="stat-value"
-                id="tempMin">
-
-                --
-
-            </span>
-
-        </div>
-
-
-        <div class="stat-row">
-
-            <span>平均</span>
-
-            <span
-                class="stat-value"
-                id="tempAvg">
-
-                --
-
-            </span>
-
-        </div>
+        </span>
 
     </div>
 
 
+    <div class="stat-row">
 
-    <!-- 濕度統計 -->
+        <span>最低</span>
 
-    <div class="stat-section">
+        <span
+            class="stat-value"
+            id="tempMin">
 
-        <div class="stat-name">
-            💧 濕度
-        </div>
+            --
 
-
-        <div class="stat-row">
-
-            <span>最高</span>
-
-            <span
-                class="stat-value"
-                id="humMax">
-
-                --
-
-            </span>
-
-        </div>
-
-
-        <div class="stat-row">
-
-            <span>最低</span>
-
-            <span
-                class="stat-value"
-                id="humMin">
-
-                --
-
-            </span>
-
-        </div>
-
-
-        <div class="stat-row">
-
-            <span>平均</span>
-
-            <span
-                class="stat-value"
-                id="humAvg">
-
-                --
-
-            </span>
-
-        </div>
+        </span>
 
     </div>
 
 
+    <div class="stat-row">
 
-    <!-- 光照統計 -->
+        <span>平均</span>
 
-    <div class="stat-section">
+        <span
+            class="stat-value"
+            id="tempAvg">
 
-        <div class="stat-name">
-            ☀️ 光照
-        </div>
+            --
 
+        </span>
 
-        <div class="stat-row">
+    </div>
 
-            <span>最高</span>
-
-            <span
-                class="stat-value"
-                id="lightMax">
-
-                --
-
-            </span>
-
-        </div>
+</div>
 
 
-        <div class="stat-row">
 
-            <span>最低</span>
+<!-- 濕度統計 -->
 
-            <span
-                class="stat-value"
-                id="lightMin">
+<div class="stat-section">
 
-                --
-
-            </span>
-
-        </div>
+    <div class="stat-name">
+        💧 濕度
+    </div>
 
 
-        <div class="stat-row">
+    <div class="stat-row">
 
-            <span>平均</span>
+        <span>最高</span>
 
-            <span
-                class="stat-value"
-                id="lightAvg">
+        <span
+            class="stat-value"
+            id="humMax">
 
-                --
+            --
 
-            </span>
-
-        </div>
+        </span>
 
     </div>
 
 
+    <div class="stat-row">
 
-    <!-- CO2 統計 -->
+        <span>最低</span>
 
-    <div class="stat-section">
+        <span
+            class="stat-value"
+            id="humMin">
 
-        <div class="stat-name">
-            🌫️ CO₂
-        </div>
+            --
 
-
-        <div class="stat-row">
-
-            <span>最高</span>
-
-            <span
-                class="stat-value"
-                id="co2Max">
-
-                --
-
-            </span>
-
-        </div>
-
-
-        <div class="stat-row">
-
-            <span>最低</span>
-
-            <span
-                class="stat-value"
-                id="co2Min">
-
-                --
-
-            </span>
-
-        </div>
-
-
-        <div class="stat-row">
-
-            <span>平均</span>
-
-            <span
-                class="stat-value"
-                id="co2Avg">
-
-                --
-
-            </span>
-
-        </div>
+        </span>
 
     </div>
 
+
+    <div class="stat-row">
+
+        <span>平均</span>
+
+        <span
+            class="stat-value"
+            id="humAvg">
+
+            --
+
+        </span>
+
+    </div>
+
+</div>
+
+
+
+<!-- 光照統計 -->
+
+<div class="stat-section">
+
+    <div class="stat-name">
+        ☀️ 光照
+    </div>
+
+
+    <div class="stat-row">
+
+        <span>最高</span>
+
+        <span
+            class="stat-value"
+            id="lightMax">
+
+            --
+
+        </span>
+
+    </div>
+
+
+    <div class="stat-row">
+
+        <span>最低</span>
+
+        <span
+            class="stat-value"
+            id="lightMin">
+
+            --
+
+        </span>
+
+    </div>
+
+
+    <div class="stat-row">
+
+        <span>平均</span>
+
+        <span
+            class="stat-value"
+            id="lightAvg">
+
+            --
+
+        </span>
+
+    </div>
+
+</div>
+
+
+
+<!-- CO2 統計 -->
+
+<div class="stat-section">
+
+    <div class="stat-name">
+        🌫️ CO₂
+    </div>
+
+
+    <div class="stat-row">
+
+        <span>最高</span>
+
+        <span
+            class="stat-value"
+            id="co2Max">
+
+            --
+
+        </span>
+
+    </div>
+
+
+    <div class="stat-row">
+
+        <span>最低</span>
+
+        <span
+            class="stat-value"
+            id="co2Min">
+
+            --
+
+        </span>
+
+    </div>
+
+
+    <div class="stat-row">
+
+        <span>平均</span>
+
+        <span
+            class="stat-value"
+            id="co2Avg">
+
+            --
+
+        </span>
+
+    </div>
+
+</div>
+```
 
 </aside>
 
-
 </main>
-
-
 
 <!-- =====================================================
      頁尾
@@ -1220,14 +1210,13 @@ body {
 
 <footer class="footer">
 
-    Smart Microalgae Shading System
+```
+Smart Microalgae Shading System
+```
 
 </footer>
 
-
 </div>
-
-
 
 <script>
 
@@ -1258,6 +1247,13 @@ const TAIWAN_TIMEZONE =
 ===================================================== */
 
 let timeRangeMinutes = 10;
+
+
+/* =====================================================
+   ⭐ 圖表最多顯示幾筆
+===================================================== */
+
+const MAX_CHART_POINTS = 10;
 
 
 /* =====================================================
@@ -1593,6 +1589,35 @@ function changeTimeRange(minutes) {
 
 
 /* =====================================================
+   ⭐ 取得圖表最新10筆
+
+   注意：
+
+   這個函式只給「圖表」使用。
+
+   右邊統計不使用這個函式，
+   所以統計仍然會計算整個時間範圍。
+===================================================== */
+
+function getChartFeeds(feeds) {
+
+    if (
+        feeds.length <= MAX_CHART_POINTS
+    ) {
+
+        return feeds;
+
+    }
+
+
+    return feeds.slice(
+        feeds.length - MAX_CHART_POINTS
+    );
+
+}
+
+
+/* =====================================================
    讀取資料
 ===================================================== */
 
@@ -1774,12 +1799,10 @@ async function loadData() {
 
 
         /* =================================================
-           ⭐ 固定排序
+           固定排序
 
            左 = 舊
            右 = 新
-
-           絕對不使用 reverse()
         ================================================= */
 
         allFeeds.sort(
@@ -1820,9 +1843,7 @@ async function loadData() {
 
 
         /* =================================================
-           ⭐ 最後資料時間
-
-           完全以 ThingSpeak 為準
+           最後資料時間
         ================================================= */
 
         document.getElementById(
@@ -2022,11 +2043,9 @@ async function loadData() {
 
 
         /* =================================================
-           ⭐ 圖表時間範圍
+           時間範圍
 
-           不使用 Date.now()
-
-           以 ThingSpeak 最新資料為基準。
+           ⭐ 這裡決定統計時間
         ================================================= */
 
         const chartEndTime =
@@ -2051,6 +2070,9 @@ async function loadData() {
 
         /* =================================================
            篩選時間範圍
+
+           ⭐ 這份 feeds 是給統計使用
+           ⭐ 不限制10筆
         ================================================= */
 
         const feeds =
@@ -2081,7 +2103,16 @@ async function loadData() {
 
 
         /* =================================================
-           統計資料
+           ⭐ 統計資料
+
+           這裡使用「完整 feeds」
+
+           所以：
+           10分鐘 = 統計10分鐘全部資料
+           30分鐘 = 統計30分鐘全部資料
+           1小時 = 統計1小時全部資料
+
+           不會受到圖表10筆限制。
         ================================================= */
 
         const temperatures =
@@ -2235,12 +2266,30 @@ async function loadData() {
 
 
         /* =================================================
+           ⭐ 圖表只取最新10筆
+
+           feeds：
+           → 完整時間範圍資料
+
+           chartFeeds：
+           → 只取最新10筆
+        ================================================= */
+
+        const chartFeeds =
+            getChartFeeds(feeds);
+
+
+
+        /* =================================================
            建立圖表
+
+           ⭐ 注意這裡傳入 chartFeeds
+           ⭐ 因此圖表最多10筆
         ================================================= */
 
         createCharts(
 
-            feeds,
+            chartFeeds,
 
             chartStartTime,
 
@@ -2952,8 +3001,6 @@ setInterval(
 
 </script>
 
-
 </body>
 
 </html>
-```
