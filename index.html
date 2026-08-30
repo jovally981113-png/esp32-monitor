@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
-    <title>智慧微藻遮陽換氣系統 · 可選筆數</title>
+    <title>智慧微藻遮陽換氣系統 · 10筆圖表</title>
     <!-- Chart.js 輕量渲染 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
@@ -212,7 +212,7 @@
 
         .data-selector {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);  /* 改為4欄，放入新按鈕 */
+            grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             margin-bottom: 14px;
             flex-shrink: 0;
@@ -224,7 +224,7 @@
             background: #d8eee9;
             color: #24564f;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 17px;
             cursor: pointer;
             transition: 0.2s;
             letter-spacing: 0.3px;
@@ -305,7 +305,7 @@
             .stat-name { font-size: 17px; }
             .stat-row { font-size: 15px; }
             .stat-value { font-size: 15px; }
-            .data-selector button { font-size: 14px; padding: 8px 0; }
+            .data-selector button { font-size: 15px; padding: 8px 0; }
             .main { gap: 12px; padding: 12px; }
         }
 
@@ -350,9 +350,6 @@
             }
             .stat-section {
                 padding: 6px 0;
-            }
-            .data-selector {
-                grid-template-columns: repeat(2, 1fr); /* 手機折行 */
             }
         }
     </style>
@@ -401,40 +398,34 @@
             </div>
         </section>
 
-        <!-- 中：圖表 2x2 -->
+        <!-- 中：圖表 2x2 (僅顯示最近10筆) -->
         <section class="center-panel">
             <div class="chart-card">
-                <div class="chart-title">🌡️ 溫度</div>
+                <div class="chart-title">🌡️ 溫度 (最近10筆)</div>
                 <div class="chart-container"><canvas id="temperatureChart"></canvas></div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">💧 濕度</div>
+                <div class="chart-title">💧 濕度 (最近10筆)</div>
                 <div class="chart-container"><canvas id="humidityChart"></canvas></div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">☀️ 光照</div>
+                <div class="chart-title">☀️ 光照 (最近10筆)</div>
                 <div class="chart-container"><canvas id="lightChart"></canvas></div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">🌫️ CO₂</div>
+                <div class="chart-title">🌫️ CO₂ (最近10筆)</div>
                 <div class="chart-container"><canvas id="co2Chart"></canvas></div>
             </div>
         </section>
 
-        <!-- 右：統計 -->
+        <!-- 右：統計 (依分鐘計算) -->
         <aside class="right-panel">
+            <!-- 標題已移除 (分鐘) -->
             <div class="right-title">📊 數據統計</div>
             <div class="data-selector">
-                <button id="btn3data" onclick="changeDataPoints(3)">📊 最近3筆</button>
-                <button id="btn10data" class="active" onclick="changeDataPoints(10)">10筆</button>
-                <button id="btn30data" onclick="changeDataPoints(30)">30筆</button>
-                <button id="btnAll" onclick="changeDataPoints(0)">全部</button>
-            </div>
-            <div style="margin-bottom: 10px; font-size: 14px; color: #66837d; flex-shrink: 0; border-bottom: 1px dashed #dceeea; padding-bottom: 6px;">
-                ⏱ 統計區間：
-                <button id="btnStat10" class="active" style="border:none; background:transparent; color:var(--primary); font-weight:600; cursor:pointer; font-size:14px;" onclick="changeStatRange(10)">10min</button>
-                <button id="btnStat30" style="border:none; background:transparent; color:#66837d; font-weight:400; cursor:pointer; font-size:14px;" onclick="changeStatRange(30)">30min</button>
-                <button id="btnStat60" style="border:none; background:transparent; color:#66837d; font-weight:400; cursor:pointer; font-size:14px;" onclick="changeStatRange(60)">60min</button>
+                <button id="btn10min" class="active" onclick="changeTimeRange(10)">10分鐘</button>
+                <button id="btn30min" onclick="changeTimeRange(30)">30分鐘</button>
+                <button id="btn60min" onclick="changeTimeRange(60)">1小時</button>
             </div>
 
             <div class="stats-container">
@@ -466,7 +457,7 @@
         </aside>
     </main>
 
-    <footer class="footer">Smart Microalgae Shading System · 可選圖表筆數</footer>
+    <footer class="footer">Smart Microalgae Shading System · 圖表10筆 · 統計依分鐘</footer>
 </div>
 
 <script>
@@ -478,9 +469,7 @@
         const READ_API_KEY = "IT0OTL4TT1QFKXO8";
         const TAIWAN_TIMEZONE = "Asia/Taipei";
 
-        // ===== 狀態變數 =====
-        let chartDataPoints = 10;        // 圖表顯示筆數 (0=全部)
-        let statRangeMinutes = 10;       // 統計區間 (分鐘)
+        let timeRangeMinutes = 10;   // 用於右側統計
 
         // ===== 圖表實例 =====
         let temperatureChart, humidityChart, lightChart, co2Chart;
@@ -514,28 +503,12 @@
             document.getElementById(avgId).textContent = mean.toFixed(decimals) + unit;
         }
 
-        // ===== 切換圖表筆數 =====
-        window.changeDataPoints = function(count) {
-            chartDataPoints = count;
+        // ===== 切換時間 (只影響右側統計) =====
+        window.changeTimeRange = function(minutes) {
+            timeRangeMinutes = minutes;
             document.querySelectorAll(".data-selector button").forEach(b => b.classList.remove("active"));
-            const map = {3:"btn3data", 10:"btn10data", 30:"btn30data", 0:"btnAll"};
-            if (map[count] !== undefined) document.getElementById(map[count]).classList.add("active");
-            loadData();
-        };
-
-        // ===== 切換統計區間 =====
-        window.changeStatRange = function(minutes) {
-            statRangeMinutes = minutes;
-            document.querySelectorAll("#btnStat10, #btnStat30, #btnStat60").forEach(b => {
-                b.style.color = "#66837d";
-                b.style.fontWeight = "400";
-            });
-            const map = {10:"btnStat10", 30:"btnStat30", 60:"btnStat60"};
-            if (map[minutes]) {
-                const el = document.getElementById(map[minutes]);
-                el.style.color = "var(--primary)";
-                el.style.fontWeight = "600";
-            }
+            const map = {10:"btn10min", 30:"btn30min", 60:"btn60min"};
+            if (map[minutes]) document.getElementById(map[minutes]).classList.add("active");
             loadData();
         };
 
@@ -547,7 +520,7 @@
             return `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds/last.json?api_key=${READ_API_KEY}`;
         }
 
-        // ===== 建立圖表 =====
+        // ===== 建立圖表 (僅顯示最近10筆) =====
         function buildChart(canvasId, label, dataPoints, unit, startTime, endTime) {
             const ctx = document.getElementById(canvasId);
             if (!ctx) return null;
@@ -665,18 +638,15 @@
                     co2El.style.color = co2Val >= 1500 ? '#dc2626' : (co2Val >= 1000 ? '#f97316' : '#087f6f');
                 }
 
-                // ===== 1) 圖表：依 chartDataPoints 決定筆數 =====
-                let chartFeeds;
-                if (chartDataPoints === 0) {
-                    chartFeeds = allFeeds;  // 全部
-                } else {
-                    chartFeeds = allFeeds.slice(-chartDataPoints);
-                }
-                const chartStartTime = chartFeeds.length ? chartFeeds[0].timestamp : latestTs - 600000;
+                // ===== 1) 圖表：僅取最近10筆 (由新到舊取最後10個) =====
+                // 以最新時間為基準，往前抓最多10筆
+                const latest10 = allFeeds.slice(-10);  // 因為 allFeeds 已由舊到新排序
+                const chartStartTime = latest10.length ? latest10[0].timestamp : latestTs - 600000;
                 const chartEndTime = latestTs;
 
+                // 準備圖表數據點 (只包含 latest10 中的有效值)
                 const tempPoints = [], humPoints = [], lightPoints = [], co2Points = [];
-                chartFeeds.forEach(item => {
+                latest10.forEach(item => {
                     const t = parseFloat(item.field1);
                     const h = parseFloat(item.field2);
                     const l = parseFloat(item.field3);
@@ -687,8 +657,8 @@
                     if (!isNaN(c)) co2Points.push({ x: item.timestamp, y: c });
                 });
 
-                // ===== 2) 右側統計：依 statRangeMinutes =====
-                const statStartTime = latestTs - statRangeMinutes * 60 * 1000;
+                // ===== 2) 右側統計：依時間範圍 (分鐘) 計算 =====
+                const statStartTime = latestTs - timeRangeMinutes * 60 * 1000;
                 const statEndTime = latestTs;
                 const statFeeds = allFeeds.filter(item => item.timestamp >= statStartTime && item.timestamp <= statEndTime);
 
@@ -712,7 +682,7 @@
                 // 銷毀舊圖表
                 [temperatureChart, humidityChart, lightChart, co2Chart].forEach(ch => { if (ch) ch.destroy(); });
 
-                // 建立新圖表
+                // 建立新圖表 (使用最近10筆)
                 temperatureChart = buildChart('temperatureChart', '溫度', tempPoints, '°C', chartStartTime, chartEndTime);
                 humidityChart = buildChart('humidityChart', '濕度', humPoints, '%', chartStartTime, chartEndTime);
                 lightChart = buildChart('lightChart', '光照', lightPoints, 'Lux', chartStartTime, chartEndTime);
