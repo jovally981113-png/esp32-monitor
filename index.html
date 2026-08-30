@@ -106,7 +106,6 @@
         }
         .status-ok { color: #7df0d0; font-weight: 600; }
         .status-error { color: #fbb5b5; font-weight: 600; }
-        .status-sim { color: #f9e79f; font-weight: 600; }
 
         /* ===== 主區塊 (Grid) ===== */
         .main {
@@ -120,31 +119,6 @@
 
         /* ===== 左側感應卡 — 玻璃質感 ===== */
         .left-panel {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            min-height: 0;
-        }
-
-        /* 左側標題：即時數據 */
-        .left-panel-header {
-            flex-shrink: 0;
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--primary-dark);
-            letter-spacing: 1.5px;
-            padding: 6px 0 2px 6px;
-            border-bottom: 3px solid var(--primary-light);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .left-panel-header span {
-            font-size: 26px;
-        }
-
-        .left-panel-grid {
-            flex: 1;
             display: grid;
             grid-template-rows: repeat(4, 1fr);
             gap: 14px;
@@ -430,11 +404,8 @@
                 padding: 12px;
             }
             .left-panel {
-                height: auto;
-                margin-bottom: 16px;
-            }
-            .left-panel-grid {
                 height: 440px;
+                margin-bottom: 16px;
                 grid-template-rows: repeat(4, 1fr);
             }
             .center-panel {
@@ -488,32 +459,27 @@
     <!-- ===== MAIN ===== -->
     <main class="main">
 
-        <!-- 左：感測器 + 即時數據標題 -->
+        <!-- 左：感測器 -->
         <section class="left-panel">
-            <div class="left-panel-header">
-                <span>📊</span> 即時數據
+            <div class="sensor-card">
+                <div class="sensor-icon">🌡️</div>
+                <div class="sensor-name">溫度</div>
+                <div class="sensor-value"><span id="temperature">--</span><span class="sensor-unit">°C</span></div>
             </div>
-            <div class="left-panel-grid">
-                <div class="sensor-card">
-                    <div class="sensor-icon">🌡️</div>
-                    <div class="sensor-name">溫度</div>
-                    <div class="sensor-value"><span id="temperature">--</span><span class="sensor-unit">°C</span></div>
-                </div>
-                <div class="sensor-card">
-                    <div class="sensor-icon">💧</div>
-                    <div class="sensor-name">濕度</div>
-                    <div class="sensor-value"><span id="humidity">--</span><span class="sensor-unit">%</span></div>
-                </div>
-                <div class="sensor-card">
-                    <div class="sensor-icon">☀️</div>
-                    <div class="sensor-name">光照</div>
-                    <div class="sensor-value"><span id="light">--</span><span class="sensor-unit">Lux</span></div>
-                </div>
-                <div class="sensor-card">
-                    <div class="sensor-icon">🌫️</div>
-                    <div class="sensor-name">CO₂ 濃度</div>
-                    <div class="sensor-value"><span id="co2">--</span><span class="sensor-unit">ppm</span></div>
-                </div>
+            <div class="sensor-card">
+                <div class="sensor-icon">💧</div>
+                <div class="sensor-name">濕度</div>
+                <div class="sensor-value"><span id="humidity">--</span><span class="sensor-unit">%</span></div>
+            </div>
+            <div class="sensor-card">
+                <div class="sensor-icon">☀️</div>
+                <div class="sensor-name">光照</div>
+                <div class="sensor-value"><span id="light">--</span><span class="sensor-unit">Lux</span></div>
+            </div>
+            <div class="sensor-card">
+                <div class="sensor-icon">🌫️</div>
+                <div class="sensor-name">CO₂ 濃度</div>
+                <div class="sensor-value"><span id="co2">--</span><span class="sensor-unit">ppm</span></div>
             </div>
         </section>
 
@@ -605,9 +571,6 @@
         // ===== 狀態 =====
         let chartCount = 10;          // 0 = 全部
         let statMinutes = 10;
-        let useSimulation = false;    // 是否使用模擬數據
-        let simData = [];            // 儲存模擬歷史數據
-        let simIndex = 0;
 
         // ===== 圖表實例 =====
         let temperatureChart, humidityChart, lightChart, co2Chart;
@@ -674,23 +637,6 @@
         }
         function getLatestURL() {
             return `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds/last.json?api_key=${READ_API_KEY}`;
-        }
-
-        // ===== 產生模擬數據 =====
-        function generateSimData(count) {
-            const now = Date.now();
-            const data = [];
-            for (let i = 0; i < count; i++) {
-                const t = now - (count - i) * 3000; // 每3秒一筆
-                data.push({
-                    timestamp: t,
-                    field1: 22 + Math.random() * 8 + Math.sin(i * 0.1) * 2,
-                    field2: 55 + Math.random() * 25 + Math.cos(i * 0.08) * 8,
-                    field3: 300 + Math.random() * 600 + Math.sin(i * 0.05) * 150,
-                    field4: 380 + Math.random() * 120 + Math.sin(i * 0.06) * 50
-                });
-            }
-            return data;
         }
 
         // ===== 建立圖表 =====
@@ -774,93 +720,26 @@
             statusEl.className = 'status-ok';
 
             try {
-                let allFeeds = [];
-                let latestData = null;
-                let useSim = false;
+                const [feedsResp, latestResp] = await Promise.all([
+                    fetch(getFeedsURL(), { cache: 'no-store' }),
+                    fetch(getLatestURL(), { cache: 'no-store' })
+                ]);
+                if (!feedsResp.ok || !latestResp.ok) throw new Error('HTTP 錯誤');
 
-                // 先嘗試從 ThingSpeak 獲取數據
-                try {
-                    const [feedsResp, latestResp] = await Promise.all([
-                        fetch(getFeedsURL(), { cache: 'no-store' }),
-                        fetch(getLatestURL(), { cache: 'no-store' })
-                    ]);
+                const feedsData = await feedsResp.json();
+                const latestData = await latestResp.json();
 
-                    if (feedsResp.ok && latestResp.ok) {
-                        const feedsData = await feedsResp.json();
-                        const latestRespData = await latestResp.json();
+                if (!feedsData.feeds?.length) throw new Error('無歷史資料');
+                if (!latestData?.created_at) throw new Error('無最新資料');
 
-                        if (feedsData.feeds?.length && latestRespData?.created_at) {
-                            allFeeds = feedsData.feeds
-                                .map(item => {
-                                    const ts = new Date(item.created_at).getTime();
-                                    return { ...item, timestamp: ts };
-                                })
-                                .filter(item => Number.isFinite(item.timestamp))
-                                .sort((a, b) => a.timestamp - b.timestamp);
-
-                            latestData = latestRespData;
-                            useSim = false;
-                        } else {
-                            useSim = true;
-                        }
-                    } else {
-                        useSim = true;
-                    }
-                } catch (e) {
-                    console.warn('ThingSpeak 連線失敗，使用模擬數據:', e.message);
-                    useSim = true;
-                }
-
-                // 如果 API 失敗或沒有數據，使用模擬數據
-                if (useSim || allFeeds.length === 0) {
-                    useSim = true;
-                    if (simData.length === 0) {
-                        simData = generateSimData(200);
-                        simIndex = simData.length - 1;
-                    }
-
-                    // 每次更新時新增一筆模擬數據
-                    const last = simData[simData.length - 1];
-                    const newData = {
-                        timestamp: last.timestamp + 3000,
-                        field1: last.field1 + (Math.random() - 0.5) * 1.2,
-                        field2: last.field2 + (Math.random() - 0.5) * 3,
-                        field3: last.field3 + (Math.random() - 0.5) * 80,
-                        field4: last.field4 + (Math.random() - 0.5) * 20
-                    };
-                    // 確保數值在合理範圍
-                    newData.field1 = Math.max(18, Math.min(35, newData.field1));
-                    newData.field2 = Math.max(30, Math.min(90, newData.field2));
-                    newData.field3 = Math.max(50, Math.min(1200, newData.field3));
-                    newData.field4 = Math.max(300, Math.min(600, newData.field4));
-
-                    simData.push(newData);
-                    if (simData.length > 500) simData.shift();
-
-                    allFeeds = simData.map(item => ({
-                        ...item,
-                        field1: item.field1.toFixed(2),
-                        field2: item.field2.toFixed(2),
-                        field3: item.field3.toFixed(2),
-                        field4: item.field4.toFixed(2),
-                        created_at: new Date(item.timestamp).toISOString()
-                    }));
-
-                    const lastItem = allFeeds[allFeeds.length - 1];
-                    latestData = {
-                        created_at: new Date(lastItem.timestamp).toISOString(),
-                        field1: lastItem.field1,
-                        field2: lastItem.field2,
-                        field3: lastItem.field3,
-                        field4: lastItem.field4
-                    };
-
-                    statusEl.textContent = '🔄 模擬模式 (無 ThingSpeak 數據)';
-                    statusEl.className = 'status-sim';
-                } else {
-                    statusEl.textContent = '✅ 資料連線正常';
-                    statusEl.className = 'status-ok';
-                }
+                // 整理資料
+                const allFeeds = feedsData.feeds
+                    .map(item => {
+                        const ts = new Date(item.created_at).getTime();
+                        return { ...item, timestamp: ts };
+                    })
+                    .filter(item => Number.isFinite(item.timestamp))
+                    .sort((a, b) => a.timestamp - b.timestamp);
 
                 const latestTs = new Date(latestData.created_at).getTime();
                 if (!Number.isFinite(latestTs)) throw new Error('最新時間無效');
@@ -875,4 +754,86 @@
                 ids.forEach((id, idx) => {
                     const val = parseFloat(fields[idx]);
                     if (!isNaN(val)) {
-                        document.getElementById(id).textContent = val.toFixed(dec
+                        document.getElementById(id).textContent = val.toFixed(decimals[idx]);
+                    }
+                });
+                const co2Val = parseFloat(latestData.field4);
+                const co2El = document.getElementById('co2');
+                if (!isNaN(co2Val)) {
+                    co2El.style.color = co2Val >= 1500 ? '#dc2626' : (co2Val >= 1000 ? '#f97316' : '#087f6f');
+                }
+
+                // ===== 圖表資料 =====
+                let chartFeeds;
+                if (chartCount === 0) {
+                    chartFeeds = allFeeds;
+                } else {
+                    chartFeeds = allFeeds.slice(-chartCount);
+                }
+                const chartStartTime = chartFeeds.length ? chartFeeds[0].timestamp : latestTs - 600000;
+                const chartEndTime = latestTs;
+
+                const tempPoints = [], humPoints = [], lightPoints = [], co2Points = [];
+                chartFeeds.forEach(item => {
+                    const t = parseFloat(item.field1);
+                    const h = parseFloat(item.field2);
+                    const l = parseFloat(item.field3);
+                    const c = parseFloat(item.field4);
+                    if (!isNaN(t)) tempPoints.push({ x: item.timestamp, y: t });
+                    if (!isNaN(h)) humPoints.push({ x: item.timestamp, y: h });
+                    if (!isNaN(l)) lightPoints.push({ x: item.timestamp, y: l });
+                    if (!isNaN(c)) co2Points.push({ x: item.timestamp, y: c });
+                });
+
+                // ===== 統計資料 =====
+                const statStartTime = latestTs - statMinutes * 60 * 1000;
+                const statEndTime = latestTs;
+                const statFeeds = allFeeds.filter(item => item.timestamp >= statStartTime && item.timestamp <= statEndTime);
+
+                const temps = [], hums = [], lights = [], co2s = [];
+                statFeeds.forEach(item => {
+                    const t = parseFloat(item.field1);
+                    const h = parseFloat(item.field2);
+                    const l = parseFloat(item.field3);
+                    const c = parseFloat(item.field4);
+                    if (!isNaN(t)) temps.push(t);
+                    if (!isNaN(h)) hums.push(h);
+                    if (!isNaN(l)) lights.push(l);
+                    if (!isNaN(c)) co2s.push(c);
+                });
+
+                updateStats(temps, 'tempMax', 'tempMin', 'tempAvg', ' °C', 1);
+                updateStats(hums, 'humMax', 'humMin', 'humAvg', ' %', 1);
+                updateStats(lights, 'lightMax', 'lightMin', 'lightAvg', ' Lux', 1);
+                updateStats(co2s, 'co2Max', 'co2Min', 'co2Avg', ' ppm', 0);
+
+                // ===== 更新圖表 =====
+                [temperatureChart, humidityChart, lightChart, co2Chart].forEach(ch => { if (ch) ch.destroy(); });
+
+                temperatureChart = buildChart('temperatureChart', '溫度', tempPoints, '°C', chartStartTime, chartEndTime, '#e74c3c');
+                humidityChart = buildChart('humidityChart', '濕度', humPoints, '%', chartStartTime, chartEndTime, '#3498db');
+                lightChart = buildChart('lightChart', '光照', lightPoints, 'Lux', chartStartTime, chartEndTime, '#f39c12');
+                co2Chart = buildChart('co2Chart', 'CO₂', co2Points, 'ppm', chartStartTime, chartEndTime, '#2ecc71');
+
+                statusEl.textContent = '資料連線正常';
+                statusEl.className = 'status-ok';
+
+            } catch (err) {
+                console.error('ThingSpeak 錯誤:', err);
+                statusEl.textContent = '讀取失敗';
+                statusEl.className = 'status-error';
+            }
+        }
+
+        // ===== 啟動 =====
+        loadData();
+        setInterval(loadData, 15000);
+
+        // 初始化標籤
+        statRangeLabel.textContent = '(最近 10 分鐘)';
+        document.querySelector('#chartBtnGroup button[data-count="10"]')?.classList.add('active');
+        document.querySelector('#statBtnGroup button[data-min="10"]')?.classList.add('active');
+    })();
+</script>
+</body>
+</html>
