@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
-    <title>智慧微藻遮陽換氣系統 · 優化版</title>
+    <title>智慧微藻遮陽換氣系統 · 10筆圖表</title>
     <!-- Chart.js 輕量渲染 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
@@ -183,7 +183,7 @@
             width: 100%;
         }
 
-        /* ===== 右側統計 — 完全填滿，不留空白 ===== */
+        /* ===== 右側統計 — 完全填滿 ===== */
         .right-panel {
             background: var(--card-bg);
             border-radius: var(--radius-card);
@@ -191,9 +191,9 @@
             box-shadow: var(--shadow-card);
             display: flex;
             flex-direction: column;
-            min-height: 0;          /* 允許收縮 */
-            height: 100%;           /* 填滿 grid 單元格 */
-            overflow-y: auto;       /* 若內容過多可滾動 */
+            min-height: 0;
+            height: 100%;
+            overflow-y: auto;
             scrollbar-width: thin;
         }
         .right-panel::-webkit-scrollbar { width: 4px; }
@@ -239,20 +239,19 @@
             box-shadow: 0 4px 10px rgba(8, 127, 111, 0.3);
         }
 
-        /* 統計區塊 — 使用 flex 撐滿剩餘空間 */
         .stats-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 4px;              /* 區塊之間小間隙 */
+            gap: 4px;
             min-height: 0;
         }
 
         .stat-section {
-            flex: 1;               /* 每個區塊平均分配剩餘高度 */
+            flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;  /* 垂直置中內容 */
+            justify-content: center;
             padding: 4px 0;
             border-top: 1px solid #dceeea;
         }
@@ -291,7 +290,7 @@
             background: transparent;
         }
 
-        /* ===== 響應式：筆電 ===== */
+        /* ===== 響應式 ===== */
         @media (max-width: 1200px) {
             .header { height: 72px; padding: 0 18px; }
             .title-area h1 { font-size: 24px; }
@@ -310,7 +309,6 @@
             .main { gap: 12px; padding: 12px; }
         }
 
-        /* ===== 手機 ===== */
         @media (max-width: 760px) {
             html, body { overflow: auto; }
             .dashboard { height: auto; }
@@ -400,29 +398,29 @@
             </div>
         </section>
 
-        <!-- 中：圖表 2x2 -->
+        <!-- 中：圖表 2x2 (僅顯示最近10筆) -->
         <section class="center-panel">
             <div class="chart-card">
-                <div class="chart-title">🌡️ 溫度</div>
+                <div class="chart-title">🌡️ 溫度 (最近10筆)</div>
                 <div class="chart-container"><canvas id="temperatureChart"></canvas></div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">💧 濕度</div>
+                <div class="chart-title">💧 濕度 (最近10筆)</div>
                 <div class="chart-container"><canvas id="humidityChart"></canvas></div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">☀️ 光照</div>
+                <div class="chart-title">☀️ 光照 (最近10筆)</div>
                 <div class="chart-container"><canvas id="lightChart"></canvas></div>
             </div>
             <div class="chart-card">
-                <div class="chart-title">🌫️ CO₂</div>
+                <div class="chart-title">🌫️ CO₂ (最近10筆)</div>
                 <div class="chart-container"><canvas id="co2Chart"></canvas></div>
             </div>
         </section>
 
-        <!-- 右：統計 — 使用 .stats-container 撐滿 -->
+        <!-- 右：統計 (依分鐘計算) -->
         <aside class="right-panel">
-            <div class="right-title">📊 數據統計</div>
+            <div class="right-title">📊 數據統計 (分鐘)</div>
             <div class="data-selector">
                 <button id="btn10min" class="active" onclick="changeTimeRange(10)">10分鐘</button>
                 <button id="btn30min" onclick="changeTimeRange(30)">30分鐘</button>
@@ -458,7 +456,7 @@
         </aside>
     </main>
 
-    <footer class="footer">Smart Microalgae Shading System · 即時更新</footer>
+    <footer class="footer">Smart Microalgae Shading System · 圖表10筆 · 統計依分鐘</footer>
 </div>
 
 <script>
@@ -470,7 +468,7 @@
         const READ_API_KEY = "IT0OTL4TT1QFKXO8";
         const TAIWAN_TIMEZONE = "Asia/Taipei";
 
-        let timeRangeMinutes = 10;
+        let timeRangeMinutes = 10;   // 用於右側統計
 
         // ===== 圖表實例 =====
         let temperatureChart, humidityChart, lightChart, co2Chart;
@@ -504,7 +502,7 @@
             document.getElementById(avgId).textContent = mean.toFixed(decimals) + unit;
         }
 
-        // ===== 切換時間 =====
+        // ===== 切換時間 (只影響右側統計) =====
         window.changeTimeRange = function(minutes) {
             timeRangeMinutes = minutes;
             document.querySelectorAll(".data-selector button").forEach(b => b.classList.remove("active"));
@@ -521,7 +519,7 @@
             return `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds/last.json?api_key=${READ_API_KEY}`;
         }
 
-        // ===== 建立圖表 (共用 options) =====
+        // ===== 建立圖表 (僅顯示最近10筆) =====
         function buildChart(canvasId, label, dataPoints, unit, startTime, endTime) {
             const ctx = document.getElementById(canvasId);
             if (!ctx) return null;
@@ -542,9 +540,9 @@
                         borderColor: borderColor,
                         backgroundColor: borderColor + '22',
                         borderWidth: 2.8,
-                        pointRadius: 2.5,
-                        pointHoverRadius: 6,
-                        tension: 0.2,
+                        pointRadius: 3.5,
+                        pointHoverRadius: 7,
+                        tension: 0.15,
                         fill: false,
                     }]
                 },
@@ -575,13 +573,13 @@
                             max: endTime,
                             ticks: {
                                 maxTicksLimit: 7,
-                                font: { size: 12 },
+                                font: { size: 11 },
                                 callback: (v) => formatChartTime(v)
                             }
                         },
                         y: {
                             beginAtZero: false,
-                            ticks: { font: { size: 12 } }
+                            ticks: { font: { size: 11 } }
                         }
                     }
                 }
@@ -607,7 +605,7 @@
                 if (!feedsData.feeds?.length) throw new Error('無歷史資料');
                 if (!latestData?.created_at) throw new Error('無最新資料');
 
-                // 所有 feeds 轉為 timestamp
+                // 所有 feeds 轉為 timestamp (由舊到新)
                 const allFeeds = feedsData.feeds
                     .map(item => {
                         const ts = new Date(item.created_at).getTime();
@@ -639,30 +637,42 @@
                     co2El.style.color = co2Val >= 1500 ? '#dc2626' : (co2Val >= 1000 ? '#f97316' : '#087f6f');
                 }
 
-                // 圖表時間範圍 (以最新為基準)
-                const endTime = latestTs;
-                const startTime = endTime - timeRangeMinutes * 60 * 1000;
+                // ===== 1) 圖表：僅取最近10筆 (由新到舊取最後10個) =====
+                // 以最新時間為基準，往前抓最多10筆
+                const latest10 = allFeeds.slice(-10);  // 因為 allFeeds 已由舊到新排序
+                const chartStartTime = latest10.length ? latest10[0].timestamp : latestTs - 600000;
+                const chartEndTime = latestTs;
 
-                // 篩選
-                const filtered = allFeeds.filter(item => item.timestamp >= startTime && item.timestamp <= endTime)
-                                         .sort((a,b) => a.timestamp - b.timestamp);
-
-                // 各數據陣列
-                const temps = [], hums = [], lights = [], co2s = [];
+                // 準備圖表數據點 (只包含 latest10 中的有效值)
                 const tempPoints = [], humPoints = [], lightPoints = [], co2Points = [];
-
-                filtered.forEach(item => {
+                latest10.forEach(item => {
                     const t = parseFloat(item.field1);
                     const h = parseFloat(item.field2);
                     const l = parseFloat(item.field3);
                     const c = parseFloat(item.field4);
-                    if (!isNaN(t)) { temps.push(t); tempPoints.push({ x: item.timestamp, y: t }); }
-                    if (!isNaN(h)) { hums.push(h); humPoints.push({ x: item.timestamp, y: h }); }
-                    if (!isNaN(l)) { lights.push(l); lightPoints.push({ x: item.timestamp, y: l }); }
-                    if (!isNaN(c)) { co2s.push(c); co2Points.push({ x: item.timestamp, y: c }); }
+                    if (!isNaN(t)) tempPoints.push({ x: item.timestamp, y: t });
+                    if (!isNaN(h)) humPoints.push({ x: item.timestamp, y: h });
+                    if (!isNaN(l)) lightPoints.push({ x: item.timestamp, y: l });
+                    if (!isNaN(c)) co2Points.push({ x: item.timestamp, y: c });
                 });
 
-                // 更新統計
+                // ===== 2) 右側統計：依時間範圍 (分鐘) 計算 =====
+                const statStartTime = latestTs - timeRangeMinutes * 60 * 1000;
+                const statEndTime = latestTs;
+                const statFeeds = allFeeds.filter(item => item.timestamp >= statStartTime && item.timestamp <= statEndTime);
+
+                const temps = [], hums = [], lights = [], co2s = [];
+                statFeeds.forEach(item => {
+                    const t = parseFloat(item.field1);
+                    const h = parseFloat(item.field2);
+                    const l = parseFloat(item.field3);
+                    const c = parseFloat(item.field4);
+                    if (!isNaN(t)) temps.push(t);
+                    if (!isNaN(h)) hums.push(h);
+                    if (!isNaN(l)) lights.push(l);
+                    if (!isNaN(c)) co2s.push(c);
+                });
+
                 updateStats(temps, 'tempMax', 'tempMin', 'tempAvg', ' °C', 1);
                 updateStats(hums, 'humMax', 'humMin', 'humAvg', ' %', 1);
                 updateStats(lights, 'lightMax', 'lightMin', 'lightAvg', ' Lux', 1);
@@ -671,11 +681,11 @@
                 // 銷毀舊圖表
                 [temperatureChart, humidityChart, lightChart, co2Chart].forEach(ch => { if (ch) ch.destroy(); });
 
-                // 建立新圖表
-                temperatureChart = buildChart('temperatureChart', '溫度', tempPoints, '°C', startTime, endTime);
-                humidityChart = buildChart('humidityChart', '濕度', humPoints, '%', startTime, endTime);
-                lightChart = buildChart('lightChart', '光照', lightPoints, 'Lux', startTime, endTime);
-                co2Chart = buildChart('co2Chart', 'CO₂', co2Points, 'ppm', startTime, endTime);
+                // 建立新圖表 (使用最近10筆)
+                temperatureChart = buildChart('temperatureChart', '溫度', tempPoints, '°C', chartStartTime, chartEndTime);
+                humidityChart = buildChart('humidityChart', '濕度', humPoints, '%', chartStartTime, chartEndTime);
+                lightChart = buildChart('lightChart', '光照', lightPoints, 'Lux', chartStartTime, chartEndTime);
+                co2Chart = buildChart('co2Chart', 'CO₂', co2Points, 'ppm', chartStartTime, chartEndTime);
 
                 statusEl.textContent = '資料連線正常';
                 statusEl.className = 'status-ok';
