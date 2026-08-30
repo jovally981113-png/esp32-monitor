@@ -544,24 +544,34 @@
     const co2CountEl = document.getElementById("co2Count");
     const statRangeLabel = document.getElementById("statRangeLabel");
 
-    /* ===== 時間格式 ===== */
+    /* ===== 時間格式 (強制台灣時區) ===== */
     function formatTaiwanTime(date) {
         return new Intl.DateTimeFormat("zh-TW", {
             timeZone: TAIWAN_TIMEZONE,
-            year: "numeric", month: "2-digit", day: "2-digit",
-            hour: "2-digit", minute: "2-digit", second: "2-digit",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
             hour12: false
         }).format(date);
     }
+
     function formatChartTime(ts) {
         return new Intl.DateTimeFormat("zh-TW", {
             timeZone: TAIWAN_TIMEZONE,
-            hour: "2-digit", minute: "2-digit", second: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
             hour12: false
         }).format(new Date(ts));
     }
 
-    function avg(arr) { return arr.length ? arr.reduce((a,b) => a+b, 0) / arr.length : 0; }
+    /* ===== 輔助函數 ===== */
+    function avg(arr) {
+        return arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+    }
 
     /* ===== 更新統計 ===== */
     function updateStats(values, maxId, minId, avgId, unit, decimals) {
@@ -586,6 +596,7 @@
         [tempCountEl, humCountEl, lightCountEl, co2CountEl].forEach(el => el.textContent = label);
         loadData();
     };
+
     window.changeStatRange = function(minutes) {
         statMinutes = minutes;
         document.querySelectorAll("#statBtnGroup button").forEach(b => b.classList.remove("active"));
@@ -598,14 +609,16 @@
     function getFeedsURL() {
         return `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}&results=1000`;
     }
+
     function getLatestURL() {
         return `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds/last.json?api_key=${READ_API_KEY}`;
     }
 
-    /* ===== 建立圖表 ===== */
+    /* ===== 建立圖表 (時間軸使用 timestamp) ===== */
     function buildChart(canvasId, label, dataPoints, unit, startTime, endTime, color) {
         const ctx = document.getElementById(canvasId);
         if (!ctx) return null;
+
         const colorMap = {
             temperatureChart: "#e74c3c",
             humidityChart: "#3498db",
@@ -613,6 +626,7 @@
             co2Chart: "#2ecc71"
         };
         const borderColor = color || colorMap[canvasId] || "#18a999";
+
         return new Chart(ctx, {
             type: "line",
             data: {
@@ -676,22 +690,26 @@
         });
     }
 
-    /* ===== 載入資料 ===== */
+    /* ===== 載入資料 (時間處理) ===== */
     async function loadData() {
         statusEl.textContent = "讀取中...";
         statusEl.className = "status-ok";
+
         try {
             const [feedsResp, latestResp] = await Promise.all([
                 fetch(getFeedsURL(), { cache: "no-store" }),
                 fetch(getLatestURL(), { cache: "no-store" })
             ]);
+
             if (!feedsResp.ok || !latestResp.ok) throw new Error("HTTP 錯誤");
+
             const feedsData = await feedsResp.json();
             const latestData = await latestResp.json();
+
             if (!feedsData.feeds?.length) throw new Error("無歷史資料");
             if (!latestData?.created_at) throw new Error("無最新資料");
 
-            // 整理歷史資料
+            // 歷史資料：轉換時間戳，過濾無效
             const allFeeds = feedsData.feeds
                 .map(item => ({ ...item, timestamp: new Date(item.created_at).getTime() }))
                 .filter(item => Number.isFinite(item.timestamp))
@@ -700,6 +718,7 @@
             const latestTs = new Date(latestData.created_at).getTime();
             if (!Number.isFinite(latestTs)) throw new Error("最新時間無效");
 
+            // 更新時間顯示 (台灣時區)
             updateTimeEl.textContent = formatTaiwanTime(new Date(latestTs));
 
             // 即時數據
@@ -708,52 +727,63 @@
             const decimals = [1, 1, 1, 0];
             ids.forEach((id, idx) => {
                 const val = parseFloat(fields[idx]);
-                if (!isNaN(val)) document.getElementById(id).textContent = val.toFixed(decimals[idx]);
+                if (!isNaN(val)) {
+                    document.getElementById(id).textContent = val.toFixed(decimals[idx]);
+                }
             });
 
-            // CO₂ 顏色
+            // CO₂ 顏色警示
             const co2Val = parseFloat(latestData.field4);
             const co2El = document.getElementById("co2");
             if (!isNaN(co2Val)) {
                 co2El.style.color = co2Val >= 1500 ? "#dc2626" : (co2Val >= 1000 ? "#f97316" : "#087f6f");
             }
 
-            // 圖表資料
+            // 圖表資料 (依 chartCount)
             let chartFeeds = chartCount === 0 ? allFeeds : allFeeds.slice(-chartCount);
             const chartStartTime = chartFeeds.length ? chartFeeds[0].timestamp : latestTs - 600000;
             const chartEndTime = latestTs;
 
             const tempPoints = [], humPoints = [], lightPoints = [], co2Points = [];
             chartFeeds.forEach(item => {
-                const t = parseFloat(item.field1), h = parseFloat(item.field2), l = parseFloat(item.field3), c = parseFloat(item.field4);
+                const t = parseFloat(item.field1);
+                const h = parseFloat(item.field2);
+                const l = parseFloat(item.field3);
+                const c = parseFloat(item.field4);
                 if (!isNaN(t)) tempPoints.push({ x: item.timestamp, y: t });
                 if (!isNaN(h)) humPoints.push({ x: item.timestamp, y: h });
                 if (!isNaN(l)) lightPoints.push({ x: item.timestamp, y: l });
                 if (!isNaN(c)) co2Points.push({ x: item.timestamp, y: c });
             });
 
-            // 統計資料
+            // 統計資料 (依 statMinutes)
             const statStartTime = latestTs - statMinutes * 60 * 1000;
             const statFeeds = allFeeds.filter(item => item.timestamp >= statStartTime && item.timestamp <= latestTs);
+
             const temps = [], hums = [], lights = [], co2s = [];
             statFeeds.forEach(item => {
-                const t = parseFloat(item.field1), h = parseFloat(item.field2), l = parseFloat(item.field3), c = parseFloat(item.field4);
+                const t = parseFloat(item.field1);
+                const h = parseFloat(item.field2);
+                const l = parseFloat(item.field3);
+                const c = parseFloat(item.field4);
                 if (!isNaN(t)) temps.push(t);
                 if (!isNaN(h)) hums.push(h);
                 if (!isNaN(l)) lights.push(l);
                 if (!isNaN(c)) co2s.push(c);
             });
 
-            // 更新統計
+            // 更新統計數值
             updateStats(temps, "tempMax", "tempMin", "tempAvg", " °C", 1);
             updateStats(hums, "humMax", "humMin", "humAvg", " %", 1);
             updateStats(lights, "lightMax", "lightMin", "lightAvg", " Lux", 1);
             updateStats(co2s, "co2Max", "co2Min", "co2Avg", " ppm", 0);
 
             // 清除舊圖表
-            [temperatureChart, humidityChart, lightChart, co2Chart].forEach(chart => { if (chart) chart.destroy(); });
+            [temperatureChart, humidityChart, lightChart, co2Chart].forEach(chart => {
+                if (chart) chart.destroy();
+            });
 
-            // 建立新圖表
+            // 建立新圖表 (時間軸為 timestamp)
             temperatureChart = buildChart("temperatureChart", "溫度", tempPoints, "°C", chartStartTime, chartEndTime, "#e74c3c");
             humidityChart = buildChart("humidityChart", "濕度", humPoints, "%", chartStartTime, chartEndTime, "#3498db");
             lightChart = buildChart("lightChart", "光照", lightPoints, "Lux", chartStartTime, chartEndTime, "#f39c12");
@@ -761,6 +791,7 @@
 
             statusEl.textContent = "資料連線正常";
             statusEl.className = "status-ok";
+
         } catch (error) {
             console.error("ThingSpeak 錯誤:", error);
             statusEl.textContent = "讀取失敗";
@@ -768,9 +799,11 @@
         }
     }
 
-    // 初始啟動
+    // 啟動
     loadData();
     setInterval(loadData, 15000);
+
+    // 初始按鈕狀態
     statRangeLabel.textContent = "(最近 10 分鐘)";
     document.querySelector('#chartBtnGroup button[data-count="10"]')?.classList.add("active");
     document.querySelector('#statBtnGroup button[data-min="10"]')?.classList.add("active");
