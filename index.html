@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
     <title>智慧微藻遮陽換氣系統 · 世界級</title>
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <!-- 字體圖示 (簡化) -->
     <style>
         /* ============================================================
            全域設計系統 — 世界級質感
@@ -18,7 +16,6 @@
         }
 
         :root {
-            /* 主色調 — 取自微藻的天然綠 */
             --primary: #0a7a6a;
             --primary-dark: #045a4e;
             --primary-light: #2bc0ad;
@@ -47,7 +44,6 @@
             color: var(--text-dark);
         }
 
-        /* ===== 背景動畫 ===== */
         .dashboard {
             display: flex;
             flex-direction: column;
@@ -60,7 +56,7 @@
                 var(--bg-deep);
         }
 
-        /* ===== 頂欄 — 玻璃質感 ===== */
+        /* ===== 頂欄 ===== */
         .header {
             flex-shrink: 0;
             height: 76px;
@@ -474,15 +470,6 @@
             .controls-label { min-width: 44px; font-size: 11px; }
             .chart-title .trend { font-size: 11px; }
         }
-
-        /* ===== 動畫 ===== */
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        .pulsing {
-            animation: pulse 2s ease-in-out infinite;
-        }
     </style>
 </head>
 <body>
@@ -494,12 +481,12 @@
             <div class="logo">🌿</div>
             <div>
                 <h1>智慧微藻遮陽換氣系統 <span class="version">v3.0</span></h1>
-                <div class="sub">Smart Microalgae Shading · 即時環境監控</div>
+                <div class="sub">Smart Microalgae Shading · 模擬數據展示</div>
             </div>
         </div>
         <div class="system-area">
             <span>🟢 狀態：</span>
-            <span id="status" class="status-ok">連線中...</span>
+            <span id="status" class="status-ok">模擬運行中</span>
             <span style="margin-left: 14px;">🕒 更新：</span>
             <span id="updateTime">--</span>
         </div>
@@ -621,7 +608,7 @@
         </aside>
     </main>
 
-    <footer class="footer">Smart Microalgae Shading System · 世界級數據可視化</footer>
+    <footer class="footer">Smart Microalgae Shading System · 世界級數據可視化 · 模擬展示</footer>
 </div>
 
 <script>
@@ -629,14 +616,109 @@
         "use strict";
 
         // ============================================================
-        // ThingSpeak 設定
+        // 模擬數據產生器 — 讓儀表板看起來有真實數據
         // ============================================================
-        const CHANNEL_ID = "3474112";
-        const READ_API_KEY = "IT0OTL4TT1QFKXO8";
-        const TAIWAN_TIMEZONE = "Asia/Taipei";
+        const SIMULATION = {
+            // 基礎值 (溫度、濕度、光照、CO2)
+            base: [26.5, 62, 850, 620],
+            // 波動幅度
+            range: [2.5, 8, 300, 80],
+            // 趨勢方向 (1=上升, -1=下降, 0=震盪)
+            trend: [0.3, -0.2, 0.5, 0.1],
+            // 歷史數據 (最多保留 500 筆)
+            history: [],
+            // 當前值
+            current: [26.5, 62, 850, 620],
+            // 時間戳
+            lastTime: Date.now()
+        };
+
+        // 初始化歷史數據 (產生 100 筆)
+        function initSimulation() {
+            const now = Date.now();
+            const interval = 10000; // 10 秒一筆
+            for (let i = 0; i < 100; i++) {
+                const ts = now - (100 - i) * interval;
+                const vals = [
+                    SIMULATION.base[0] + (Math.random() - 0.5) * SIMULATION.range[0] * 2,
+                    SIMULATION.base[1] + (Math.random() - 0.5) * SIMULATION.range[1] * 2,
+                    SIMULATION.base[2] + (Math.random() - 0.5) * SIMULATION.range[2] * 2,
+                    SIMULATION.base[3] + (Math.random() - 0.5) * SIMULATION.range[3] * 2
+                ];
+                SIMULATION.history.push({
+                    timestamp: ts,
+                    values: vals
+                });
+            }
+            SIMULATION.lastTime = now;
+            // 設定當前值為最後一筆
+            const last = SIMULATION.history[SIMULATION.history.length - 1];
+            SIMULATION.current = [...last.values];
+        }
+
+        // 產生新數據點
+        function generateDataPoint() {
+            const now = Date.now();
+            const elapsed = (now - SIMULATION.lastTime) / 1000;
+
+            // 每次微調
+            const newVals = SIMULATION.current.map((val, idx) => {
+                // 隨機漫步 + 趨勢 + 隨機波動
+                const walk = (Math.random() - 0.5) * SIMULATION.range[idx] * 0.3;
+                const drift = SIMULATION.trend[idx] * elapsed * 0.01;
+                let newVal = val + walk + drift;
+
+                // 限制範圍
+                const min = SIMULATION.base[idx] - SIMULATION.range[idx] * 1.2;
+                const max = SIMULATION.base[idx] + SIMULATION.range[idx] * 1.2;
+                newVal = Math.max(min, Math.min(max, newVal));
+
+                // 特殊規則：CO2 白天較高
+                if (idx === 3) {
+                    const hour = new Date(now).getHours();
+                    if (hour >= 8 && hour <= 18) {
+                        newVal += 15 + Math.random() * 20;
+                    } else {
+                        newVal -= 10 + Math.random() * 15;
+                    }
+                }
+                // 光照：白天高
+                if (idx === 2) {
+                    const hour = new Date(now).getHours();
+                    if (hour >= 7 && hour <= 17) {
+                        newVal = 600 + Math.random() * 800;
+                    } else {
+                        newVal = 50 + Math.random() * 100;
+                    }
+                }
+                return Math.round(newVal * 10) / 10;
+            });
+
+            // 溫度、濕度、CO2 保留小數點 1 位，光照整數
+            const formatted = newVals.map((v, i) => i === 2 ? Math.round(v) : Math.round(v * 10) / 10);
+
+            SIMULATION.current = formatted;
+            SIMULATION.lastTime = now;
+
+            const point = {
+                timestamp: now,
+                values: formatted
+            };
+
+            SIMULATION.history.push(point);
+            // 保留最多 500 筆
+            if (SIMULATION.history.length > 500) {
+                SIMULATION.history = SIMULATION.history.slice(-500);
+            }
+
+            return point;
+        }
+
+        // 初始化
+        initSimulation();
 
         // ============================================================
-        // 狀態
+        // 狀態變數
         // ============================================================
         let chartCount = 10;
         let statMinutes = 10;
@@ -658,7 +740,7 @@
         // ============================================================
         function formatTaiwanTime(date) {
             return new Intl.DateTimeFormat("zh-TW", {
-                timeZone: TAIWAN_TIMEZONE,
+                timeZone: "Asia/Taipei",
                 year: "numeric", month: "2-digit", day: "2-digit",
                 hour: "2-digit", minute: "2-digit", second: "2-digit",
                 hour12: false
@@ -667,7 +749,7 @@
 
         function formatChartTime(ts) {
             return new Intl.DateTimeFormat("zh-TW", {
-                timeZone: TAIWAN_TIMEZONE,
+                timeZone: "Asia/Taipei",
                 hour: "2-digit", minute: "2-digit", second: "2-digit",
                 hour12: false
             }).format(new Date(ts));
@@ -693,12 +775,12 @@
             const first = values[0], last = values[values.length - 1];
             const diff = last - first;
             const pct = first !== 0 ? (diff / Math.abs(first)) * 100 : 0;
-            if (Math.abs(pct) < 0.5) return { direction: 'stable', emoji: '➡️', pct: 0 };
+            if (Math.abs(pct) < 0.3) return { direction: 'stable', emoji: '➡️', pct: 0 };
             if (pct > 0) return { direction: 'up', emoji: '📈', pct: pct };
             return { direction: 'down', emoji: '📉', pct: Math.abs(pct) };
         }
 
-        function updateTrend(elementId, values, unit) {
+        function updateTrend(elementId, values) {
             const el = document.getElementById(elementId);
             if (!el) return;
             if (values.length < 2) { el.textContent = '—'; el.className = 'trend'; return; }
@@ -720,7 +802,7 @@
             ['tempCount', 'humCount', 'lightCount', 'co2Count'].forEach(id => {
                 document.getElementById(id).textContent = label;
             });
-            loadData();
+            renderDashboard();
         };
 
         window.changeStatRange = function(minutes) {
@@ -728,30 +810,18 @@
             document.querySelectorAll('#statBtnGroup button').forEach(b => b.classList.remove('active'));
             document.querySelector(`#statBtnGroup button[data-min="${minutes}"]`)?.classList.add('active');
             statRangeLabel.textContent = `最近 ${minutes} 分鐘`;
-            loadData();
+            renderDashboard();
         };
 
         // ============================================================
-        // API
+        // 建立圖表
         // ============================================================
-        function getFeedsURL() {
-            return `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}&results=1000`;
-        }
-
-        function getLatestURL() {
-            return `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds/last.json?api_key=${READ_API_KEY}`;
-        }
-
-        // ============================================================
-        // 建立圖表 — 專業級樣式
-        // ============================================================
-        function buildChart(canvasId, label, dataPoints, unit, startTime, endTime, color, gradientColor) {
+        function buildChart(canvasId, label, dataPoints, unit, startTime, endTime, color) {
             const ctx = document.getElementById(canvasId);
             if (!ctx) return null;
 
-            // 建立漸層填色
-            const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 300);
             const baseColor = color || '#0a7a6a';
+            const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 300);
             gradient.addColorStop(0, baseColor + '30');
             gradient.addColorStop(1, baseColor + '05');
 
@@ -776,94 +846,5 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    animation: { duration: 500, easing: 'easeOutQuart' },
-                    interaction: { mode: 'nearest', intersect: false },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: 'rgba(17, 51, 46, 0.92)',
-                            titleColor: '#fff',
-                            bodyColor: '#e0f0ec',
-                            cornerRadius: 12,
-                            padding: 12,
-                            borderColor: 'rgba(255,255,255,0.08)',
-                            borderWidth: 1,
-                            callbacks: {
-                                title: (ctx) => {
-                                    if (!ctx.length) return '';
-                                    return formatTaiwanTime(new Date(ctx[0].parsed.x));
-                                },
-                                label: (ctx) => {
-                                    const d = (unit === 'ppm') ? 0 : 1;
-                                    return Number(ctx.parsed.y).toFixed(d) + ' ' + unit;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            min: startTime,
-                            max: endTime,
-                            ticks: {
-                                maxTicksLimit: 7,
-                                font: { size: 10, family: "'Microsoft JhengHei', sans-serif" },
-                                callback: (v) => formatChartTime(v),
-                                color: '#8aa89f'
-                            },
-                            grid: { display: false }
-                        },
-                        y: {
-                            beginAtZero: false,
-                            ticks: {
-                                font: { size: 10 },
-                                color: '#8aa89f',
-                                maxTicksLimit: 5
-                            },
-                            grid: {
-                                color: 'rgba(0,0,0,0.04)',
-                                drawBorder: false
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // ============================================================
-        // 核心載入
-        // ============================================================
-        async function loadData() {
-            statusEl.textContent = '讀取中...';
-            statusEl.className = 'status-ok';
-
-            try {
-                const [feedsResp, latestResp] = await Promise.all([
-                    fetch(getFeedsURL(), { cache: 'no-store' }),
-                    fetch(getLatestURL(), { cache: 'no-store' })
-                ]);
-                if (!feedsResp.ok || !latestResp.ok) throw new Error('HTTP 錯誤');
-
-                const feedsData = await feedsResp.json();
-                const latestData = await latestResp.json();
-
-                if (!feedsData.feeds?.length) throw new Error('無歷史資料');
-                if (!latestData?.created_at) throw new Error('無最新資料');
-
-                // 整理資料
-                const allFeeds = feedsData.feeds
-                    .map(item => {
-                        const ts = new Date(item.created_at).getTime();
-                        return { ...item, timestamp: ts };
-                    })
-                    .filter(item => Number.isFinite(item.timestamp))
-                    .sort((a, b) => a.timestamp - b.timestamp);
-
-                const latestTs = new Date(latestData.created_at).getTime();
-                if (!Number.isFinite(latestTs)) throw new Error('最新時間無效');
-
-                // 更新時間
-                updateTimeEl.textContent = formatTaiwanTime(new Date(latestTs));
-
-                // 即時數值
-                const fields = [latestData.field1, latestData
+                    animation: { duration: 400, easing: 'easeOutQuart' },
+                    interaction: {
