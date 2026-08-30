@@ -1214,10 +1214,6 @@ body {
 
 
 
-<!-- =====================================================
-     頁尾
-===================================================== -->
-
 <footer class="footer">
 
     ESP32 IoT Environmental Monitoring Platform
@@ -1245,11 +1241,12 @@ const READ_API_KEY = "IT0OTL4TT1QFKXO8";
    台灣時區
 ===================================================== */
 
-const TAIWAN_TIMEZONE = "Asia/Taipei";
+const TAIWAN_TIMEZONE =
+    "Asia/Taipei";
 
 
 /* =====================================================
-   目前時間範圍
+   時間範圍
 
    10 = 10分鐘
    30 = 30分鐘
@@ -1260,7 +1257,7 @@ let timeRangeMinutes = 10;
 
 
 /* =====================================================
-   圖表
+   圖表變數
 ===================================================== */
 
 let temperatureChart = null;
@@ -1273,17 +1270,10 @@ let co2Chart = null;
 
 
 /* =====================================================
-   ThingSpeak API
-
-   一次抓較多資料，
-   再由 JavaScript 篩選時間。
-
-   1000筆對目前的
-   10分鐘 / 30分鐘 / 1小時
-   已經很足夠。
+   ThingSpeak 歷史資料 API
 ===================================================== */
 
-function getAPI() {
+function getFeedsAPI() {
 
     return (
 
@@ -1301,13 +1291,34 @@ function getAPI() {
 
 
 /* =====================================================
-   時間格式化
+   ThingSpeak 最新資料 API
 
-   強制使用台灣時區。
+   ⭐ 重要
 
-   不使用電腦自己的時區，
-   因此不會因為 Windows 時區設定
-   或瀏覽器時區不同而亂掉。
+   這個 API 專門拿「最新一筆」。
+
+   不再從歷史資料陣列猜哪一筆最新。
+===================================================== */
+
+function getLatestAPI() {
+
+    return (
+
+        `https://api.thingspeak.com/channels/` +
+
+        `${CHANNEL_ID}/feeds/last.json` +
+
+        `?api_key=${READ_API_KEY}`
+
+    );
+
+}
+
+
+/* =====================================================
+   台灣時間
+
+   所有時間統一使用 Asia/Taipei
 ===================================================== */
 
 function formatTaiwanTime(date) {
@@ -1350,16 +1361,7 @@ function formatTaiwanTime(date) {
 
 
 /* =====================================================
-   圖表時間格式
-
-   只顯示：
-   時:分:秒
-
-   例如：
-
-   16:00:00
-   16:05:00
-   16:10:00
+   圖表時間
 ===================================================== */
 
 function formatChartTime(timestamp) {
@@ -1388,7 +1390,9 @@ function formatChartTime(timestamp) {
         }
 
     ).format(
+
         new Date(timestamp)
+
     );
 
 }
@@ -1414,6 +1418,7 @@ function getAverage(values) {
         values.reduce(
 
             (a, b) =>
+
                 a + b,
 
             0
@@ -1487,7 +1492,6 @@ function updateStatistics(
         unit;
 
 
-
     document.getElementById(
         minID
     ).textContent =
@@ -1499,7 +1503,6 @@ function updateStatistics(
         +
 
         unit;
-
 
 
     document.getElementById(
@@ -1518,7 +1521,7 @@ function updateStatistics(
 
 
 /* =====================================================
-   切換時間範圍
+   切換時間
 ===================================================== */
 
 function changeTimeRange(minutes) {
@@ -1595,7 +1598,9 @@ function changeTimeRange(minutes) {
 
 
 /* =====================================================
-   讀取 ThingSpeak
+   讀取資料
+
+   ⭐ 這裡是本次最重要的修改
 ===================================================== */
 
 async function loadData() {
@@ -1604,77 +1609,82 @@ async function loadData() {
 
 
         /* =================================================
-           狀態：讀取中
+           顯示讀取狀態
         ================================================= */
 
         document.getElementById(
             "status"
         ).textContent =
-
             "讀取中...";
 
 
         document.getElementById(
             "status"
         ).className =
-
             "status-ok";
 
 
 
         /* =================================================
-           取得資料
+           同時取得：
+
+           1. 歷史資料
+           2. 最新資料
+
+           最新資料由 last.json 負責。
         ================================================= */
 
-        const response =
+        const [
 
-            await fetch(
+            feedsResponse,
 
-                getAPI(),
+            latestResponse
 
+        ] = await Promise.all([
+
+            fetch(
+                getFeedsAPI(),
                 {
-
                     cache:
                         "no-store"
-
                 }
+            ),
 
-            );
+            fetch(
+                getLatestAPI(),
+                {
+                    cache:
+                        "no-store"
+                }
+            )
+
+        ]);
 
 
+
+        /* =================================================
+           檢查 API
+        ================================================= */
 
         if (
-            !response.ok
+            !feedsResponse.ok
         ) {
 
             throw new Error(
-
-                "ThingSpeak HTTP " +
-
-                response.status
-
+                "ThingSpeak 歷史資料 HTTP " +
+                feedsResponse.status
             );
 
         }
 
 
-
-        const data =
-
-            await response.json();
-
-
-
         if (
-
-            !data.feeds ||
-
-            data.feeds.length === 0
-
+            !latestResponse.ok
         ) {
 
             throw new Error(
-                "ThingSpeak 沒有資料"
+                "ThingSpeak 最新資料 HTTP " +
+                latestResponse.status
             );
 
         }
@@ -1682,24 +1692,62 @@ async function loadData() {
 
 
         /* =================================================
-           將 ThingSpeak 資料轉成時間戳
+           解析 JSON
+        ================================================= */
 
-           Date 會正確解析 ThingSpeak 的
-           ISO 8601 時間。
+        const feedsData =
+            await feedsResponse.json();
 
-           例如：
 
-           2026-08-30T08:12:49Z
+        const latestData =
+            await latestResponse.json();
 
-           Z = UTC
 
-           接著我們只在顯示時轉成
-           Asia/Taipei。
+
+        /* =================================================
+           確認資料
+        ================================================= */
+
+        if (
+
+            !feedsData.feeds ||
+
+            feedsData.feeds.length === 0
+
+        ) {
+
+            throw new Error(
+                "ThingSpeak 沒有歷史資料"
+            );
+
+        }
+
+
+        if (
+
+            !latestData ||
+
+            !latestData.created_at
+
+        ) {
+
+            throw new Error(
+                "ThingSpeak 沒有最新資料"
+            );
+
+        }
+
+
+
+        /* =================================================
+           整理歷史資料
+
+           每一筆資料都建立 timestamp。
         ================================================= */
 
         const allFeeds =
 
-            data.feeds
+            feedsData.feeds
 
                 .map(item => {
 
@@ -1708,6 +1756,7 @@ async function loadData() {
                         ...item,
 
                         timestamp:
+
                             new Date(
                                 item.created_at
                             ).getTime()
@@ -1727,20 +1776,16 @@ async function loadData() {
 
 
         /* =================================================
-           時間排序
+           ⭐ 固定排序
 
            永遠：
 
            舊 → 新
 
-           這是最重要的地方。
+           左邊 = 舊資料
+           右邊 = 新資料
 
-           不再使用 reverse:true。
-
-           所以：
-
-           左邊 = 舊
-           右邊 = 新
+           不使用 reverse。
         ================================================= */
 
         allFeeds.sort(
@@ -1755,28 +1800,47 @@ async function loadData() {
 
 
         /* =================================================
-           最新資料
+           ⭐ 最新資料
 
-           注意：
+           不再從 allFeeds 最後一筆判斷。
 
-           這是 ThingSpeak 的
-           「最新一筆資料時間」，
+           直接使用 ThingSpeak：
 
-           不是網頁重新整理時間。
+           /feeds/last.json
+
         ================================================= */
 
-        const latestFeed =
+        const latestTimestamp =
 
-            allFeeds[
-                allFeeds.length - 1
-            ];
+            new Date(
+                latestData.created_at
+            ).getTime();
+
+
+
+        if (
+            !Number.isFinite(
+                latestTimestamp
+            )
+        ) {
+
+            throw new Error(
+                "最新資料時間格式錯誤"
+            );
+
+        }
 
 
 
         /* =================================================
-           最後資料時間
+           ⭐ 最後資料時間
 
-           強制轉成台灣時間。
+           只由 latestData 決定。
+
+           不使用 Date.now()
+           不使用瀏覽器時間。
+
+           因此不會再出現兩個時間交換。
         ================================================= */
 
         document.getElementById(
@@ -1786,7 +1850,7 @@ async function loadData() {
             formatTaiwanTime(
 
                 new Date(
-                    latestFeed.timestamp
+                    latestTimestamp
                 )
 
             );
@@ -1794,90 +1858,13 @@ async function loadData() {
 
 
         /* =================================================
-           目前真正時間
+           最新數值
 
-           用電腦目前時間當作圖表
-           的右側邊界。
-
-           這樣如果 ESP32 暫停上傳，
-           圖表也不會把舊資料假裝成最新。
+           直接使用 ThingSpeak
+           最新一筆資料。
         ================================================= */
 
-        const now =
-
-            Date.now();
-
-
-
-        /* =================================================
-           開始時間
-
-           例如選擇：
-
-           10分鐘
-
-           就是：
-
-           現在 - 10分鐘
-        ================================================= */
-
-        const startTime =
-
-            now -
-
-            (
-
-                timeRangeMinutes *
-
-                60 *
-
-                1000
-
-            );
-
-
-
-        /* =================================================
-           篩選時間範圍
-
-           只顯示：
-
-           startTime → now
-        ================================================= */
-
-        const feeds =
-
-            allFeeds.filter(
-
-                item =>
-
-                    item.timestamp >=
-                    startTime
-
-                    &&
-
-                    item.timestamp <=
-                    now
-
-            );
-
-
-
-        /* =================================================
-           最新感測資料
-
-           注意：
-
-           如果 ThingSpeak 的最新資料
-           尚未進入目前時間範圍，
-
-           仍然使用 ThingSpeak 最新資料
-           顯示左邊即時數值。
-        ================================================= */
-
-        const latestData =
-
-            latestFeed;
+        const latest = latestData;
 
 
 
@@ -1886,17 +1873,14 @@ async function loadData() {
         ================================================= */
 
         if (
-
-            latestData.field1 !== null &&
-
-            latestData.field1 !== undefined
-
+            latest.field1 !== null &&
+            latest.field1 !== undefined
         ) {
 
             const value =
 
                 Number(
-                    latestData.field1
+                    latest.field1
                 );
 
 
@@ -1921,17 +1905,14 @@ async function loadData() {
         ================================================= */
 
         if (
-
-            latestData.field2 !== null &&
-
-            latestData.field2 !== undefined
-
+            latest.field2 !== null &&
+            latest.field2 !== undefined
         ) {
 
             const value =
 
                 Number(
-                    latestData.field2
+                    latest.field2
                 );
 
 
@@ -1956,17 +1937,14 @@ async function loadData() {
         ================================================= */
 
         if (
-
-            latestData.field3 !== null &&
-
-            latestData.field3 !== undefined
-
+            latest.field3 !== null &&
+            latest.field3 !== undefined
         ) {
 
             const value =
 
                 Number(
-                    latestData.field3
+                    latest.field3
                 );
 
 
@@ -1991,17 +1969,14 @@ async function loadData() {
         ================================================= */
 
         if (
-
-            latestData.field4 !== null &&
-
-            latestData.field4 !== undefined
-
+            latest.field4 !== null &&
+            latest.field4 !== undefined
         ) {
 
             const co2Value =
 
                 Number(
-                    latestData.field4
+                    latest.field4
                 );
 
 
@@ -2025,11 +2000,14 @@ async function loadData() {
                 /* =========================================
                    CO2 顏色
 
-                   >= 1500 → 紅色
+                   >= 1500 ppm
+                   紅色
 
-                   1000～1499 → 橘色
+                   1000～1499 ppm
+                   橘色
 
-                   < 1000 → 綠色
+                   < 1000 ppm
+                   綠色
                 ========================================= */
 
                 if (
@@ -2064,6 +2042,77 @@ async function loadData() {
 
 
         /* =================================================
+           ⭐ 圖表時間範圍
+
+           注意：
+
+           不使用 Date.now()
+
+           改用 ThingSpeak 最新資料時間。
+
+           所以圖表跟資料時間完全一致。
+        ================================================= */
+
+        const chartEndTime =
+            latestTimestamp;
+
+
+        const chartStartTime =
+
+            chartEndTime -
+
+            (
+
+                timeRangeMinutes *
+
+                60 *
+
+                1000
+
+            );
+
+
+
+        /* =================================================
+           取得目前時間範圍內的資料
+
+           只保留：
+
+           chartStartTime
+           ↓
+           chartEndTime
+
+           並再次排序。
+        ================================================= */
+
+        const feeds =
+
+            allFeeds
+
+                .filter(item =>
+
+                    item.timestamp >=
+                    chartStartTime
+
+                    &&
+
+                    item.timestamp <=
+                    chartEndTime
+
+                )
+
+                .sort(
+
+                    (a, b) =>
+
+                        a.timestamp -
+                        b.timestamp
+
+                );
+
+
+
+        /* =================================================
            統計資料
         ================================================= */
 
@@ -2086,7 +2135,6 @@ async function loadData() {
                 );
 
 
-
         const humidities =
 
             feeds
@@ -2106,7 +2154,6 @@ async function loadData() {
                 );
 
 
-
         const lights =
 
             feeds
@@ -2124,7 +2171,6 @@ async function loadData() {
                             value
                         )
                 );
-
 
 
         const co2Values =
@@ -2228,9 +2274,9 @@ async function loadData() {
 
             feeds,
 
-            startTime,
+            chartStartTime,
 
-            now
+            chartEndTime
 
         );
 
@@ -2261,11 +2307,8 @@ async function loadData() {
 
 
         console.error(
-
             "ThingSpeak 錯誤：",
-
             error
-
         );
 
 
@@ -2288,7 +2331,7 @@ async function loadData() {
 
 
 /* =====================================================
-   建立所有圖表
+   建立圖表
 ===================================================== */
 
 function createCharts(
@@ -2297,7 +2340,7 @@ function createCharts(
 
     startTime,
 
-    now
+    endTime
 
 ) {
 
@@ -2344,31 +2387,23 @@ function createCharts(
 
 
     /* =================================================
-       共用圖表設定
+       共用設定
 
-       ⭐ 這次最重要的修改：
-
-       不使用 reverse。
+       ⭐ 最重要：
 
        X軸：
+
+       startTime → endTime
 
        左 → 右
 
        舊 → 新
 
-       而且使用真正的 timestamp
-       當 X 座標。
-
-       因此不會再出現：
-
-       有時新資料在左邊
-       有時新資料在右邊
+       完全不使用 reverse。
     ================================================= */
 
     function createCommonOptions(
-
         unit
-
     ) {
 
         return {
@@ -2377,24 +2412,24 @@ function createCharts(
 
             maintainAspectRatio: false,
 
-
             animation: false,
-
 
             interaction: {
 
-                mode: "nearest",
+                mode:
+                    "nearest",
 
-                intersect: false
+                intersect:
+                    false
 
             },
-
 
             plugins: {
 
                 legend: {
 
-                    display: false
+                    display:
+                        false
 
                 },
 
@@ -2403,49 +2438,62 @@ function createCharts(
 
                     callbacks: {
 
-                        title: function(context) {
+                        title:
+                            function(context) {
 
-                            if (
-                                !context.length
-                            ) {
+                                if (
+                                    !context.length
+                                ) {
 
-                                return "";
+                                    return "";
+
+                                }
+
+
+                                return formatTaiwanTime(
+
+                                    new Date(
+                                        context[0]
+                                            .parsed
+                                            .x
+                                    )
+
+                                );
+
+                            },
+
+
+                        label:
+                            function(context) {
+
+                                const decimals =
+
+                                    unit ===
+                                    "ppm"
+
+                                    ? 0
+                                    : 1;
+
+
+                                return (
+
+                                    Number(
+                                        context
+                                            .parsed
+                                            .y
+                                    ).toFixed(
+                                        decimals
+                                    )
+
+                                    +
+
+                                    " " +
+
+                                    unit
+
+                                );
 
                             }
-
-
-                            return formatTaiwanTime(
-
-                                new Date(
-                                    context[0].parsed.x
-                                )
-
-                            );
-
-                        },
-
-
-                        label: function(context) {
-
-                            return (
-
-                                Number(
-                                    context.parsed.y
-                                ).toFixed(
-                                    unit === "ppm"
-                                    ? 0
-                                    : 1
-                                )
-
-                                +
-
-                                " " +
-
-                                unit
-
-                            );
-
-                        }
 
                     }
 
@@ -2458,38 +2506,36 @@ function createCharts(
 
                 x: {
 
-                    type: "linear",
+                    type:
+                        "linear",
 
-                    min: startTime,
+                    min:
+                        startTime,
 
-                    max: now,
-
-
-                    grid: {
-
-                        display: true
-
-                    },
-
+                    max:
+                        endTime,
 
                     ticks: {
 
-                        maxTicksLimit: 7,
+                        maxTicksLimit:
+                            7,
 
                         font: {
 
-                            size: 14
+                            size:
+                                14
 
                         },
 
 
-                        callback: function(value) {
+                        callback:
+                            function(value) {
 
-                            return formatChartTime(
-                                value
-                            );
+                                return formatChartTime(
+                                    value
+                                );
 
-                        }
+                            }
 
                     }
 
@@ -2498,21 +2544,15 @@ function createCharts(
 
                 y: {
 
-                    beginAtZero: false,
-
+                    beginAtZero:
+                        false,
 
                     ticks: {
 
                         font: {
 
-                            size: 14
-
-                        },
-
-
-                        callback: function(value) {
-
-                            return value;
+                            size:
+                                14
 
                         }
 
@@ -2530,10 +2570,6 @@ function createCharts(
 
     /* =================================================
        溫度資料
-
-       X = 時間
-
-       Y = 溫度
     ================================================= */
 
     const temperatureData =
@@ -2545,9 +2581,11 @@ function createCharts(
                 item.field1 !== null &&
 
                 Number.isFinite(
+
                     Number(
                         item.field1
                     )
+
                 )
 
             )
@@ -2583,9 +2621,11 @@ function createCharts(
                 item.field2 !== null &&
 
                 Number.isFinite(
+
                     Number(
                         item.field2
                     )
+
                 )
 
             )
@@ -2621,9 +2661,11 @@ function createCharts(
                 item.field3 !== null &&
 
                 Number.isFinite(
+
                     Number(
                         item.field3
                     )
+
                 )
 
             )
@@ -2659,9 +2701,11 @@ function createCharts(
                 item.field4 !== null &&
 
                 Number.isFinite(
+
                     Number(
                         item.field4
                     )
+
                 )
 
             )
@@ -2698,7 +2742,8 @@ function createCharts(
 
             {
 
-                type: "line",
+                type:
+                    "line",
 
                 data: {
 
@@ -2710,15 +2755,20 @@ function createCharts(
                         data:
                             temperatureData,
 
-                        borderWidth: 3,
+                        borderWidth:
+                            3,
 
-                        pointRadius: 3,
+                        pointRadius:
+                            3,
 
-                        pointHoverRadius: 6,
+                        pointHoverRadius:
+                            6,
 
-                        tension: 0.25,
+                        tension:
+                            0.25,
 
-                        fill: false
+                        fill:
+                            false
 
                     }]
 
@@ -2751,7 +2801,8 @@ function createCharts(
 
             {
 
-                type: "line",
+                type:
+                    "line",
 
                 data: {
 
@@ -2763,15 +2814,20 @@ function createCharts(
                         data:
                             humidityData,
 
-                        borderWidth: 3,
+                        borderWidth:
+                            3,
 
-                        pointRadius: 3,
+                        pointRadius:
+                            3,
 
-                        pointHoverRadius: 6,
+                        pointHoverRadius:
+                            6,
 
-                        tension: 0.25,
+                        tension:
+                            0.25,
 
-                        fill: false
+                        fill:
+                            false
 
                     }]
 
@@ -2804,7 +2860,8 @@ function createCharts(
 
             {
 
-                type: "line",
+                type:
+                    "line",
 
                 data: {
 
@@ -2816,15 +2873,20 @@ function createCharts(
                         data:
                             lightData,
 
-                        borderWidth: 3,
+                        borderWidth:
+                            3,
 
-                        pointRadius: 3,
+                        pointRadius:
+                            3,
 
-                        pointHoverRadius: 6,
+                        pointHoverRadius:
+                            6,
 
-                        tension: 0.25,
+                        tension:
+                            0.25,
 
-                        fill: false
+                        fill:
+                            false
 
                     }]
 
@@ -2857,7 +2919,8 @@ function createCharts(
 
             {
 
-                type: "line",
+                type:
+                    "line",
 
                 data: {
 
@@ -2869,15 +2932,20 @@ function createCharts(
                         data:
                             co2Data,
 
-                        borderWidth: 3,
+                        borderWidth:
+                            3,
 
-                        pointRadius: 3,
+                        pointRadius:
+                            3,
 
-                        pointHoverRadius: 6,
+                        pointHoverRadius:
+                            6,
 
-                        tension: 0.25,
+                        tension:
+                            0.25,
 
-                        fill: false
+                        fill:
+                            false
 
                     }]
 
@@ -2898,7 +2966,7 @@ function createCharts(
 
 
 /* =====================================================
-   第一次啟動
+   啟動
 ===================================================== */
 
 loadData();
@@ -2907,17 +2975,7 @@ loadData();
 /* =====================================================
    自動更新
 
-   ThingSpeak 建議不要太頻繁讀取。
-
-   15秒更新一次：
-
-   15秒
-   30秒
-   45秒
-   60秒
-   ...
-
-   這樣比每5秒穩定。
+   每15秒更新一次
 ===================================================== */
 
 setInterval(
