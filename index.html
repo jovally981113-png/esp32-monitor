@@ -117,27 +117,53 @@
             padding: 18px 20px 12px 20px;
         }
 
-        /* ===== 左側感應卡 — 玻璃質感 ===== */
+        /* ===== 左側即時數據 — 玻璃質感 ===== */
         .left-panel {
             display: grid;
-            grid-template-rows: repeat(4, 1fr);
-            gap: 14px;
+            grid-template-rows: auto 1fr 1fr 1fr 1fr;
+            gap: 10px;
             min-height: 0;
+        }
+
+        /* 即時數據標題 */
+        .live-title {
+            background: var(--card-bg);
+            border-radius: var(--radius-card);
+            padding: 8px 16px;
+            box-shadow: var(--shadow-card), var(--border-glow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            border-left: 5px solid var(--primary-light);
+        }
+        .live-title .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #2ecc71;
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
         }
 
         .sensor-card {
             background: var(--card-bg);
             border-radius: var(--radius-card);
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            padding: 8px 18px 8px 16px;
             box-shadow: var(--shadow-card), var(--border-glow);
-            border-left: 5px solid var(--primary-light);
             transition: all var(--transition);
-            padding: 6px 4px;
             position: relative;
             overflow: hidden;
+            gap: 8px;
         }
         .sensor-card::before {
             content: '';
@@ -150,32 +176,41 @@
             pointer-events: none;
         }
         .sensor-card:hover {
-            transform: translateY(-4px) scale(1.01);
+            transform: translateY(-2px) scale(1.01);
             box-shadow: 0 16px 32px rgba(10, 122, 106, 0.15);
         }
 
+        /* 每個感應卡左側彩色邊條 */
+        .sensor-card:nth-child(2) { border-left: 5px solid #e74c3c; }
+        .sensor-card:nth-child(3) { border-left: 5px solid #3498db; }
+        .sensor-card:nth-child(4) { border-left: 5px solid #f39c12; }
+        .sensor-card:nth-child(5) { border-left: 5px solid #2ecc71; }
+
+        .sensor-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
         .sensor-icon {
-            font-size: 38px;
-            line-height: 1.2;
-            margin-bottom: 1px;
+            font-size: 30px;
+            line-height: 1;
         }
         .sensor-name {
-            font-size: 19px;
+            font-size: 16px;
             font-weight: 500;
             color: var(--text-muted);
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
         }
         .sensor-value {
             display: flex;
             align-items: baseline;
-            gap: 6px;
-            font-size: 38px;
+            gap: 4px;
+            font-size: 28px;
             font-weight: 700;
             color: var(--primary);
-            margin-top: 1px;
         }
         .sensor-unit {
-            font-size: 17px;
+            font-size: 15px;
             font-weight: 400;
             color: #8ba9a3;
         }
@@ -376,9 +411,9 @@
         /* ===== 響應式 ===== */
         @media (max-width: 1300px) {
             .main { grid-template-columns: 22% minmax(0, 1fr) 24%; gap: 14px; padding: 14px; }
-            .sensor-value { font-size: 34px; }
-            .sensor-name { font-size: 17px; }
-            .sensor-icon { font-size: 34px; }
+            .sensor-value { font-size: 24px; }
+            .sensor-name { font-size: 14px; }
+            .sensor-icon { font-size: 26px; }
         }
 
         @media (max-width: 1100px) {
@@ -393,7 +428,10 @@
             .stat-row { font-size: 14px; }
             .stat-value { font-size: 14px; }
             .btn-group button { font-size: 12px; padding: 5px 12px; }
-            .sensor-value { font-size: 30px; }
+            .sensor-value { font-size: 22px; }
+            .sensor-name { font-size: 13px; }
+            .sensor-icon { font-size: 24px; }
+            .live-title { font-size: 16px; padding: 6px 14px; }
         }
 
         @media (max-width: 760px) {
@@ -404,9 +442,10 @@
                 padding: 12px;
             }
             .left-panel {
-                height: 440px;
+                height: auto;
                 margin-bottom: 16px;
-                grid-template-rows: repeat(4, 1fr);
+                grid-template-rows: auto repeat(4, 70px);
+                gap: 8px;
             }
             .center-panel {
                 height: 600px;
@@ -433,9 +472,15 @@
             }
             .title-area h1 { font-size: 20px; }
             .title-area h1 span { font-size: 11px; padding: 1px 10px; }
-            .sensor-value { font-size: 28px; }
+            .sensor-value { font-size: 20px; }
             .controls-row { flex-wrap: wrap; }
             .controls-label { min-width: 50px; font-size: 12px; }
+            .sensor-card {
+                padding: 6px 14px 6px 12px;
+            }
+            .sensor-icon { font-size: 22px; }
+            .sensor-name { font-size: 13px; }
+            .live-title { font-size: 15px; padding: 6px 12px; }
         }
     </style>
 </head>
@@ -459,27 +504,61 @@
     <!-- ===== MAIN ===== -->
     <main class="main">
 
-        <!-- 左：感測器 -->
+        <!-- 左：即時數據 -->
         <section class="left-panel">
-            <div class="sensor-card">
-                <div class="sensor-icon">🌡️</div>
-                <div class="sensor-name">溫度</div>
-                <div class="sensor-value"><span id="temperature">--</span><span class="sensor-unit">°C</span></div>
+            <!-- 即時數據標題 -->
+            <div class="live-title">
+                <span class="dot"></span>
+                ⚡ 即時數據
+                <span style="font-size:13px; font-weight:400; color:var(--text-muted); margin-left:auto;">Live</span>
             </div>
+
+            <!-- 溫度 -->
             <div class="sensor-card">
-                <div class="sensor-icon">💧</div>
-                <div class="sensor-name">濕度</div>
-                <div class="sensor-value"><span id="humidity">--</span><span class="sensor-unit">%</span></div>
+                <div class="sensor-left">
+                    <span class="sensor-icon">🌡️</span>
+                    <span class="sensor-name">溫度</span>
+                </div>
+                <div class="sensor-value">
+                    <span id="temperature">--</span>
+                    <span class="sensor-unit">°C</span>
+                </div>
             </div>
+
+            <!-- 濕度 -->
             <div class="sensor-card">
-                <div class="sensor-icon">☀️</div>
-                <div class="sensor-name">光照</div>
-                <div class="sensor-value"><span id="light">--</span><span class="sensor-unit">Lux</span></div>
+                <div class="sensor-left">
+                    <span class="sensor-icon">💧</span>
+                    <span class="sensor-name">濕度</span>
+                </div>
+                <div class="sensor-value">
+                    <span id="humidity">--</span>
+                    <span class="sensor-unit">%</span>
+                </div>
             </div>
+
+            <!-- 光照 -->
             <div class="sensor-card">
-                <div class="sensor-icon">🌫️</div>
-                <div class="sensor-name">CO₂ 濃度</div>
-                <div class="sensor-value"><span id="co2">--</span><span class="sensor-unit">ppm</span></div>
+                <div class="sensor-left">
+                    <span class="sensor-icon">☀️</span>
+                    <span class="sensor-name">光照</span>
+                </div>
+                <div class="sensor-value">
+                    <span id="light">--</span>
+                    <span class="sensor-unit">Lux</span>
+                </div>
+            </div>
+
+            <!-- CO₂ -->
+            <div class="sensor-card">
+                <div class="sensor-left">
+                    <span class="sensor-icon">🌫️</span>
+                    <span class="sensor-name">CO₂ 濃度</span>
+                </div>
+                <div class="sensor-value">
+                    <span id="co2">--</span>
+                    <span class="sensor-unit">ppm</span>
+                </div>
             </div>
         </section>
 
@@ -798,42 +877,4 @@
                     const c = parseFloat(item.field4);
                     if (!isNaN(t)) temps.push(t);
                     if (!isNaN(h)) hums.push(h);
-                    if (!isNaN(l)) lights.push(l);
-                    if (!isNaN(c)) co2s.push(c);
-                });
-
-                updateStats(temps, 'tempMax', 'tempMin', 'tempAvg', ' °C', 1);
-                updateStats(hums, 'humMax', 'humMin', 'humAvg', ' %', 1);
-                updateStats(lights, 'lightMax', 'lightMin', 'lightAvg', ' Lux', 1);
-                updateStats(co2s, 'co2Max', 'co2Min', 'co2Avg', ' ppm', 0);
-
-                // ===== 更新圖表 =====
-                [temperatureChart, humidityChart, lightChart, co2Chart].forEach(ch => { if (ch) ch.destroy(); });
-
-                temperatureChart = buildChart('temperatureChart', '溫度', tempPoints, '°C', chartStartTime, chartEndTime, '#e74c3c');
-                humidityChart = buildChart('humidityChart', '濕度', humPoints, '%', chartStartTime, chartEndTime, '#3498db');
-                lightChart = buildChart('lightChart', '光照', lightPoints, 'Lux', chartStartTime, chartEndTime, '#f39c12');
-                co2Chart = buildChart('co2Chart', 'CO₂', co2Points, 'ppm', chartStartTime, chartEndTime, '#2ecc71');
-
-                statusEl.textContent = '資料連線正常';
-                statusEl.className = 'status-ok';
-
-            } catch (err) {
-                console.error('ThingSpeak 錯誤:', err);
-                statusEl.textContent = '讀取失敗';
-                statusEl.className = 'status-error';
-            }
-        }
-
-        // ===== 啟動 =====
-        loadData();
-        setInterval(loadData, 15000);
-
-        // 初始化標籤
-        statRangeLabel.textContent = '(最近 10 分鐘)';
-        document.querySelector('#chartBtnGroup button[data-count="10"]')?.classList.add('active');
-        document.querySelector('#statBtnGroup button[data-min="10"]')?.classList.add('active');
-    })();
-</script>
-</body>
-</html>
+                    if (!is
