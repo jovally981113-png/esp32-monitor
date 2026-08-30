@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 
@@ -14,6 +13,10 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+
+/* =====================================================
+   基本設定
+===================================================== */
 
 * {
     box-sizing: border-box;
@@ -51,6 +54,7 @@ body {
     height: 100vh;
 
     display: flex;
+
     flex-direction: column;
 }
 
@@ -61,7 +65,7 @@ body {
 
 .header {
 
-    height: 82px;
+    height: 90px;
 
     flex-shrink: 0;
 
@@ -81,22 +85,26 @@ body {
         0 3px 10px rgba(0, 80, 70, 0.18);
 }
 
+
 .title-area h1 {
 
     margin: 0;
 
-    font-size: 27px;
+    font-size: 32px;
 
     letter-spacing: 1px;
+
 }
+
 
 .title-area p {
 
-    margin: 4px 0 0;
+    margin: 5px 0 0;
 
-    font-size: 15px;
+    font-size: 18px;
 
     color: #cceee8;
+
 }
 
 
@@ -108,25 +116,30 @@ body {
 
     text-align: right;
 
-    font-size: 16px;
+    font-size: 19px;
 
-    line-height: 25px;
+    line-height: 29px;
 
     color: #d9f5ef;
+
 }
+
 
 .status-ok {
 
     color: #a7f3d0;
 
     font-weight: bold;
+
 }
+
 
 .status-error {
 
     color: #fecaca;
 
     font-weight: bold;
+
 }
 
 
@@ -150,6 +163,7 @@ body {
     gap: 14px;
 
     padding: 14px;
+
 }
 
 
@@ -167,6 +181,7 @@ body {
         repeat(4, minmax(0, 1fr));
 
     gap: 14px;
+
 }
 
 
@@ -201,7 +216,9 @@ body {
     transition:
         transform 0.2s,
         box-shadow 0.2s;
+
 }
+
 
 .sensor-card:hover {
 
@@ -209,22 +226,27 @@ body {
 
     box-shadow:
         0 7px 18px rgba(0, 100, 85, 0.18);
+
 }
+
 
 .sensor-icon {
 
-    font-size: 40px;
+    font-size: 45px;
 
-    margin-bottom: 6px;
+    margin-bottom: 7px;
+
 }
+
 
 .sensor-name {
 
-    font-size: 19px;
+    font-size: 23px;
 
     color: #5f7f78;
 
-    margin-bottom: 3px;
+    margin-bottom: 4px;
+
 }
 
 
@@ -240,31 +262,27 @@ body {
 
     justify-content: center;
 
-    gap: 7px;
+    gap: 8px;
 
-    font-size: 38px;
+    font-size: 42px;
 
     font-weight: bold;
 
-    margin-top: 5px;
+    margin-top: 4px;
 
     color: #087f6f;
+
 }
 
 
-/* =====================================================
-   單位
-===================================================== */
-
 .sensor-unit {
 
-    font-size: 17px;
+    font-size: 21px;
 
     font-weight: normal;
 
     color: #8ba9a3;
 
-    margin-top: 0;
 }
 
 
@@ -287,6 +305,7 @@ body {
         1fr 1fr;
 
     gap: 14px;
+
 }
 
 
@@ -304,7 +323,7 @@ body {
 
     border-radius: 14px;
 
-    padding: 13px 15px;
+    padding: 15px 17px;
 
     box-shadow:
         0 3px 12px rgba(0, 100, 85, 0.10);
@@ -312,15 +331,17 @@ body {
     display: flex;
 
     flex-direction: column;
+
 }
+
 
 .chart-title {
 
-    height: 30px;
+    height: 36px;
 
     flex-shrink: 0;
 
-    font-size: 19px;
+    font-size: 22px;
 
     font-weight: bold;
 
@@ -329,7 +350,9 @@ body {
     align-items: center;
 
     color: #174f47;
+
 }
+
 
 .chart-container {
 
@@ -338,6 +361,7 @@ body {
     min-height: 0;
 
     position: relative;
+
 }
 
 
@@ -355,7 +379,7 @@ body {
 
     border-radius: 14px;
 
-    padding: 16px;
+    padding: 18px;
 
     box-shadow:
         0 3px 12px rgba(0, 100, 85, 0.10);
@@ -363,17 +387,20 @@ body {
     display: flex;
 
     flex-direction: column;
+
 }
+
 
 .right-title {
 
-    font-size: 23px;
+    font-size: 27px;
 
     font-weight: bold;
 
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 
     color: #087f6f;
+
 }
 
 
@@ -388,18 +415,20 @@ body {
     grid-template-columns:
         repeat(3, 1fr);
 
-    gap: 7px;
+    gap: 8px;
 
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+
 }
+
 
 .data-selector button {
 
     border: none;
 
-    border-radius: 7px;
+    border-radius: 8px;
 
-    padding: 9px 3px;
+    padding: 11px 3px;
 
     background: #d8eee9;
 
@@ -407,21 +436,28 @@ body {
 
     cursor: pointer;
 
-    font-size: 15px;
+    font-size: 18px;
+
+    font-weight: bold;
 
     transition: 0.2s;
+
 }
+
 
 .data-selector button:hover {
 
     background: #bfe4dc;
+
 }
+
 
 .data-selector button.active {
 
     background: #087f6f;
 
     color: white;
+
 }
 
 
@@ -431,22 +467,26 @@ body {
 
 .stat-section {
 
-    padding: 10px 0;
+    padding: 11px 0;
 
     border-top:
         1px solid #dceeea;
+
 }
+
 
 .stat-name {
 
-    font-size: 18px;
+    font-size: 22px;
 
     font-weight: bold;
 
-    margin-bottom: 6px;
+    margin-bottom: 7px;
 
     color: #24564f;
+
 }
+
 
 .stat-row {
 
@@ -456,20 +496,23 @@ body {
 
     align-items: center;
 
-    padding: 4px 0;
+    padding: 5px 0;
 
-    font-size: 16px;
+    font-size: 19px;
 
     color: #66837d;
+
 }
+
 
 .stat-value {
 
     font-weight: bold;
 
-    font-size: 17px;
+    font-size: 19px;
 
     color: #087f6f;
+
 }
 
 
@@ -479,15 +522,16 @@ body {
 
 .footer {
 
-    height: 25px;
+    height: 28px;
 
     flex-shrink: 0;
 
     text-align: center;
 
-    font-size: 12px;
+    font-size: 14px;
 
     color: #65938a;
+
 }
 
 
@@ -499,88 +543,120 @@ body {
 
     .header {
 
-        height: 72px;
+        height: 78px;
 
         padding: 0 20px;
+
     }
+
 
     .title-area h1 {
 
-        font-size: 22px;
+        font-size: 27px;
+
     }
+
 
     .title-area p {
 
-        font-size: 14px;
+        font-size: 16px;
+
     }
+
 
     .system-area {
 
-        font-size: 15px;
+        font-size: 17px;
+
     }
+
 
     .sensor-value {
 
-        font-size: 32px;
+        font-size: 37px;
+
     }
+
 
     .sensor-name {
 
-        font-size: 17px;
+        font-size: 20px;
+
     }
+
 
     .sensor-icon {
 
-        font-size: 34px;
+        font-size: 38px;
+
     }
+
 
     .sensor-unit {
 
-        font-size: 15px;
+        font-size: 18px;
+
     }
+
 
     .chart-title {
 
-        font-size: 17px;
+        font-size: 20px;
+
     }
+
 
     .right-title {
 
-        font-size: 21px;
+        font-size: 24px;
+
     }
+
 
     .stat-name {
 
-        font-size: 17px;
+        font-size: 19px;
+
     }
+
 
     .stat-row {
 
-        font-size: 15px;
+        font-size: 17px;
+
     }
+
 
     .stat-value {
 
-        font-size: 16px;
+        font-size: 18px;
+
     }
+
 
     .data-selector button {
 
-        font-size: 14px;
+        font-size: 16px;
+
     }
+
 
     .main {
 
         padding: 10px;
 
         gap: 10px;
+
     }
+
 
     .left-panel,
     .center-panel {
 
         gap: 10px;
+
     }
+
 }
 
 
@@ -594,36 +670,48 @@ body {
     body {
 
         overflow: auto;
+
     }
+
 
     .dashboard {
 
         height: auto;
+
     }
+
 
     .main {
 
         display: block;
+
     }
+
 
     .left-panel {
 
         height: 600px;
 
         margin-bottom: 12px;
+
     }
+
 
     .center-panel {
 
         height: 700px;
 
         margin-bottom: 12px;
+
     }
+
 
     .right-panel {
 
         min-height: 550px;
+
     }
+
 }
 
 </style>
@@ -642,6 +730,7 @@ body {
 ===================================================== -->
 
 <header class="header">
+
 
     <div class="title-area">
 
@@ -680,6 +769,7 @@ body {
 
     </div>
 
+
 </header>
 
 
@@ -691,6 +781,7 @@ body {
 <main class="main">
 
 
+
 <!-- =====================================================
      左邊：即時數據
 ===================================================== -->
@@ -698,7 +789,9 @@ body {
 <section class="left-panel">
 
 
-    <!-- 溫度 -->
+    <!-- =================================================
+         溫度
+    ================================================= -->
 
     <div class="sensor-card">
 
@@ -725,7 +818,10 @@ body {
     </div>
 
 
-    <!-- 濕度 -->
+
+    <!-- =================================================
+         濕度
+    ================================================= -->
 
     <div class="sensor-card">
 
@@ -752,7 +848,10 @@ body {
     </div>
 
 
-    <!-- 光照 -->
+
+    <!-- =================================================
+         光照
+    ================================================= -->
 
     <div class="sensor-card">
 
@@ -779,7 +878,10 @@ body {
     </div>
 
 
-    <!-- CO2 -->
+
+    <!-- =================================================
+         CO2
+    ================================================= -->
 
     <div class="sensor-card">
 
@@ -817,7 +919,9 @@ body {
 <section class="center-panel">
 
 
-    <!-- 溫度 -->
+    <!-- =================================================
+         溫度
+    ================================================= -->
 
     <div class="chart-card">
 
@@ -834,7 +938,10 @@ body {
     </div>
 
 
-    <!-- 濕度 -->
+
+    <!-- =================================================
+         濕度
+    ================================================= -->
 
     <div class="chart-card">
 
@@ -851,7 +958,10 @@ body {
     </div>
 
 
-    <!-- 光照 -->
+
+    <!-- =================================================
+         光照
+    ================================================= -->
 
     <div class="chart-card">
 
@@ -868,7 +978,10 @@ body {
     </div>
 
 
-    <!-- CO2 -->
+
+    <!-- =================================================
+         CO2
+    ================================================= -->
 
     <div class="chart-card">
 
@@ -890,7 +1003,7 @@ body {
 
 
 <!-- =====================================================
-     右邊：統計資料
+     右邊：統計
 ===================================================== -->
 
 <aside class="right-panel">
@@ -901,8 +1014,9 @@ body {
     </div>
 
 
+
     <!-- =================================================
-         時間選擇
+         時間範圍
     ================================================= -->
 
     <div class="data-selector">
@@ -1214,12 +1328,6 @@ const READ_API_KEY = "IT0OTL4TT1QFKXO8";
    時間範圍
 ===================================================== */
 
-/*
-   10  = 最近 10 分鐘
-   30  = 最近 30 分鐘
-   60  = 最近 1 小時
-*/
-
 let timeRangeMinutes = 10;
 
 
@@ -1245,10 +1353,15 @@ let co2Chart = null;
 function getAPI() {
 
     return (
+
         `https://api.thingspeak.com/channels/` +
+
         `${CHANNEL_ID}/feeds.json` +
+
         `?api_key=${READ_API_KEY}` +
+
         `&results=1000`
+
     );
 
 }
@@ -1268,12 +1381,19 @@ function getAverage(values) {
     }
 
     return (
+
         values.reduce(
+
             (a, b) => a + b,
+
             0
+
         )
+
         /
+
         values.length
+
     );
 
 }
@@ -1285,40 +1405,82 @@ function getAverage(values) {
 ===================================================== */
 
 function updateStatistics(
+
     values,
+
     maxID,
+
     minID,
+
     avgID,
+
     unit,
+
     decimals
+
 ) {
 
     if (values.length === 0) {
 
-        document.getElementById(maxID).textContent = "--";
+        document.getElementById(
+            maxID
+        ).textContent = "--";
 
-        document.getElementById(minID).textContent = "--";
 
-        document.getElementById(avgID).textContent = "--";
+        document.getElementById(
+            minID
+        ).textContent = "--";
+
+
+        document.getElementById(
+            avgID
+        ).textContent = "--";
+
 
         return;
 
     }
 
 
-    document.getElementById(maxID).textContent =
-        Math.max(...values).toFixed(decimals)
-        + unit;
+    document.getElementById(
+        maxID
+    ).textContent =
+
+        Math.max(
+            ...values
+        ).toFixed(decimals)
+
+        +
+
+        unit;
 
 
-    document.getElementById(minID).textContent =
-        Math.min(...values).toFixed(decimals)
-        + unit;
+
+    document.getElementById(
+        minID
+    ).textContent =
+
+        Math.min(
+            ...values
+        ).toFixed(decimals)
+
+        +
+
+        unit;
 
 
-    document.getElementById(avgID).textContent =
-        getAverage(values).toFixed(decimals)
-        + unit;
+
+    document.getElementById(
+        avgID
+    ).textContent =
+
+        getAverage(
+            values
+        ).toFixed(decimals)
+
+        +
+
+        unit;
 
 }
 
@@ -1333,49 +1495,62 @@ function changeTimeRange(minutes) {
     timeRangeMinutes = minutes;
 
 
-    /* 移除所有 active */
 
     document
         .querySelectorAll(
             ".data-selector button"
         )
-        .forEach(button => {
+        .forEach(
+            button => {
 
-            button.classList.remove(
-                "active"
-            );
+                button.classList.remove(
+                    "active"
+                );
 
-        });
+            }
+        );
 
 
-    /* 設定目前按鈕 */
 
     if (minutes === 10) {
 
         document
-            .getElementById("btn10min")
-            .classList.add("active");
+            .getElementById(
+                "btn10min"
+            )
+            .classList.add(
+                "active"
+            );
 
     }
+
 
     else if (minutes === 30) {
 
         document
-            .getElementById("btn30min")
-            .classList.add("active");
+            .getElementById(
+                "btn30min"
+            )
+            .classList.add(
+                "active"
+            );
 
     }
+
 
     else if (minutes === 60) {
 
         document
-            .getElementById("btn60min")
-            .classList.add("active");
+            .getElementById(
+                "btn60min"
+            )
+            .classList.add(
+                "active"
+            );
 
     }
 
 
-    /* 重新讀取 */
 
     loadData();
 
@@ -1395,26 +1570,35 @@ async function loadData() {
         document.getElementById(
             "status"
         ).textContent =
+
             "讀取中...";
 
 
         document.getElementById(
             "status"
         ).className =
+
             "status-ok";
 
 
 
         /* =================================================
-           取得 ThingSpeak 資料
+           取得資料
         ================================================= */
 
         const response =
+
             await fetch(
+
                 getAPI(),
+
                 {
-                    cache: "no-store"
+
+                    cache:
+                        "no-store"
+
                 }
+
             );
 
 
@@ -1422,8 +1606,11 @@ async function loadData() {
         if (!response.ok) {
 
             throw new Error(
+
                 "ThingSpeak HTTP " +
+
                 response.status
+
             );
 
         }
@@ -1431,17 +1618,23 @@ async function loadData() {
 
 
         const data =
+
             await response.json();
 
 
 
         if (
+
             !data.feeds ||
+
             data.feeds.length === 0
+
         ) {
 
             throw new Error(
+
                 "ThingSpeak 沒有資料"
+
             );
 
         }
@@ -1453,48 +1646,55 @@ async function loadData() {
         ================================================= */
 
         const allFeeds =
+
             data.feeds;
 
 
 
         /* =================================================
-           非常重要：
-           按 created_at 從「舊 → 新」排序
+           按照時間排序
 
-           所以：
-           左邊 = 舊資料
-           右邊 = 最新資料
+           這裡先使用：
+           舊 → 新
+
+           之後圖表會反轉成：
+           右 → 左
+
+           因此最新資料會在最右邊。
         ================================================= */
 
         allFeeds.sort(
-            (a, b) => {
 
-                return (
-                    new Date(a.created_at) -
-                    new Date(b.created_at)
-                );
+            (a, b) =>
 
-            }
+                new Date(
+                    a.created_at
+                )
+
+                -
+
+                new Date(
+                    b.created_at
+                )
+
         );
 
 
 
         /* =================================================
-           最新資料
+           最新資料時間
         ================================================= */
 
         const latest =
+
             allFeeds[
                 allFeeds.length - 1
             ];
 
 
 
-        /* =================================================
-           最新時間
-        ================================================= */
-
         const latestTime =
+
             new Date(
                 latest.created_at
             ).getTime();
@@ -1506,45 +1706,58 @@ async function loadData() {
         ================================================= */
 
         const startTime =
-            latestTime -
+
+            latestTime
+
+            -
+
             (
-                timeRangeMinutes *
-                60 *
+
+                timeRangeMinutes
+
+                *
+
+                60
+
+                *
+
                 1000
+
             );
 
 
 
         /* =================================================
-           只保留指定時間範圍
-
-           例如：
-
-           10分鐘
-           → 最近10分鐘
-
-           30分鐘
-           → 最近30分鐘
-
-           1小時
-           → 最近60分鐘
+           篩選指定時間
         ================================================= */
 
         const feeds =
+
             allFeeds.filter(
+
                 item => {
 
                     const itemTime =
+
                         new Date(
                             item.created_at
                         ).getTime();
 
+
                     return (
-                        itemTime >= startTime &&
-                        itemTime <= latestTime
+
+                        itemTime >=
+                        startTime
+
+                        &&
+
+                        itemTime <=
+                        latestTime
+
                     );
 
                 }
+
             );
 
 
@@ -1552,7 +1765,9 @@ async function loadData() {
         if (feeds.length === 0) {
 
             throw new Error(
+
                 "指定時間內沒有資料"
+
             );
 
         }
@@ -1564,6 +1779,7 @@ async function loadData() {
         ================================================= */
 
         const latestData =
+
             feeds[
                 feeds.length - 1
             ];
@@ -1575,13 +1791,17 @@ async function loadData() {
         ================================================= */
 
         if (
+
             latestData.field1 !== null &&
+
             latestData.field1 !== undefined
+
         ) {
 
             document.getElementById(
                 "temperature"
             ).textContent =
+
                 Number(
                     latestData.field1
                 ).toFixed(1);
@@ -1595,13 +1815,17 @@ async function loadData() {
         ================================================= */
 
         if (
+
             latestData.field2 !== null &&
+
             latestData.field2 !== undefined
+
         ) {
 
             document.getElementById(
                 "humidity"
             ).textContent =
+
                 Number(
                     latestData.field2
                 ).toFixed(1);
@@ -1615,13 +1839,17 @@ async function loadData() {
         ================================================= */
 
         if (
+
             latestData.field3 !== null &&
+
             latestData.field3 !== undefined
+
         ) {
 
             document.getElementById(
                 "light"
             ).textContent =
+
                 Number(
                     latestData.field3
                 ).toFixed(1);
@@ -1635,32 +1863,44 @@ async function loadData() {
         ================================================= */
 
         if (
+
             latestData.field4 !== null &&
+
             latestData.field4 !== undefined
+
         ) {
 
             const co2Value =
+
                 Number(
                     latestData.field4
                 );
 
 
             const co2Element =
+
                 document.getElementById(
                     "co2"
                 );
 
 
             co2Element.textContent =
+
                 co2Value.toFixed(0);
+
 
 
             /* =================================================
                CO2 顏色
 
-               >= 1500 → 紅色
-               1000～1499 → 橘色
-               < 1000 → 綠色
+               >= 1500 ppm
+               → 紅色
+
+               1000～1499 ppm
+               → 橘色
+
+               < 1000 ppm
+               → 綠色
             ================================================= */
 
             if (co2Value >= 1500) {
@@ -1699,15 +1939,31 @@ async function loadData() {
             new Date(
                 latestData.created_at
             ).toLocaleString(
+
                 "zh-TW",
+
                 {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit"
+
+                    year:
+                        "numeric",
+
+                    month:
+                        "2-digit",
+
+                    day:
+                        "2-digit",
+
+                    hour:
+                        "2-digit",
+
+                    minute:
+                        "2-digit",
+
+                    second:
+                        "2-digit"
+
                 }
+
             );
 
 
@@ -1717,14 +1973,27 @@ async function loadData() {
         ================================================= */
 
         const temperatures =
+
             feeds
+
                 .map(
+
                     item =>
-                        Number(item.field1)
+
+                        Number(
+                            item.field1
+                        )
+
                 )
+
                 .filter(
+
                     value =>
-                        Number.isFinite(value)
+
+                        Number.isFinite(
+                            value
+                        )
+
                 );
 
 
@@ -1734,14 +2003,27 @@ async function loadData() {
         ================================================= */
 
         const humidities =
+
             feeds
+
                 .map(
+
                     item =>
-                        Number(item.field2)
+
+                        Number(
+                            item.field2
+                        )
+
                 )
+
                 .filter(
+
                     value =>
-                        Number.isFinite(value)
+
+                        Number.isFinite(
+                            value
+                        )
+
                 );
 
 
@@ -1751,14 +2033,27 @@ async function loadData() {
         ================================================= */
 
         const lights =
+
             feeds
+
                 .map(
+
                     item =>
-                        Number(item.field3)
+
+                        Number(
+                            item.field3
+                        )
+
                 )
+
                 .filter(
+
                     value =>
-                        Number.isFinite(value)
+
+                        Number.isFinite(
+                            value
+                        )
+
                 );
 
 
@@ -1768,20 +2063,33 @@ async function loadData() {
         ================================================= */
 
         const co2Values =
+
             feeds
+
                 .map(
+
                     item =>
-                        Number(item.field4)
+
+                        Number(
+                            item.field4
+                        )
+
                 )
+
                 .filter(
+
                     value =>
-                        Number.isFinite(value)
+
+                        Number.isFinite(
+                            value
+                        )
+
                 );
 
 
 
         /* =================================================
-           溫度統計
+           統計
         ================================================= */
 
         updateStatistics(
@@ -1801,11 +2109,6 @@ async function loadData() {
         );
 
 
-
-        /* =================================================
-           濕度統計
-        ================================================= */
-
         updateStatistics(
 
             humidities,
@@ -1823,11 +2126,6 @@ async function loadData() {
         );
 
 
-
-        /* =================================================
-           光照統計
-        ================================================= */
-
         updateStatistics(
 
             lights,
@@ -1844,11 +2142,6 @@ async function loadData() {
 
         );
 
-
-
-        /* =================================================
-           CO2 統計
-        ================================================= */
 
         updateStatistics(
 
@@ -1871,22 +2164,42 @@ async function loadData() {
         /* =================================================
            時間標籤
 
-           由舊 → 新
+           原始：
 
-           左邊 → 右邊
+           舊 → 新
 
-           最新資料在最右邊
+           10:00
+           10:05
+           10:10
+           10:15
+
+           圖表設定 reverse：
+
+           10:15
+           10:10
+           10:05
+           10:00
+
+           因此：
+
+           右邊 = 最新
+           左邊 = 舊資料
         ================================================= */
 
         const labels =
-            feeds.map(
-                item => {
 
-                    return new Date(
+            feeds.map(
+
+                item =>
+
+                    new Date(
                         item.created_at
                     ).toLocaleTimeString(
+
                         "zh-TW",
+
                         {
+
                             hour:
                                 "2-digit",
 
@@ -1895,10 +2208,11 @@ async function loadData() {
 
                             second:
                                 "2-digit"
-                        }
-                    );
 
-                }
+                        }
+
+                    )
+
             );
 
 
@@ -1908,8 +2222,11 @@ async function loadData() {
         ================================================= */
 
         createCharts(
+
             labels,
+
             feeds
+
         );
 
 
@@ -1921,36 +2238,44 @@ async function loadData() {
         document.getElementById(
             "status"
         ).textContent =
+
             "資料連線正常";
 
 
         document.getElementById(
             "status"
         ).className =
+
             "status-ok";
 
 
 
     }
 
+
     catch (error) {
 
 
         console.error(
+
             "ThingSpeak 錯誤：",
+
             error
+
         );
 
 
         document.getElementById(
             "status"
         ).textContent =
+
             "資料讀取失敗";
 
 
         document.getElementById(
             "status"
         ).className =
+
             "status-error";
 
     }
@@ -1964,8 +2289,11 @@ async function loadData() {
 ===================================================== */
 
 function createCharts(
+
     labels,
+
     feeds
+
 ) {
 
 
@@ -1993,10 +2321,14 @@ function createCharts(
     /* =================================================
        共用設定
 
-       X軸：
-       左 → 右
-       舊 → 新
-       最新 → 最右邊
+       ⭐ 重要：
+
+       reverse: true
+
+       會讓 X 軸方向反轉。
+
+       最新資料 → 右邊
+       舊資料 → 左邊
     ================================================= */
 
     const commonOptions = {
@@ -2005,6 +2337,7 @@ function createCharts(
 
         maintainAspectRatio: false,
 
+
         interaction: {
 
             mode: "index",
@@ -2012,6 +2345,7 @@ function createCharts(
             intersect: false
 
         },
+
 
         plugins: {
 
@@ -2023,11 +2357,12 @@ function createCharts(
 
         },
 
+
         scales: {
 
             x: {
 
-                reverse: false,
+                reverse: true,
 
                 ticks: {
 
@@ -2035,13 +2370,14 @@ function createCharts(
 
                     font: {
 
-                        size: 12
+                        size: 14
 
                     }
 
                 }
 
             },
+
 
             y: {
 
@@ -2051,7 +2387,7 @@ function createCharts(
 
                     font: {
 
-                        size: 12
+                        size: 14
 
                     }
 
@@ -2081,30 +2417,42 @@ function createCharts(
 
                 type: "line",
 
+
                 data: {
 
                     labels: labels,
+
 
                     datasets: [{
 
                         label:
                             "溫度 (°C)",
 
+
                         data:
+
                             feeds.map(
+
                                 item =>
 
                                     item.field1 == null
-                                    ? null
+
+                                    ?
+
+                                    null
+
                                     :
+
                                     Number(
                                         item.field1
                                     )
+
                             ),
 
-                        borderWidth: 2,
 
-                        pointRadius: 2,
+                        borderWidth: 3,
+
+                        pointRadius: 3,
 
                         tension: 0.3,
 
@@ -2113,6 +2461,7 @@ function createCharts(
                     }]
 
                 },
+
 
                 options:
                     commonOptions
@@ -2139,30 +2488,42 @@ function createCharts(
 
                 type: "line",
 
+
                 data: {
 
                     labels: labels,
+
 
                     datasets: [{
 
                         label:
                             "濕度 (%)",
 
+
                         data:
+
                             feeds.map(
+
                                 item =>
 
                                     item.field2 == null
-                                    ? null
+
+                                    ?
+
+                                    null
+
                                     :
+
                                     Number(
                                         item.field2
                                     )
+
                             ),
 
-                        borderWidth: 2,
 
-                        pointRadius: 2,
+                        borderWidth: 3,
+
+                        pointRadius: 3,
 
                         tension: 0.3,
 
@@ -2171,6 +2532,7 @@ function createCharts(
                     }]
 
                 },
+
 
                 options:
                     commonOptions
@@ -2197,30 +2559,42 @@ function createCharts(
 
                 type: "line",
 
+
                 data: {
 
                     labels: labels,
+
 
                     datasets: [{
 
                         label:
                             "光照 (Lux)",
 
+
                         data:
+
                             feeds.map(
+
                                 item =>
 
                                     item.field3 == null
-                                    ? null
+
+                                    ?
+
+                                    null
+
                                     :
+
                                     Number(
                                         item.field3
                                     )
+
                             ),
 
-                        borderWidth: 2,
 
-                        pointRadius: 2,
+                        borderWidth: 3,
+
+                        pointRadius: 3,
 
                         tension: 0.3,
 
@@ -2229,6 +2603,7 @@ function createCharts(
                     }]
 
                 },
+
 
                 options:
                     commonOptions
@@ -2255,30 +2630,42 @@ function createCharts(
 
                 type: "line",
 
+
                 data: {
 
                     labels: labels,
+
 
                     datasets: [{
 
                         label:
                             "CO₂ (ppm)",
 
+
                         data:
+
                             feeds.map(
+
                                 item =>
 
                                     item.field4 == null
-                                    ? null
+
+                                    ?
+
+                                    null
+
                                     :
+
                                     Number(
                                         item.field4
                                     )
+
                             ),
 
-                        borderWidth: 2,
 
-                        pointRadius: 2,
+                        borderWidth: 3,
+
+                        pointRadius: 3,
 
                         tension: 0.3,
 
@@ -2287,6 +2674,7 @@ function createCharts(
                     }]
 
                 },
+
 
                 options:
                     commonOptions
