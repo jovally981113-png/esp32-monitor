@@ -223,9 +223,25 @@ body {
     font-size: 19px;
 
     color: #5f7f78;
+
+    margin-bottom: 3px;
 }
 
+
+/* =====================================================
+   數值 + 單位
+   改成同一排
+===================================================== */
+
 .sensor-value {
+
+    display: flex;
+
+    align-items: baseline;
+
+    justify-content: center;
+
+    gap: 7px;
 
     font-size: 38px;
 
@@ -236,13 +252,21 @@ body {
     color: #087f6f;
 }
 
+
+/* =====================================================
+   單位
+===================================================== */
+
 .sensor-unit {
 
-    font-size: 15px;
+    font-size: 17px;
+
+    font-weight: normal;
 
     color: #8ba9a3;
 
-    margin-top: 3px;
+    margin-top: 0;
+
 }
 
 
@@ -514,7 +538,7 @@ body {
 
     .sensor-unit {
 
-        font-size: 14px;
+        font-size: 15px;
     }
 
     .chart-title {
@@ -694,10 +718,10 @@ body {
                 --
             </span>
 
-        </div>
+            <span class="sensor-unit">
+                °C
+            </span>
 
-        <div class="sensor-unit">
-            °C
         </div>
 
     </div>
@@ -721,10 +745,10 @@ body {
                 --
             </span>
 
-        </div>
+            <span class="sensor-unit">
+                %
+            </span>
 
-        <div class="sensor-unit">
-            %
         </div>
 
     </div>
@@ -748,10 +772,10 @@ body {
                 --
             </span>
 
-        </div>
+            <span class="sensor-unit">
+                Lux
+            </span>
 
-        <div class="sensor-unit">
-            Lux
         </div>
 
     </div>
@@ -775,10 +799,10 @@ body {
                 --
             </span>
 
-        </div>
+            <span class="sensor-unit">
+                ppm
+            </span>
 
-        <div class="sensor-unit">
-            ppm
         </div>
 
     </div>
@@ -1178,14 +1202,6 @@ body {
    ThingSpeak 設定
 ===================================================== */
 
-/*
-   Channel ID：
-   3474112
-
-   Read API Key：
-   IT0OTL4TT1QFKXO8
-*/
-
 const CHANNEL_ID = "3474112";
 
 const READ_API_KEY = "IT0OTL4TT1QFKXO8";
@@ -1474,7 +1490,7 @@ async function loadData() {
 
         /* =================================================
            CO2
-           
+
            1500 ppm 以上 → 紅色
            1000～1499 ppm → 橘色
            1000 ppm 以下 → 綠色
