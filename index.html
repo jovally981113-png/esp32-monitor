@@ -229,7 +229,6 @@ body {
 
 /* =====================================================
    數值 + 單位
-   改成同一排
 ===================================================== */
 
 .sensor-value {
@@ -823,7 +822,7 @@ body {
     <div class="chart-card">
 
         <div class="chart-title">
-            🌡️ 溫度
+            🌡️ 溫度 (°C)
         </div>
 
         <div class="chart-container">
@@ -840,7 +839,7 @@ body {
     <div class="chart-card">
 
         <div class="chart-title">
-            💧 濕度
+            💧 濕度 (%)
         </div>
 
         <div class="chart-container">
@@ -857,7 +856,7 @@ body {
     <div class="chart-card">
 
         <div class="chart-title">
-            ☀️ 光照
+            ☀️ 光照 (Lux)
         </div>
 
         <div class="chart-container">
@@ -874,7 +873,7 @@ body {
     <div class="chart-card">
 
         <div class="chart-title">
-            🌫️ CO₂
+            🌫️ CO₂ (ppm)
         </div>
 
         <div class="chart-container">
@@ -1489,7 +1488,7 @@ async function loadData() {
 
         /* =================================================
            CO2
-
+           
            1500 ppm 以上 → 紅色
            1000～1499 ppm → 橘色
            1000 ppm 以下 → 綠色
@@ -1535,7 +1534,7 @@ async function loadData() {
 
             else {
 
-                // 1000 ppm 以下 → 原本綠色
+                // 1000 ppm 以下 → 綠色
 
                 co2Element.style.color =
                     "#087f6f";
@@ -1897,6 +1896,7 @@ function createCharts(
 
     /* =================================================
        溫度圖
+       單位：°C
     ================================================= */
 
     temperatureChart =
@@ -1917,7 +1917,7 @@ function createCharts(
 
                     datasets: [{
 
-                        label: "溫度",
+                        label: "溫度 (°C)",
 
                         data:
                             feeds.map(
@@ -1954,6 +1954,7 @@ function createCharts(
 
     /* =================================================
        濕度圖
+       單位：%
     ================================================= */
 
     humidityChart =
@@ -1974,7 +1975,7 @@ function createCharts(
 
                     datasets: [{
 
-                        label: "濕度",
+                        label: "濕度 (%)",
 
                         data:
                             feeds.map(
@@ -2011,6 +2012,7 @@ function createCharts(
 
     /* =================================================
        光照圖
+       單位：Lux
     ================================================= */
 
     lightChart =
@@ -2031,7 +2033,7 @@ function createCharts(
 
                     datasets: [{
 
-                        label: "光照",
+                        label: "光照 (Lux)",
 
                         data:
                             feeds.map(
@@ -2068,6 +2070,7 @@ function createCharts(
 
     /* =================================================
        CO2 圖
+       單位：ppm
     ================================================= */
 
     co2Chart =
@@ -2088,7 +2091,7 @@ function createCharts(
 
                     datasets: [{
 
-                        label: "CO₂",
+                        label: "CO₂ (ppm)",
 
                         data:
                             feeds.map(
