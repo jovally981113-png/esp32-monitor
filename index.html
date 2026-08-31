@@ -2740,32 +2740,16 @@ async function loadData() {
             ].timestamp;
 
 
-        const timeRange =
-            lastTime -
-            firstTime;
-
-
         /* =================================================
-           左右只留 5%
-           
-           最少 1 秒
+           圖表時間範圍
+
+           ★ 只使用實際資料的第一筆與最後一筆時間
+           ★ 不再額外增加左右 5% 空白
+           ★ 因此 X 軸不會出現超出實際資料的假時間
         ================================================= */
 
-        const padding =
-            Math.max(
-                timeRange * 0.05,
-                1000
-            );
-
-
-        const chartStartTime =
-            firstTime -
-            padding;
-
-
-        const chartEndTime =
-            lastTime +
-            padding;
+        const chartStartTime = firstTime;
+        const chartEndTime = lastTime;
 
 
         /* =================================================
