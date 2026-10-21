@@ -13,22 +13,26 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 :root {
     --primary: #0a7a6a;
     --dark: #065a4e;
     --light: #e8f6f2;
     --muted: #5f7f78;
 }
+
 body {
     font-family: "Microsoft JhengHei", sans-serif;
     background: var(--light);
     color: #1a3d37;
 }
+
 .dashboard {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
+
 header {
     background: linear-gradient(135deg, var(--dark), var(--primary));
     color: white;
@@ -38,41 +42,55 @@ header {
     justify-content: space-between;
     gap: 15px;
 }
+
 header h1 {
-    font-size: 27px;
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: 2px;
 }
+
 header p {
     margin-top: 5px;
     color: #c4e8e0;
+    font-size: 17px;
 }
+
 .system-status {
     background: #ffffff20;
     padding: 12px 20px;
     border-radius: 20px;
     line-height: 1.8;
+    flex-shrink: 0;
 }
+
 main {
     flex: 1;
     display: grid;
-    grid-template-columns: 21% minmax(0,1fr) 25%;
+    grid-template-columns: 21% minmax(0, 1fr) 25%;
     gap: 16px;
     padding: 18px;
 }
+
 .left-panel {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
+
 .panel-title {
     color: var(--primary);
-    font-size: 21px;
+    font-size: 29px;
     font-weight: bold;
 }
-.sensor-card, .chart-card, .right-panel {
+
+.sensor-card,
+.chart-card,
+.right-panel {
     background: white;
     border-radius: 18px;
     box-shadow: 0 6px 22px #00463c16;
 }
+
 .sensor-card {
     flex: 1;
     min-height: 115px;
@@ -83,23 +101,28 @@ main {
     align-items: center;
     padding: 10px;
 }
+
 .sensor-icon {
-    font-size: 30px;
+    font-size: 32px;
 }
+
 .sensor-name {
-    font-size: 17px;
+    font-size: 20px;
     color: var(--muted);
 }
+
 .sensor-value {
     color: var(--primary);
-    font-size: 35px;
+    font-size: 38px;
     font-weight: bold;
 }
+
 .sensor-value small {
-    font-size: 15px;
+    font-size: 17px;
     font-weight: normal;
     color: #8ba9a3;
 }
+
 .center-panel {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -107,55 +130,66 @@ main {
     gap: 15px;
     min-height: 500px;
 }
+
 .chart-card {
     padding: 15px;
     display: flex;
     flex-direction: column;
     min-height: 0;
 }
+
 .chart-card.wide {
     grid-column: span 2;
 }
+
 .chart-title {
-    font-size: 18px;
+    font-size: 25px;
     font-weight: bold;
     color: #1a4d44;
     margin-bottom: 12px;
 }
+
 .chart-title span {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: normal;
     color: var(--muted);
     background: var(--light);
     padding: 3px 10px;
     border-radius: 15px;
 }
+
 .chart-container {
     flex: 1;
     position: relative;
     min-height: 0;
 }
+
 .right-panel {
     padding: 18px;
     overflow-y: auto;
 }
+
 .controls {
     margin: 15px 0;
 }
+
 .controls-row {
     margin-bottom: 12px;
 }
+
 .controls-label {
     display: block;
-    font-size: 14px;
+    font-size: 16px;
     color: var(--muted);
     margin-bottom: 6px;
 }
+
 .btn-group {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
 }
+
 .btn-group button {
     border: 0;
     border-radius: 20px;
@@ -163,65 +197,96 @@ main {
     color: #24564f;
     padding: 7px 13px;
     cursor: pointer;
+    font-size: 14px;
 }
+
 .btn-group button.active {
     background: var(--primary);
     color: white;
 }
+
 .stat-section {
     border-top: 1px solid #e6f0ed;
     padding: 12px 0;
 }
+
 .stat-name {
     color: #24564f;
-    font-size: 16px;
+    font-size: 19px;
     font-weight: bold;
     margin-bottom: 7px;
 }
+
 .stat-row {
     display: flex;
     justify-content: space-between;
-    font-size: 15px;
+    font-size: 17px;
     color: #66837d;
     padding: 3px 0;
 }
+
 .stat-value {
     font-weight: bold;
     color: var(--primary);
 }
+
 footer {
     text-align: center;
     padding: 10px;
     color: #8aa8a0;
     font-size: 12px;
 }
-@media(max-width:1100px) {
-    main {
-        grid-template-columns: 24% minmax(0,1fr);
+
+@media (max-width: 1100px) {
+    header h1 {
+        font-size: 32px;
     }
+
+    main {
+        grid-template-columns: 24% minmax(0, 1fr);
+    }
+
     .right-panel {
         grid-column: span 2;
     }
 }
-@media(max-width:760px) {
+
+@media (max-width: 760px) {
     header {
         flex-direction: column;
         align-items: flex-start;
     }
+
+    header h1 {
+        font-size: 27px;
+    }
+
+    .panel-title {
+        font-size: 23px;
+    }
+
+    .chart-title {
+        font-size: 20px;
+    }
+
     main {
         display: block;
     }
+
     .left-panel {
         margin-bottom: 15px;
     }
+
     .sensor-card {
         margin-top: 8px;
     }
+
     .center-panel {
         display: flex;
         flex-direction: column;
         margin-bottom: 15px;
     }
+
     .chart-card {
         height: 270px;
         flex: none;
@@ -238,6 +303,7 @@ footer {
         <h1>🌿 智慧微藻遮陽換氣系統</h1>
         <p>Smart Microalgae Shading · 即時環境監控</p>
     </div>
+
     <div class="system-status">
         🟢 狀態：<span id="status">連線中...</span>
         <div>🕒 更新：<span id="updateTime">--</span></div>
