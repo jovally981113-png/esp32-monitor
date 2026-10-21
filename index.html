@@ -35,10 +35,7 @@ body {
     flex-direction: column;
 }
 
-/* =========================================
-   頂部綠色區域
-   只縮小高度及留白，不改字體大小
-========================================= */
+/* ===== 頂部綠色標題區 ===== */
 
 header {
     background: linear-gradient(
@@ -78,8 +75,6 @@ header {
     flex-shrink: 0;
 }
 
-/* 保留原本字體大小 */
-
 header h1 {
     font-size: clamp(28px, 2.4vw, 42px);
     font-weight: 800;
@@ -95,7 +90,7 @@ header p {
     letter-spacing: 1px;
 }
 
-/* 右側狀態框 */
+/* ===== 系統狀態 ===== */
 
 .system-status {
     background: rgba(255,255,255,0.12);
@@ -140,9 +135,7 @@ header p {
     font-variant-numeric: tabular-nums;
 }
 
-/* =========================================
-   主畫面
-========================================= */
+/* ===== 主畫面 ===== */
 
 main {
     flex: 1;
@@ -159,9 +152,10 @@ main {
     gap: 12px;
 }
 
+/* 縮小：即時數據、數據統計標題 */
 .panel-title {
     color: var(--primary);
-    font-size: 29px;
+    font-size: 23px;
     font-weight: 800;
 }
 
@@ -194,8 +188,9 @@ main {
     font-size: 32px;
 }
 
+/* 縮小感測器名稱 */
 .sensor-name {
-    font-size: 20px;
+    font-size: 17px;
     color: var(--muted);
     margin-top: 4px;
 }
@@ -213,9 +208,7 @@ main {
     color: #8ba9a3;
 }
 
-/* =========================================
-   中間圖表
-========================================= */
+/* ===== 中間圖表 ===== */
 
 .center-panel {
     display: grid;
@@ -241,8 +234,9 @@ main {
     grid-column: span 2;
 }
 
+/* 縮小圖表標題 */
 .chart-title {
-    font-size: 25px;
+    font-size: 20px;
     font-weight: 800;
     color: #1a4d44;
     margin-bottom: 12px;
@@ -264,9 +258,7 @@ main {
     min-height: 0;
 }
 
-/* =========================================
-   右側數據統計
-========================================= */
+/* ===== 右側數據統計 ===== */
 
 .right-panel {
     padding: 20px;
@@ -325,9 +317,10 @@ main {
     padding: 14px 0;
 }
 
+/* 縮小統計項目名稱 */
 .stat-name {
     color: #24564f;
-    font-size: 19px;
+    font-size: 16px;
     font-weight: 700;
     margin-bottom: 8px;
 }
@@ -354,9 +347,7 @@ footer {
     font-size: 12px;
 }
 
-/* =========================================
-   響應式排版
-========================================= */
+/* ===== 響應式 ===== */
 
 @media(max-width:1200px) {
     header h1 {
@@ -416,7 +407,7 @@ footer {
     }
 
     .panel-title {
-        font-size: 23px;
+        font-size: 20px;
     }
 
     .sensor-card {
@@ -435,7 +426,7 @@ footer {
     }
 
     .chart-title {
-        font-size: 20px;
+        font-size: 18px;
     }
 }
 </style>
@@ -444,7 +435,8 @@ footer {
 <body>
 <div class="dashboard">
 
-<!-- 頂部標題列 -->
+<!-- ===== 頂部 ===== -->
+
 <header>
     <div class="brand">
         <div class="brand-icon">🌿</div>
@@ -474,7 +466,8 @@ footer {
 
 <main>
 
-<!-- 左側即時數據 -->
+<!-- ===== 左側即時數據 ===== -->
+
 <section class="left-panel">
     <div class="panel-title">📡 即時數據</div>
 
@@ -515,7 +508,8 @@ footer {
     </div>
 </section>
 
-<!-- 中間圖表 -->
+<!-- ===== 中間圖表 ===== -->
+
 <section class="center-panel">
 
     <div class="chart-card">
@@ -550,7 +544,8 @@ footer {
 
 </section>
 
-<!-- 右側統計 -->
+<!-- ===== 右側統計 ===== -->
+
 <aside class="right-panel">
     <div class="panel-title">📊 數據統計</div>
     <div id="statRangeLabel">(最近 10 分鐘)</div>
@@ -581,28 +576,17 @@ footer {
 
 </main>
 
-<footer>
-    隊伍編號：大專-創-N075
-</footer>
-
+<footer>隊伍編號：大專-創-N075</footer>
 </div>
 
 <script>
 "use strict";
 
-// ==========================================
-// ThingSpeak 設定
-// ==========================================
+// ===== ThingSpeak 設定 =====
 
 const CHANNEL_ID = "3474112";
 const READ_API_KEY = "IT0OTL4TT1QFKXO8";
 const TIMEZONE = "Asia/Taipei";
-
-// Field 1：水溫
-// Field 2：濕度
-// Field 3：不使用
-// Field 4：室內 CO2
-// Field 5：室外 CO2
 
 const FIELD_MAP = {
     temperature: "field1",
@@ -619,9 +603,7 @@ let reloadPending = false;
 
 const $ = id => document.getElementById(id);
 
-// ==========================================
-// 台灣時間格式
-// ==========================================
+// ===== 台灣時間 =====
 
 function formatTime(date, full = false) {
     const options = {
@@ -643,9 +625,7 @@ function formatTime(date, full = false) {
     ).format(date);
 }
 
-// ==========================================
-// 數值處理
-// ==========================================
+// ===== 數值處理 =====
 
 function parseValue(value) {
     if (
@@ -672,9 +652,7 @@ function co2Color(value) {
     return "#087f6f";
 }
 
-// ==========================================
-// 系統狀態
-// ==========================================
+// ===== 系統狀態 =====
 
 function setStatus(message, state) {
     $("status").textContent = message;
@@ -693,9 +671,7 @@ function setStatus(message, state) {
         `0 0 12px ${color}80`;
 }
 
-// ==========================================
-// 圖表筆數切換
-// ==========================================
+// ===== 切換圖表筆數 =====
 
 window.changeChartCount = function(count) {
     chartCount = count;
@@ -720,9 +696,7 @@ window.changeChartCount = function(count) {
     loadData();
 };
 
-// ==========================================
-// 統計時間切換
-// ==========================================
+// ===== 切換統計時間 =====
 
 window.changeStatRange = function(minutes) {
     statMinutes = minutes;
@@ -742,9 +716,7 @@ window.changeStatRange = function(minutes) {
     loadData();
 };
 
-// ==========================================
-// Chart.js 圖表
-// ==========================================
+// ===== Chart.js 圖表 =====
 
 function createChart(id, datasets, start, end, unit) {
     if (charts[id]) {
@@ -768,24 +740,19 @@ function createChart(id, datasets, start, end, unit) {
 
     charts[id] = new Chart($(id), {
         type: "line",
-
         data: {
             datasets: chartDatasets
         },
-
         options: {
             responsive: true,
             maintainAspectRatio: false,
-
             animation: {
                 duration: 300
             },
-
             interaction: {
                 mode: "nearest",
                 intersect: false
             },
-
             plugins: {
                 legend: {
                     display: datasets.length > 1,
@@ -797,12 +764,10 @@ function createChart(id, datasets, start, end, unit) {
                         }
                     }
                 },
-
                 tooltip: {
                     backgroundColor: "rgba(0,0,0,0.78)",
                     padding: 12,
                     cornerRadius: 10,
-
                     callbacks: {
                         title: context => {
                             if (!context.length) return "";
@@ -812,7 +777,6 @@ function createChart(id, datasets, start, end, unit) {
                                 true
                             );
                         },
-
                         label: context => {
                             const decimals =
                                 unit === "ppm" ? 0 : 1;
@@ -826,33 +790,27 @@ function createChart(id, datasets, start, end, unit) {
                     }
                 }
             },
-
             scales: {
                 x: {
                     type: "linear",
                     min: start,
                     max: end,
-
                     ticks: {
                         maxTicksLimit: 8,
                         callback: value =>
                             formatTime(new Date(value))
                     },
-
                     grid: {
                         display: false
                     }
                 },
-
                 y: {
                     beginAtZero: false,
-
                     ticks: {
                         font: {
                             size: 12
                         }
                     },
-
                     grid: {
                         color: "rgba(0,0,0,0.05)"
                     }
@@ -862,9 +820,7 @@ function createChart(id, datasets, start, end, unit) {
     });
 }
 
-// ==========================================
-// 圖表資料
-// ==========================================
+// ===== 取得圖表資料 =====
 
 function getPoints(feeds, field) {
     return feeds.flatMap(feed => {
@@ -879,9 +835,7 @@ function getPoints(feeds, field) {
     });
 }
 
-// ==========================================
-// 統計計算
-// ==========================================
+// ===== 統計計算 =====
 
 function getStats(feeds, field) {
     const values = feeds
@@ -903,9 +857,7 @@ function getStats(feeds, field) {
     };
 }
 
-// ==========================================
-// 顯示統計
-// ==========================================
+// ===== 顯示統計 =====
 
 function renderStats(feeds) {
     const configs = [
@@ -953,21 +905,18 @@ function renderStats(feeds) {
                     <div class="stat-name">
                         ${config.name}
                     </div>
-
                     <div class="stat-row">
                         <span>最高</span>
                         <span class="stat-value">
                             ${display("max")}
                         </span>
                     </div>
-
                     <div class="stat-row">
                         <span>最低</span>
                         <span class="stat-value">
                             ${display("min")}
                         </span>
                     </div>
-
                     <div class="stat-row">
                         <span>平均</span>
                         <span class="stat-value">
@@ -979,9 +928,7 @@ function renderStats(feeds) {
         }).join("");
 }
 
-// ==========================================
-// ThingSpeak API
-// ==========================================
+// ===== ThingSpeak API =====
 
 function getFeedsURL() {
     return (
@@ -1002,9 +949,7 @@ function getLatestURL() {
     );
 }
 
-// ==========================================
-// 讀取資料
-// ==========================================
+// ===== 讀取 ThingSpeak 資料 =====
 
 async function loadData() {
     if (loading) {
@@ -1021,7 +966,6 @@ async function loadData() {
                 fetch(getFeedsURL(), {
                     cache: "no-store"
                 }),
-
                 fetch(getLatestURL(), {
                     cache: "no-store"
                 })
@@ -1215,9 +1159,7 @@ async function loadData() {
     }
 }
 
-// ==========================================
-// 初始化
-// ==========================================
+// ===== 初始化 =====
 
 loadData();
 
