@@ -4,33 +4,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>智慧微藻遮陽換氣系統｜花草監控儀表板</title>
+<title>智慧微藻遮陽換氣系統</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <style>
-/* ==============================
-   基本設定
-============================== */
-
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
 :root {
     --green: #087c68;
-    --dark-green: #075747;
-    --soft-green: #e8f6ed;
-    --mint: #d5f0df;
-    --pink: #f8c8d8;
-    --cream: #fffdf5;
+    --dark: #075747;
+    --mint: #e7f5e9;
+    --border: #cfe8d5;
     --text: #24554a;
     --muted: #698b80;
 }
 
 html, body {
+    margin: 0;
     width: 100%;
     height: 100%;
 }
@@ -39,9 +32,13 @@ body {
     font-family: "Microsoft JhengHei", sans-serif;
     color: var(--text);
     background:
-        radial-gradient(circle at 8% 12%, #fce7ed 0%, transparent 23%),
-        radial-gradient(circle at 90% 85%, #d7f3df 0%, transparent 27%),
+        radial-gradient(circle at 8% 12%, #fce7ed, transparent 23%),
+        radial-gradient(circle at 90% 85%, #d7f3df, transparent 27%),
         linear-gradient(135deg, #f4fbf4, #e7f5ed);
+}
+
+button, input {
+    font-family: inherit;
 }
 
 .dashboard {
@@ -52,60 +49,16 @@ body {
     overflow: hidden;
 }
 
-/* ==============================
-   SVG 花草共用
-============================== */
-
-.floral-svg {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-}
-
-.flower-decoration {
-    position: absolute;
-    pointer-events: none;
-    z-index: 0;
-}
-
-.flower-left {
-    width: 125px;
-    height: 90px;
-    left: 12px;
-    bottom: -8px;
-}
-
-.flower-right {
-    width: 130px;
-    height: 95px;
-    right: 12px;
-    bottom: -10px;
-    transform: scaleX(-1);
-}
-
-.leaf-corner {
-    position: absolute;
-    right: 8px;
-    top: 7px;
-    width: 45px;
-    height: 45px;
-    opacity: 0.35;
-    pointer-events: none;
-}
-
-/* ==============================
-   頂部標題
-============================== */
+/* ===== 頂部標題與花草 ===== */
 
 header {
     position: relative;
-    flex-shrink: 0;
     min-height: 105px;
     padding: 13px 190px 12px;
-    background:
-        linear-gradient(120deg, #e6f8e8, #fffdf4 48%, #e1f6e7);
+    background: linear-gradient(120deg, #e6f8e8, #fffdf4 48%, #e1f6e7);
     border-bottom: 3px solid #b7e1c7;
     box-shadow: 0 3px 14px #397b5a18;
+    flex-shrink: 0;
     overflow: hidden;
 }
 
@@ -116,18 +69,19 @@ header {
 }
 
 .header-center h1 {
+    margin: 0;
     color: #076650;
     font-size: clamp(23px, 2.4vw, 35px);
     font-weight: 900;
     letter-spacing: 2px;
-    text-shadow: 1px 2px 0 #ffffff;
+    text-shadow: 1px 2px 0 white;
     white-space: nowrap;
 }
 
 .header-center p {
+    margin: 5px 0 0;
     font-size: 13px;
     color: #658e79;
-    margin-top: 5px;
     letter-spacing: 1px;
 }
 
@@ -135,44 +89,59 @@ header {
     width: 210px;
     max-width: 70%;
     height: 5px;
+    margin: 8px auto 0;
     border-radius: 20px;
     background: linear-gradient(
-        90deg,
-        transparent,
-        #6dc69b,
-        #f2b8ce,
-        #6dc69b,
-        transparent
+        90deg, transparent, #6dc69b, #f2b8ce,
+        #6dc69b, transparent
     );
-    margin: 8px auto 0;
+}
+
+.flower-decoration {
+    position: absolute;
+    width: 130px;
+    height: 95px;
+    bottom: -8px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.flower-left {
+    left: 12px;
+}
+
+.flower-right {
+    right: 12px;
+    transform: scaleX(-1);
+}
+
+.flower-decoration svg {
+    width: 100%;
+    height: 100%;
 }
 
 .system-status {
     position: absolute;
     z-index: 3;
-    right: 15px;
-    top: 16px;
-    background: #ffffffcc;
+    right: 14px;
+    top: 15px;
+    background: #ffffffdd;
     border: 1px solid #cdebd6;
     border-radius: 12px;
-    padding: 7px 11px;
+    padding: 7px 10px;
     font-size: 11px;
     line-height: 1.8;
     color: #477c69;
     white-space: nowrap;
 }
 
-/* ==============================
-   主要版面
-============================== */
+/* ===== 主版面 ===== */
 
 main {
     flex: 1;
     min-height: 0;
     display: grid;
-    grid-template-columns:
-        minmax(0, 1fr)
-        minmax(180px, 18%);
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 18%);
     gap: 10px;
     padding: 10px;
 }
@@ -180,107 +149,117 @@ main {
 .center-panel {
     display: flex;
     flex-direction: column;
-    gap: 9px;
     min-height: 0;
     min-width: 0;
+    gap: 9px;
 }
 
 .section-title {
+    flex-shrink: 0;
     font-size: 17px;
     font-weight: 800;
-    color: var(--dark-green);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
+    color: var(--dark);
 }
 
 .section-title::after {
-    content: "❀ ─── ❀";
+    content: " ❀ ─── ❀";
     font-size: 13px;
     color: #a8d4b4;
-    font-weight: normal;
 }
 
-/* ==============================
-   五個即時數據
-============================== */
+/* ===== 六個即時數據 ===== */
 
 .sensor-grid {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 9px;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 8px;
     flex-shrink: 0;
 }
 
 .sensor-card {
     position: relative;
+    min-width: 0;
     overflow: hidden;
-    background: linear-gradient(150deg, #ffffff, #f5fcf5);
-    border: 1px solid #cdebd6;
+    background: linear-gradient(150deg, white, #f5fcf5);
+    border: 1px solid var(--border);
     border-bottom: 3px solid #a5dcb7;
     border-radius: 15px;
+    padding: 9px 4px;
     box-shadow: 0 4px 12px #316d4d12;
-    padding: 9px 5px;
-    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.sensor-card:nth-child(2n) {
-    background: linear-gradient(150deg, #ffffff, #fff8f9);
+.sensor-card:nth-child(even) {
+    background: linear-gradient(150deg, white, #fff8f9);
     border-bottom-color: #efc5d3;
 }
 
+.sensor-card::after {
+    content: "✿";
+    position: absolute;
+    top: 0;
+    right: 7px;
+    font-size: 21px;
+    color: #f2c9d8;
+    opacity: 0.65;
+}
+
 .sensor-icon {
-    font-size: 23px;
-    position: relative;
-    z-index: 1;
+    font-size: 22px;
 }
 
 .sensor-name {
+    font-size: 12px;
     color: var(--muted);
-    font-size: 13px;
     margin: 3px 0;
-    position: relative;
-    z-index: 1;
 }
 
 .sensor-value {
-    font-size: clamp(19px, 2.5vw, 30px);
-    color: var(--green);
+    font-size: clamp(17px, 2vw, 27px);
     font-weight: 900;
+    color: var(--green);
     white-space: nowrap;
-    position: relative;
-    z-index: 1;
 }
 
 .sensor-value small {
-    font-size: 12px;
-    color: #89a99b;
+    font-size: 11px;
     font-weight: normal;
+    color: #89a99b;
 }
 
-/* ==============================
-   圖表勾選區
-============================== */
+/* ===== 圖表選擇 ===== */
 
 .chart-selector {
     position: relative;
-    overflow: hidden;
     flex-shrink: 0;
-    background: linear-gradient(110deg, #ffffff, #f6fcf5);
+    overflow: hidden;
+    background: linear-gradient(110deg, white, #f6fcf5);
     border: 1px solid #d6ebdc;
     border-radius: 14px;
-    box-shadow: 0 3px 12px #316d4d10;
     padding: 10px 12px;
+    box-shadow: 0 3px 12px #316d4d10;
+}
+
+.chart-selector::after {
+    content: "❀";
+    position: absolute;
+    right: 12px;
+    top: -8px;
+    font-size: 45px;
+    color: #f7dce5;
+    pointer-events: none;
+}
+
+.selector-header,
+.chart-options {
+    position: relative;
+    z-index: 1;
 }
 
 .selector-header {
-    position: relative;
-    z-index: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -309,13 +288,7 @@ main {
     cursor: pointer;
 }
 
-.small-btn:hover {
-    background: #cfeedd;
-}
-
 .chart-options {
-    position: relative;
-    z-index: 1;
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
@@ -326,7 +299,7 @@ main {
     align-items: center;
     gap: 5px;
     padding: 6px 9px;
-    background: #ffffff;
+    background: white;
     border: 1px solid #d9e9df;
     border-radius: 20px;
     font-size: 12px;
@@ -347,9 +320,7 @@ main {
     cursor: pointer;
 }
 
-/* ==============================
-   動態圖表
-============================== */
+/* ===== 自動排列圖表 ===== */
 
 .chart-grid {
     flex: 1;
@@ -371,18 +342,14 @@ main {
     grid-template-rows: minmax(0, 1fr);
 }
 
-.chart-grid[data-count="3"] {
+.chart-grid[data-count="3"],
+.chart-grid[data-count="4"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 
 .chart-grid[data-count="3"] .chart-card:last-child {
     grid-column: span 2;
-}
-
-.chart-grid[data-count="4"] {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 
 .chart-grid[data-count="5"],
@@ -395,18 +362,27 @@ main {
     grid-column: span 2;
 }
 
+.chart-grid[data-count="7"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.chart-grid[data-count="7"] .chart-card:last-child {
+    grid-column: span 2;
+}
+
 .chart-card {
     position: relative;
+    min-height: 0;
+    min-width: 0;
     overflow: hidden;
-    background: #ffffff;
+    background: white;
     border: 1px solid #dcefe1;
     border-radius: 15px;
     padding: 10px;
     box-shadow: 0 4px 14px #316d4d12;
     display: flex;
     flex-direction: column;
-    min-height: 0;
-    min-width: 0;
 }
 
 .chart-card::before {
@@ -434,14 +410,14 @@ main {
 .chart-title {
     position: relative;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 5px;
     font-size: 14px;
     font-weight: bold;
     color: #245c4a;
-    margin-bottom: 5px;
-    display: flex;
-    gap: 7px;
-    align-items: center;
-    flex-wrap: wrap;
     flex-shrink: 0;
 }
 
@@ -472,52 +448,43 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #ffffff;
+    background: white;
     border: 1px solid #dcefe1;
     border-radius: 15px;
     color: #709185;
-    font-size: 15px;
     text-align: center;
     padding: 20px;
 }
 
-/* ==============================
-   右側統計
-============================== */
+/* ===== 右側統計 ===== */
 
 .right-panel {
     position: relative;
-    overflow: hidden;
     min-height: 0;
     min-width: 0;
-    padding: 11px;
-    background: linear-gradient(180deg, #ffffff, #f7fcf7);
+    overflow: hidden;
+    background: linear-gradient(180deg, white, #f7fcf7);
     border: 1px solid #d6eadb;
     border-radius: 15px;
+    padding: 10px;
     box-shadow: 0 4px 14px #316d4d12;
     display: flex;
     flex-direction: column;
 }
 
 .panel-title {
-    position: relative;
-    z-index: 1;
     color: #146d51;
     font-size: 18px;
     font-weight: bold;
 }
 
 #statRangeLabel {
-    position: relative;
-    z-index: 1;
     font-size: 12px;
     color: var(--muted);
     margin-top: 4px;
 }
 
 .controls {
-    position: relative;
-    z-index: 1;
     margin: 10px 0 5px;
     flex-shrink: 0;
 }
@@ -555,8 +522,6 @@ main {
 }
 
 #statsContainer {
-    position: relative;
-    z-index: 1;
     flex: 1;
     min-height: 0;
     display: flex;
@@ -591,12 +556,9 @@ main {
     white-space: nowrap;
 }
 
-/* ==============================
-   底部
-============================== */
+/* ===== 底部 ===== */
 
 footer {
-    position: relative;
     flex-shrink: 0;
     text-align: center;
     padding: 5px;
@@ -607,18 +569,14 @@ footer {
 }
 
 footer::before {
-    content: "🌸  🌿  ❀";
-    margin-right: 12px;
+    content: "🌸 🌿 ❀ ";
 }
 
 footer::after {
-    content: "❀  🌿  🌸";
-    margin-left: 12px;
+    content: " ❀ 🌿 🌸";
 }
 
-/* ==============================
-   矮螢幕調整
-============================== */
+/* ===== 矮螢幕 ===== */
 
 @media (max-height: 760px) {
     header {
@@ -633,12 +591,6 @@ footer::after {
 
     .header-center p {
         font-size: 11px;
-    }
-
-    .flower-left,
-    .flower-right {
-        width: 95px;
-        height: 70px;
     }
 
     main {
@@ -660,7 +612,7 @@ footer::after {
     }
 
     .sensor-value {
-        font-size: 21px;
+        font-size: 20px;
     }
 
     .chart-selector {
@@ -685,25 +637,18 @@ footer::after {
     }
 }
 
-/* ==============================
-   響應式
-============================== */
+/* ===== 響應式 ===== */
 
-@media (max-width: 1050px) {
+@media (max-width: 1100px) {
     header {
-        padding-left: 120px;
-        padding-right: 120px;
+        padding-left: 110px;
+        padding-right: 110px;
     }
 
     .system-status {
         position: static;
         width: fit-content;
         margin: 8px auto 0;
-    }
-
-    header {
-        padding-top: 8px;
-        padding-bottom: 8px;
     }
 }
 
@@ -742,8 +687,7 @@ footer::after {
         font-size: 23px;
     }
 
-    .flower-left,
-    .flower-right {
+    .flower-decoration {
         opacity: 0.3;
     }
 
@@ -774,19 +718,13 @@ footer::after {
 
 <div class="dashboard">
 
-<!-- ==============================
-     頂部
-============================== -->
-
 <header>
 
-    <!-- 左側花草 SVG -->
+    <!-- 左側 SVG 花草 -->
     <div class="flower-decoration flower-left">
-        <svg class="floral-svg" viewBox="0 0 150 110">
+        <svg viewBox="0 0 150 110" aria-hidden="true">
             <path d="M18 115 Q35 65 52 22"
-                  fill="none"
-                  stroke="#68ad78"
-                  stroke-width="3"/>
+                  fill="none" stroke="#68ad78" stroke-width="3"/>
             <path d="M38 75 Q13 52 12 76 Q25 91 38 75"
                   fill="#8acb94"/>
             <path d="M43 55 Q69 38 67 61 Q54 70 43 55"
@@ -796,27 +734,33 @@ footer::after {
 
             <g transform="translate(54 23)">
                 <ellipse cx="0" cy="-14" rx="10" ry="17" fill="#f6b9cd"/>
-                <ellipse cx="14" cy="-3" rx="10" ry="17" transform="rotate(72 14 -3)" fill="#f9d1df"/>
-                <ellipse cx="9" cy="14" rx="10" ry="17" transform="rotate(144 9 14)" fill="#f4b5c9"/>
-                <ellipse cx="-9" cy="14" rx="10" ry="17" transform="rotate(216 -9 14)" fill="#f9d1df"/>
-                <ellipse cx="-14" cy="-3" rx="10" ry="17" transform="rotate(288 -14 -3)" fill="#f4b5c9"/>
+                <ellipse cx="14" cy="-3" rx="10" ry="17"
+                         transform="rotate(72 14 -3)" fill="#f9d1df"/>
+                <ellipse cx="9" cy="14" rx="10" ry="17"
+                         transform="rotate(144 9 14)" fill="#f4b5c9"/>
+                <ellipse cx="-9" cy="14" rx="10" ry="17"
+                         transform="rotate(216 -9 14)" fill="#f9d1df"/>
+                <ellipse cx="-14" cy="-3" rx="10" ry="17"
+                         transform="rotate(288 -14 -3)" fill="#f4b5c9"/>
                 <circle r="9" fill="#f6cf70"/>
                 <circle r="3" fill="#e9a54c"/>
             </g>
 
             <path d="M95 115 Q98 78 108 54"
-                  fill="none"
-                  stroke="#80bd84"
-                  stroke-width="3"/>
+                  fill="none" stroke="#80bd84" stroke-width="3"/>
             <path d="M101 85 Q78 72 83 92 Q94 100 101 85"
                   fill="#a0d7a4"/>
 
             <g transform="translate(109 51) scale(.55)">
-                <ellipse cx="0" cy="-14" rx="10" ry="17" fill="#ffffff"/>
-                <ellipse cx="14" cy="-3" rx="10" ry="17" transform="rotate(72 14 -3)" fill="#fff4e4"/>
-                <ellipse cx="9" cy="14" rx="10" ry="17" transform="rotate(144 9 14)" fill="#ffffff"/>
-                <ellipse cx="-9" cy="14" rx="10" ry="17" transform="rotate(216 -9 14)" fill="#fff4e4"/>
-                <ellipse cx="-14" cy="-3" rx="10" ry="17" transform="rotate(288 -14 -3)" fill="#ffffff"/>
+                <ellipse cx="0" cy="-14" rx="10" ry="17" fill="white"/>
+                <ellipse cx="14" cy="-3" rx="10" ry="17"
+                         transform="rotate(72 14 -3)" fill="#fff4e4"/>
+                <ellipse cx="9" cy="14" rx="10" ry="17"
+                         transform="rotate(144 9 14)" fill="white"/>
+                <ellipse cx="-9" cy="14" rx="10" ry="17"
+                         transform="rotate(216 -9 14)" fill="#fff4e4"/>
+                <ellipse cx="-14" cy="-3" rx="10" ry="17"
+                         transform="rotate(288 -14 -3)" fill="white"/>
                 <circle r="9" fill="#e9c45f"/>
             </g>
         </svg>
@@ -828,13 +772,11 @@ footer::after {
         <div class="title-underline"></div>
     </div>
 
-    <!-- 右側花草 SVG -->
+    <!-- 右側 SVG 花草 -->
     <div class="flower-decoration flower-right">
-        <svg class="floral-svg" viewBox="0 0 150 110">
+        <svg viewBox="0 0 150 110" aria-hidden="true">
             <path d="M18 115 Q35 65 52 22"
-                  fill="none"
-                  stroke="#68ad78"
-                  stroke-width="3"/>
+                  fill="none" stroke="#68ad78" stroke-width="3"/>
             <path d="M38 75 Q13 52 12 76 Q25 91 38 75"
                   fill="#8acb94"/>
             <path d="M43 55 Q69 38 67 61 Q54 70 43 55"
@@ -844,27 +786,16 @@ footer::after {
 
             <g transform="translate(54 23)">
                 <ellipse cx="0" cy="-14" rx="10" ry="17" fill="#f6b9cd"/>
-                <ellipse cx="14" cy="-3" rx="10" ry="17" transform="rotate(72 14 -3)" fill="#f9d1df"/>
-                <ellipse cx="9" cy="14" rx="10" ry="17" transform="rotate(144 9 14)" fill="#f4b5c9"/>
-                <ellipse cx="-9" cy="14" rx="10" ry="17" transform="rotate(216 -9 14)" fill="#f9d1df"/>
-                <ellipse cx="-14" cy="-3" rx="10" ry="17" transform="rotate(288 -14 -3)" fill="#f4b5c9"/>
+                <ellipse cx="14" cy="-3" rx="10" ry="17"
+                         transform="rotate(72 14 -3)" fill="#f9d1df"/>
+                <ellipse cx="9" cy="14" rx="10" ry="17"
+                         transform="rotate(144 9 14)" fill="#f4b5c9"/>
+                <ellipse cx="-9" cy="14" rx="10" ry="17"
+                         transform="rotate(216 -9 14)" fill="#f9d1df"/>
+                <ellipse cx="-14" cy="-3" rx="10" ry="17"
+                         transform="rotate(288 -14 -3)" fill="#f4b5c9"/>
                 <circle r="9" fill="#f6cf70"/>
-            </g>
-
-            <path d="M95 115 Q98 78 108 54"
-                  fill="none"
-                  stroke="#80bd84"
-                  stroke-width="3"/>
-            <path d="M101 85 Q78 72 83 92 Q94 100 101 85"
-                  fill="#a0d7a4"/>
-
-            <g transform="translate(109 51) scale(.55)">
-                <ellipse cx="0" cy="-14" rx="10" ry="17" fill="#ffffff"/>
-                <ellipse cx="14" cy="-3" rx="10" ry="17" transform="rotate(72 14 -3)" fill="#fff4e4"/>
-                <ellipse cx="9" cy="14" rx="10" ry="17" transform="rotate(144 9 14)" fill="#ffffff"/>
-                <ellipse cx="-9" cy="14" rx="10" ry="17" transform="rotate(216 -9 14)" fill="#fff4e4"/>
-                <ellipse cx="-14" cy="-3" rx="10" ry="17" transform="rotate(288 -14 -3)" fill="#ffffff"/>
-                <circle r="9" fill="#e9c45f"/>
+                <circle r="3" fill="#e9a54c"/>
             </g>
         </svg>
     </div>
@@ -878,20 +809,14 @@ footer::after {
 
 <main>
 
-<!-- ==============================
-     主要監控區
-============================== -->
-
 <section class="center-panel">
 
-    <div class="section-title">
-        即時環境監測
-    </div>
+    <div class="section-title">即時環境監測</div>
 
+    <!-- 六個即時數據 -->
     <div class="sensor-grid">
 
         <div class="sensor-card">
-            <div class="leaf-corner">🌿</div>
             <div class="sensor-icon">🌡️</div>
             <div class="sensor-name">水溫</div>
             <div class="sensor-value">
@@ -901,7 +826,15 @@ footer::after {
         </div>
 
         <div class="sensor-card">
-            <div class="leaf-corner">🌸</div>
+            <div class="sensor-icon">🏡</div>
+            <div class="sensor-name">室內溫度</div>
+            <div class="sensor-value">
+                <span id="indoorTemperature">--</span>
+                <small>°C</small>
+            </div>
+        </div>
+
+        <div class="sensor-card">
             <div class="sensor-icon">💧</div>
             <div class="sensor-name">濕度</div>
             <div class="sensor-value">
@@ -911,7 +844,6 @@ footer::after {
         </div>
 
         <div class="sensor-card">
-            <div class="leaf-corner">🍃</div>
             <div class="sensor-icon">🏠</div>
             <div class="sensor-name">室內 CO₂</div>
             <div class="sensor-value">
@@ -921,7 +853,6 @@ footer::after {
         </div>
 
         <div class="sensor-card">
-            <div class="leaf-corner">🌼</div>
             <div class="sensor-icon">🌳</div>
             <div class="sensor-name">室外 CO₂</div>
             <div class="sensor-value">
@@ -931,7 +862,6 @@ footer::after {
         </div>
 
         <div class="sensor-card">
-            <div class="leaf-corner">🌿</div>
             <div class="sensor-icon">⚡</div>
             <div class="sensor-name">電壓</div>
             <div class="sensor-value">
@@ -942,25 +872,16 @@ footer::after {
 
     </div>
 
-    <!-- 圖表選擇 -->
-
+    <!-- 七種圖表選擇 -->
     <div class="chart-selector">
 
         <div class="selector-header">
-
-            <div class="selector-title">
-                🌸 自訂圖表顯示
-            </div>
+            <div class="selector-title">🌸 自訂圖表顯示</div>
 
             <div class="selector-actions">
-                <button class="small-btn" onclick="selectAllCharts()">
-                    全選
-                </button>
-                <button class="small-btn" onclick="clearAllCharts()">
-                    清除
-                </button>
+                <button class="small-btn" onclick="selectAllCharts()">全選</button>
+                <button class="small-btn" onclick="clearAllCharts()">清除</button>
             </div>
-
         </div>
 
         <div class="chart-options">
@@ -969,6 +890,12 @@ footer::after {
                 <input type="checkbox" value="temperature"
                        checked onchange="updateSelectedCharts()">
                 🌡️ 水溫
+            </label>
+
+            <label class="chart-option">
+                <input type="checkbox" value="indoorTemperature"
+                       onchange="updateSelectedCharts()">
+                🏡 室內溫度
             </label>
 
             <label class="chart-option">
@@ -1002,17 +929,13 @@ footer::after {
             </label>
 
         </div>
-
     </div>
 
     <div class="chart-grid" id="chartGrid" data-count="3"></div>
 
 </section>
 
-<!-- ==============================
-     右側統計
-============================== -->
-
+<!-- 右側統計 -->
 <aside class="right-panel">
 
     <div class="panel-title">🌿 數據統計</div>
@@ -1058,9 +981,7 @@ footer::after {
 <script>
 "use strict";
 
-/* ======================================
-   ThingSpeak 設定
-====================================== */
+/* ===== ThingSpeak 設定 ===== */
 
 const CHANNEL_ID = "3474112";
 const READ_API_KEY = "IT0OTL4TT1QFKXO8";
@@ -1069,14 +990,13 @@ const TIMEZONE = "Asia/Taipei";
 const FIELD_MAP = {
     temperature: "field1",
     humidity: "field2",
+    indoorTemperature: "field3",
     co2Indoor: "field4",
     co2Outdoor: "field5",
     voltage: "field6"
 };
 
-/* ======================================
-   六種圖表設定
-====================================== */
+/* ===== 七種圖表 ===== */
 
 const CHART_CONFIG = {
 
@@ -1084,11 +1004,15 @@ const CHART_CONFIG = {
         title: "🌡️ 水溫",
         unit: "°C",
         datasets: [
-            {
-                label: "水溫",
-                field: "field1",
-                color: "#e76f67"
-            }
+            { label: "水溫", field: "field1", color: "#e76f67" }
+        ]
+    },
+
+    indoorTemperature: {
+        title: "🏡 室內溫度",
+        unit: "°C",
+        datasets: [
+            { label: "室內溫度", field: "field3", color: "#c084cf" }
         ]
     },
 
@@ -1096,11 +1020,7 @@ const CHART_CONFIG = {
         title: "💧 濕度",
         unit: "%",
         datasets: [
-            {
-                label: "濕度",
-                field: "field2",
-                color: "#5a9fd6"
-            }
+            { label: "濕度", field: "field2", color: "#5a9fd6" }
         ]
     },
 
@@ -1108,11 +1028,7 @@ const CHART_CONFIG = {
         title: "🏠 室內 CO₂",
         unit: "ppm",
         datasets: [
-            {
-                label: "室內 CO₂",
-                field: "field4",
-                color: "#e98c6c"
-            }
+            { label: "室內 CO₂", field: "field4", color: "#e98c6c" }
         ]
     },
 
@@ -1120,11 +1036,7 @@ const CHART_CONFIG = {
         title: "🌳 室外 CO₂",
         unit: "ppm",
         datasets: [
-            {
-                label: "室外 CO₂",
-                field: "field5",
-                color: "#56a6b3"
-            }
+            { label: "室外 CO₂", field: "field5", color: "#56a6b3" }
         ]
     },
 
@@ -1132,11 +1044,7 @@ const CHART_CONFIG = {
         title: "⚡ 電壓",
         unit: "V",
         datasets: [
-            {
-                label: "電壓",
-                field: "field6",
-                color: "#d7a33b"
-            }
+            { label: "電壓", field: "field6", color: "#d7a33b" }
         ]
     },
 
@@ -1144,31 +1052,18 @@ const CHART_CONFIG = {
         title: "🌫️ 室內與室外 CO₂ 濃度比較",
         unit: "ppm",
         datasets: [
-            {
-                label: "室內 CO₂",
-                field: "field4",
-                color: "#e98c6c"
-            },
-            {
-                label: "室外 CO₂",
-                field: "field5",
-                color: "#56a6b3"
-            }
+            { label: "室內 CO₂", field: "field4", color: "#e98c6c" },
+            { label: "室外 CO₂", field: "field5", color: "#56a6b3" }
         ]
     }
-
 };
 
-/* ======================================
-   全域變數
-====================================== */
+/* ===== 全域變數 ===== */
 
 let chartCount = 10;
 let statMinutes = 10;
-
 let charts = {};
 let loading = false;
-
 let allFeedsCache = [];
 let latestFeedCache = null;
 
@@ -1180,12 +1075,9 @@ let selectedCharts = [
 
 const $ = id => document.getElementById(id);
 
-/* ======================================
-   時間格式
-====================================== */
+/* ===== 時間格式 ===== */
 
 function formatTime(date, full = false) {
-
     const options = {
         timeZone: TIMEZONE,
         hour: "2-digit",
@@ -1203,12 +1095,9 @@ function formatTime(date, full = false) {
     return new Intl.DateTimeFormat("zh-TW", options).format(date);
 }
 
-/* ======================================
-   數值處理
-====================================== */
+/* ===== 數值處理 ===== */
 
 function parseValue(value) {
-
     if (
         value === null ||
         value === undefined ||
@@ -1218,74 +1107,58 @@ function parseValue(value) {
     }
 
     const number = Number(value);
-
     return Number.isFinite(number) ? number : null;
 }
 
 function setValue(id, value, decimals) {
-
     $(id).textContent =
         value === null ? "--" : value.toFixed(decimals);
 }
 
-function co2Color(value) {
+/* CO2 顏色提醒：
+   <1000 綠色
+   1000~1499 橘色
+   >=1500 紅色
+*/
 
+function co2Color(value) {
     if (value === null) return "#087c68";
     if (value >= 1500) return "#dc2626";
     if (value >= 1000) return "#f97316";
-
     return "#087c68";
 }
 
-/* ======================================
-   圖表勾選
-====================================== */
+/* ===== 圖表選擇 ===== */
 
 function getSelectedCharts() {
-
     return Array.from(
-        document.querySelectorAll(
-            '.chart-options input:checked'
-        )
+        document.querySelectorAll('.chart-options input:checked')
     ).map(input => input.value);
 }
 
 window.updateSelectedCharts = function() {
-
     selectedCharts = getSelectedCharts();
-
     buildChartCards();
     renderCharts();
 };
 
 window.selectAllCharts = function() {
-
-    document.querySelectorAll(
-        ".chart-options input"
-    ).forEach(input => {
+    document.querySelectorAll(".chart-options input").forEach(input => {
         input.checked = true;
     });
-
     updateSelectedCharts();
 };
 
 window.clearAllCharts = function() {
-
-    document.querySelectorAll(
-        ".chart-options input"
-    ).forEach(input => {
+    document.querySelectorAll(".chart-options input").forEach(input => {
         input.checked = false;
     });
-
     updateSelectedCharts();
 };
 
-/* ======================================
-   動態建立圖表卡片
-====================================== */
+/* ===== 建立圖表卡片 ===== */
 
 function buildChartCards() {
-
     Object.values(charts).forEach(chart => {
         if (chart) chart.destroy();
     });
@@ -1297,18 +1170,15 @@ function buildChartCards() {
     grid.dataset.count = selectedCharts.length;
 
     if (!selectedCharts.length) {
-
         grid.innerHTML = `
             <div class="empty-charts">
                 🌷 請在上方勾選想顯示的圖表 🌿
             </div>
         `;
-
         return;
     }
 
     selectedCharts.forEach(key => {
-
         const config = CHART_CONFIG[key];
 
         const card = document.createElement("div");
@@ -1341,68 +1211,45 @@ function buildChartCards() {
     });
 }
 
-/* ======================================
-   圖表筆數切換
-====================================== */
+/* ===== 圖表筆數 ===== */
 
 window.changeChartCount = function(count) {
-
     chartCount = count;
 
-    document.querySelectorAll(
-        "#chartBtnGroup button"
-    ).forEach(button => {
-
+    document.querySelectorAll("#chartBtnGroup button").forEach(button => {
         button.classList.toggle(
             "active",
-            button.textContent ===
-                (count === 0 ? "全部" : count + "筆")
+            button.textContent === (count === 0 ? "全部" : count + "筆")
         );
     });
 
-    document.querySelectorAll(
-        ".count-label"
-    ).forEach(element => {
-
-        element.textContent =
-            count === 0 ? "全部" : count + "筆";
+    document.querySelectorAll(".count-label").forEach(element => {
+        element.textContent = count === 0 ? "全部" : count + "筆";
     });
 
     renderCharts();
 };
 
-/* ======================================
-   統計時間切換
-====================================== */
+/* ===== 統計時間 ===== */
 
 window.changeStatRange = function(minutes) {
-
     statMinutes = minutes;
 
-    document.querySelectorAll(
-        "#statBtnGroup button"
-    ).forEach(button => {
-
+    document.querySelectorAll("#statBtnGroup button").forEach(button => {
         button.classList.toggle(
             "active",
             button.textContent === minutes + "min"
         );
     });
 
-    $("statRangeLabel").textContent =
-        `(最近 ${minutes} 分鐘)`;
-
+    $("statRangeLabel").textContent = `(最近 ${minutes} 分鐘)`;
     renderStatsFromCache();
 };
 
-/* ======================================
-   取得圖表資料點
-====================================== */
+/* ===== 圖表資料點 ===== */
 
 function getPoints(feeds, field) {
-
     return feeds.flatMap(feed => {
-
         const value = parseValue(feed[field]);
 
         if (value === null) return [];
@@ -1414,58 +1261,34 @@ function getPoints(feeds, field) {
     });
 }
 
-/* ======================================
-   建立 Chart.js 圖表
-====================================== */
+/* ===== 建立 Chart.js 圖表 ===== */
 
 function createChart(key, config, feeds, start, end) {
-
     const canvas = $("chart_" + key);
+    if (!canvas || typeof Chart === "undefined") return;
 
-    if (!canvas) return;
-
-    if (charts[key]) {
-        charts[key].destroy();
-    }
+    if (charts[key]) charts[key].destroy();
 
     const datasets = config.datasets.map(item => ({
-
         label: item.label,
-
         data: getPoints(feeds, item.field),
-
         borderColor: item.color,
-
         backgroundColor: item.color + "18",
-
         borderWidth: 2.5,
-
         pointRadius: feeds.length > 50 ? 0 : 3,
-
         pointHoverRadius: 6,
-
         pointBackgroundColor: item.color,
-
         tension: 0.25,
-
         fill: false,
-
         spanGaps: false
-
     }));
 
     charts[key] = new Chart(canvas, {
-
         type: "line",
-
-        data: {
-            datasets
-        },
+        data: { datasets },
 
         options: {
-
             responsive: true,
-
             maintainAspectRatio: false,
 
             animation: {
@@ -1478,30 +1301,20 @@ function createChart(key, config, feeds, start, end) {
             },
 
             plugins: {
-
                 legend: {
-
                     display: datasets.length > 1,
-
                     position: "top",
-
                     labels: {
                         usePointStyle: true,
                         boxWidth: 9,
-                        font: {
-                            size: 11
-                        }
+                        font: { size: 11 }
                     }
                 },
 
                 tooltip: {
-
                     callbacks: {
-
                         title: context => {
-
                             if (!context.length) return "";
-
                             return formatTime(
                                 new Date(context[0].parsed.x),
                                 true
@@ -1509,20 +1322,14 @@ function createChart(key, config, feeds, start, end) {
                         },
 
                         label: context => {
-
                             const decimals =
-                                config.unit === "ppm"
-                                    ? 0
-                                    : config.unit === "V"
-                                        ? 2
-                                        : 1;
+                                config.unit === "ppm" ? 0 :
+                                config.unit === "V" ? 2 : 1;
 
                             return (
-                                context.dataset.label +
-                                ": " +
+                                context.dataset.label + ": " +
                                 context.parsed.y.toFixed(decimals) +
-                                " " +
-                                config.unit
+                                " " + config.unit
                             );
                         }
                     }
@@ -1530,56 +1337,31 @@ function createChart(key, config, feeds, start, end) {
             },
 
             scales: {
-
                 x: {
-
                     type: "linear",
-
                     min: start,
                     max: end,
-
                     ticks: {
-
                         maxTicksLimit: 6,
-
-                        font: {
-                            size: 10
-                        },
-
-                        callback: value =>
-                            formatTime(new Date(value))
+                        font: { size: 10 },
+                        callback: value => formatTime(new Date(value))
                     },
-
-                    grid: {
-                        display: false
-                    }
+                    grid: { display: false }
                 },
 
                 y: {
-
                     beginAtZero: false,
-
-                    ticks: {
-                        font: {
-                            size: 10
-                        }
-                    },
-
-                    grid: {
-                        color: "rgba(20,100,50,0.06)"
-                    }
+                    ticks: { font: { size: 10 } },
+                    grid: { color: "rgba(20,100,50,0.06)" }
                 }
             }
         }
     });
 }
 
-/* ======================================
-   更新圖表
-====================================== */
+/* ===== 更新圖表 ===== */
 
 function renderCharts() {
-
     if (!allFeedsCache.length) return;
 
     const feeds = chartCount === 0
@@ -1600,7 +1382,6 @@ function renderCharts() {
         : lastTs;
 
     selectedCharts.forEach(key => {
-
         createChart(
             key,
             CHART_CONFIG[key],
@@ -1611,22 +1392,16 @@ function renderCharts() {
     });
 }
 
-/* ======================================
-   統計計算
-====================================== */
+/* ===== 統計計算 ===== */
 
 function getStats(feeds, field) {
-
     const values = feeds
         .map(feed => parseValue(feed[field]))
         .filter(value => value !== null);
 
     if (!values.length) return null;
 
-    const sum = values.reduce(
-        (total, value) => total + value,
-        0
-    );
+    const sum = values.reduce((total, value) => total + value, 0);
 
     return {
         max: Math.max(...values),
@@ -1635,172 +1410,82 @@ function getStats(feeds, field) {
     };
 }
 
-/* ======================================
-   顯示統計
-====================================== */
+/* ===== 統計顯示 ===== */
 
 function renderStats(feeds) {
-
     const configs = [
-
-        {
-            name: "🌡️ 水溫",
-            field: FIELD_MAP.temperature,
-            unit: "°C",
-            decimals: 1
-        },
-
-        {
-            name: "💧 濕度",
-            field: FIELD_MAP.humidity,
-            unit: "%",
-            decimals: 1
-        },
-
-        {
-            name: "🏠 室內 CO₂",
-            field: FIELD_MAP.co2Indoor,
-            unit: "ppm",
-            decimals: 0
-        },
-
-        {
-            name: "🌳 室外 CO₂",
-            field: FIELD_MAP.co2Outdoor,
-            unit: "ppm",
-            decimals: 0
-        },
-
-        {
-            name: "⚡ 電壓",
-            field: FIELD_MAP.voltage,
-            unit: "V",
-            decimals: 2
-        }
-
+        { name: "🌡️ 水溫", field: "field1", unit: "°C", decimals: 1 },
+        { name: "🏡 室內溫度", field: "field3", unit: "°C", decimals: 1 },
+        { name: "💧 濕度", field: "field2", unit: "%", decimals: 1 },
+        { name: "🏠 室內 CO₂", field: "field4", unit: "ppm", decimals: 0 },
+        { name: "🌳 室外 CO₂", field: "field5", unit: "ppm", decimals: 0 },
+        { name: "⚡ 電壓", field: "field6", unit: "V", decimals: 2 }
     ];
 
-    $("statsContainer").innerHTML =
-        configs.map(config => {
+    $("statsContainer").innerHTML = configs.map(config => {
+        const stats = getStats(feeds, config.field);
 
-            const stats = getStats(feeds, config.field);
+        function display(key) {
+            if (!stats) return "--";
+            return stats[key].toFixed(config.decimals) + " " + config.unit;
+        }
 
-            function display(key) {
-
-                if (!stats) return "--";
-
-                return (
-                    stats[key].toFixed(config.decimals) +
-                    " " +
-                    config.unit
-                );
-            }
-
-            return `
-                <div class="stat-section">
-
-                    <div class="stat-name">
-                        ${config.name}
-                    </div>
-
-                    <div class="stat-row">
-                        <span>最高</span>
-                        <span class="stat-value">
-                            ${display("max")}
-                        </span>
-                    </div>
-
-                    <div class="stat-row">
-                        <span>最低</span>
-                        <span class="stat-value">
-                            ${display("min")}
-                        </span>
-                    </div>
-
-                    <div class="stat-row">
-                        <span>平均</span>
-                        <span class="stat-value">
-                            ${display("avg")}
-                        </span>
-                    </div>
-
+        return `
+            <div class="stat-section">
+                <div class="stat-name">${config.name}</div>
+                <div class="stat-row">
+                    <span>最高</span>
+                    <span class="stat-value">${display("max")}</span>
                 </div>
-            `;
-
-        }).join("");
+                <div class="stat-row">
+                    <span>最低</span>
+                    <span class="stat-value">${display("min")}</span>
+                </div>
+                <div class="stat-row">
+                    <span>平均</span>
+                    <span class="stat-value">${display("avg")}</span>
+                </div>
+            </div>
+        `;
+    }).join("");
 }
 
-/* ======================================
-   重新計算統計
-====================================== */
-
 function renderStatsFromCache() {
-
     if (!latestFeedCache) return;
 
     const latestTs = latestFeedCache.timestamp;
-
-    const statStart =
-        latestTs - statMinutes * 60 * 1000;
+    const statStart = latestTs - statMinutes * 60 * 1000;
 
     const statFeeds = allFeedsCache.filter(
-        feed =>
-            feed.timestamp >= statStart &&
-            feed.timestamp <= latestTs
+        feed => feed.timestamp >= statStart &&
+                feed.timestamp <= latestTs
     );
 
     renderStats(statFeeds);
 }
 
-/* ======================================
-   ThingSpeak API
-====================================== */
+/* ===== ThingSpeak API ===== */
 
 function getFeedsURL() {
-
-    return (
-        `https://api.thingspeak.com/channels/` +
-        `${CHANNEL_ID}/feeds.json?` +
-        `api_key=${READ_API_KEY}&results=1000`
-    );
+    return `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds.json?api_key=${READ_API_KEY}&results=1000`;
 }
 
 function getLatestURL() {
-
-    return (
-        `https://api.thingspeak.com/channels/` +
-        `${CHANNEL_ID}/feeds/last.json?` +
-        `api_key=${READ_API_KEY}`
-    );
+    return `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds/last.json?api_key=${READ_API_KEY}`;
 }
 
-/* ======================================
-   五個即時數據
-====================================== */
+/* ===== 六個即時數據 ===== */
 
 function renderLatestData(latest) {
-
-    const temperature = parseValue(
-        latest[FIELD_MAP.temperature]
-    );
-
-    const humidity = parseValue(
-        latest[FIELD_MAP.humidity]
-    );
-
-    const co2Indoor = parseValue(
-        latest[FIELD_MAP.co2Indoor]
-    );
-
-    const co2Outdoor = parseValue(
-        latest[FIELD_MAP.co2Outdoor]
-    );
-
-    const voltage = parseValue(
-        latest[FIELD_MAP.voltage]
-    );
+    const temperature = parseValue(latest.field1);
+    const humidity = parseValue(latest.field2);
+    const indoorTemperature = parseValue(latest.field3);
+    const co2Indoor = parseValue(latest.field4);
+    const co2Outdoor = parseValue(latest.field5);
+    const voltage = parseValue(latest.field6);
 
     setValue("temperature", temperature, 1);
+    setValue("indoorTemperature", indoorTemperature, 1);
     setValue("humidity", humidity, 1);
     setValue("co2Indoor", co2Indoor, 0);
     setValue("co2Outdoor", co2Outdoor, 0);
@@ -1813,33 +1498,20 @@ function renderLatestData(latest) {
         formatTime(new Date(latest.timestamp), true);
 }
 
-/* ======================================
-   讀取 ThingSpeak
-====================================== */
+/* ===== 讀取 ThingSpeak ===== */
 
 async function loadData() {
-
     if (loading) return;
 
     loading = true;
-
     $("status").textContent = "讀取中...";
     $("status").style.color = "#4b8067";
 
     try {
-
-        const [feedsResponse, latestResponse] =
-            await Promise.all([
-
-                fetch(getFeedsURL(), {
-                    cache: "no-store"
-                }),
-
-                fetch(getLatestURL(), {
-                    cache: "no-store"
-                })
-
-            ]);
+        const [feedsResponse, latestResponse] = await Promise.all([
+            fetch(getFeedsURL(), { cache: "no-store" }),
+            fetch(getLatestURL(), { cache: "no-store" })
+        ]);
 
         if (!feedsResponse.ok || !latestResponse.ok) {
             throw new Error("ThingSpeak HTTP 錯誤");
@@ -1852,25 +1524,18 @@ async function loadData() {
             throw new Error("找不到最新資料");
         }
 
-        const latestTs =
-            new Date(latest.created_at).getTime();
+        const latestTs = new Date(latest.created_at).getTime();
 
         if (!Number.isFinite(latestTs)) {
             throw new Error("最新資料時間無效");
         }
 
         let allFeeds = (feedsJSON.feeds || [])
-
             .map(feed => ({
                 ...feed,
-                timestamp: new Date(
-                    feed.created_at
-                ).getTime()
+                timestamp: new Date(feed.created_at).getTime()
             }))
-
-            .filter(feed =>
-                Number.isFinite(feed.timestamp)
-            );
+            .filter(feed => Number.isFinite(feed.timestamp));
 
         const latestFeed = {
             ...latest,
@@ -1890,9 +1555,7 @@ async function loadData() {
             allFeeds.push(latestFeed);
         }
 
-        allFeeds.sort(
-            (a, b) => a.timestamp - b.timestamp
-        );
+        allFeeds.sort((a, b) => a.timestamp - b.timestamp);
 
         allFeedsCache = allFeeds;
         latestFeedCache = latestFeed;
@@ -1905,34 +1568,27 @@ async function loadData() {
         $("status").style.color = "#087c68";
 
     } catch (error) {
-
         console.error("ThingSpeak 錯誤:", error);
-
         $("status").textContent = "讀取失敗";
         $("status").style.color = "#dc2626";
-
     } finally {
         loading = false;
     }
 }
 
-/* ======================================
-   初始化
-====================================== */
+/* ===== 初始化 ===== */
 
 buildChartCards();
 loadData();
 
-// 每 15 秒更新
+// 每 15 秒自動更新
 setInterval(loadData, 15000);
 
-// 視窗大小變化時重新調整圖表
+// 視窗大小改變時調整圖表
 window.addEventListener("resize", () => {
-
     Object.values(charts).forEach(chart => {
         if (chart) chart.resize();
     });
-
 });
 </script>
 
