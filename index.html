@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -6,934 +5,867 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>智慧微藻遮陽換氣系統</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-:root {
-    --primary: #0a7a6a;
-    --dark: #065a4e;
-    --light: #e8f6f2;
-    --muted: #5f7f78;
-}
-body {
-    font-family: "Microsoft JhengHei", sans-serif;
-    background: var(--light);
-    color: #1a3d37;
-}
-.dashboard {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-header {
-    background: linear-gradient(135deg, var(--dark), var(--primary));
-    color: white;
-    padding: 20px 30px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-}
-header h1 {
-    font-size: 27px;
-}
-header p {
-    margin-top: 5px;
-    color: #c4e8e0;
-}
-.system-status {
-    background: #ffffff20;
-    padding: 12px 20px;
-    border-radius: 20px;
-    line-height: 1.8;
-}
-main {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 21% minmax(0,1fr) 25%;
-    gap: 16px;
-    padding: 18px;
-}
-.left-panel {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-.panel-title {
-    color: var(--primary);
-    font-size: 21px;
-    font-weight: bold;
-}
-.sensor-card, .chart-card, .right-panel {
-    background: white;
-    border-radius: 18px;
-    box-shadow: 0 6px 22px #00463c16;
-}
-.sensor-card {
-    flex: 1;
-    min-height: 115px;
-    border-left: 5px solid #1fb3a0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-}
-.sensor-icon {
-    font-size: 30px;
-}
-.sensor-name {
-    font-size: 17px;
-    color: var(--muted);
-}
-.sensor-value {
-    color: var(--primary);
-    font-size: 35px;
-    font-weight: bold;
-}
-.sensor-value small {
-    font-size: 15px;
-    font-weight: normal;
-    color: #8ba9a3;
-}
-.center-panel {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 15px;
-    min-height: 500px;
-}
-.chart-card {
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-}
-.chart-card.wide {
-    grid-column: span 2;
-}
-.chart-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #1a4d44;
-    margin-bottom: 12px;
-}
-.chart-title span {
-    font-size: 12px;
-    font-weight: normal;
-    color: var(--muted);
-    background: var(--light);
-    padding: 3px 10px;
-    border-radius: 15px;
-}
-.chart-container {
-    flex: 1;
-    position: relative;
-    min-height: 0;
-}
-.right-panel {
-    padding: 18px;
-    overflow-y: auto;
-}
-.controls {
-    margin: 15px 0;
-}
-.controls-row {
-    margin-bottom: 12px;
-}
-.controls-label {
-    display: block;
-    font-size: 14px;
-    color: var(--muted);
-    margin-bottom: 6px;
-}
-.btn-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-}
-.btn-group button {
-    border: 0;
-    border-radius: 20px;
-    background: #eaf5f2;
-    color: #24564f;
-    padding: 7px 13px;
-    cursor: pointer;
-}
-.btn-group button.active {
-    background: var(--primary);
-    color: white;
-}
-.stat-section {
-    border-top: 1px solid #e6f0ed;
-    padding: 12px 0;
-}
-.stat-name {
-    color: #24564f;
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 7px;
-}
-.stat-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 15px;
-    color: #66837d;
-    padding: 3px 0;
-}
-.stat-value {
-    font-weight: bold;
-    color: var(--primary);
-}
-footer {
-    text-align: center;
-    padding: 10px;
-    color: #8aa8a0;
-    font-size: 12px;
-}
-@media(max-width:1100px) {
-    main {
-        grid-template-columns: 24% minmax(0,1fr);
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
-    .right-panel {
-        grid-column: span 2;
+    :root {
+        --primary: #0a7a6a;
+        --dark: #065a4e;
+        --light: #e8f6f2;
+        --muted: #5f7f78;
+        --accent: #2a9d8f;
+        --warm: #e9c46a;
+        --card-bg: #ffffff;
+        --shadow: 0 8px 20px rgba(6, 90, 78, 0.08);
+        --radius: 20px;
     }
-}
-@media(max-width:760px) {
-    header {
-        flex-direction: column;
+    body {
+        font-family: "Microsoft JhengHei", "Segoe UI", sans-serif;
+        background: var(--light);
+        color: #1a3d37;
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
         align-items: flex-start;
     }
-    main {
-        display: block;
-    }
-    .left-panel {
-        margin-bottom: 15px;
-    }
-    .sensor-card {
-        margin-top: 8px;
-    }
-    .center-panel {
+    .dashboard {
+        width: 100%;
+        max-width: 1440px;
         display: flex;
         flex-direction: column;
-        margin-bottom: 15px;
+        gap: 24px;
     }
-    .chart-card {
-        height: 270px;
-        flex: none;
+
+    /* 头部区域 */
+    header {
+        background: linear-gradient(135deg, var(--dark), var(--primary));
+        color: white;
+        padding: 20px 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        border-radius: var(--radius);
+        box-shadow: 0 12px 28px rgba(6, 90, 78, 0.3);
+        position: relative;
+        overflow: hidden;
     }
-}
+    header::after {
+        content: "🌿";
+        font-size: 120px;
+        position: absolute;
+        right: 20px;
+        bottom: -30px;
+        opacity: 0.12;
+        transform: rotate(10deg);
+        pointer-events: none;
+    }
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        z-index: 1;
+    }
+    .logo-icon {
+        font-size: 42px;
+        line-height: 1;
+        background: rgba(255, 255, 255, 0.15);
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        backdrop-filter: blur(4px);
+    }
+    .header-title h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+    .header-title p {
+        font-size: 0.95rem;
+        opacity: 0.85;
+        margin-top: 4px;
+    }
+    .header-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.12);
+        padding: 10px 20px;
+        border-radius: 40px;
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        z-index: 1;
+    }
+    .status-dot {
+        width: 12px;
+        height: 12px;
+        background: #7bed9f;
+        border-radius: 50%;
+        box-shadow: 0 0 12px #7bed9f;
+        animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.6; transform: scale(0.85); }
+    }
+
+    /* 卡片通用 */
+    .card {
+        background: var(--card-bg);
+        border-radius: var(--radius);
+        padding: 24px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(10, 122, 106, 0.06);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+        box-shadow: 0 12px 28px rgba(6, 90, 78, 0.12);
+    }
+    .card-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .card-title .icon {
+        font-size: 1.3rem;
+    }
+
+    /* 顶部指标行 */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+    }
+    .metric-card {
+        background: var(--card-bg);
+        border-radius: var(--radius);
+        padding: 20px 22px;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        border-left: 6px solid var(--primary);
+        transition: transform 0.2s ease;
+    }
+    .metric-card:hover {
+        transform: translateY(-3px);
+    }
+    .metric-label {
+        font-size: 0.85rem;
+        color: var(--muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .metric-value {
+        font-size: 2.1rem;
+        font-weight: 800;
+        color: var(--dark);
+        line-height: 1.2;
+    }
+    .metric-value small {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--muted);
+        margin-left: 4px;
+    }
+    .metric-sub {
+        font-size: 0.8rem;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .trend-up { color: #0a7a6a; }
+    .trend-down { color: #e76f51; }
+
+    /* 中间图表区 */
+    .charts-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+    }
+    @media (max-width: 900px) {
+        .charts-row {
+            grid-template-columns: 1fr;
+        }
+    }
+    .chart-container {
+        position: relative;
+        height: 280px;
+        width: 100%;
+    }
+    .chart-container-sm {
+        height: 200px;
+    }
+
+    /* 控制面板 */
+    .control-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 24px;
+    }
+    .control-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+    .toggle-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 18px;
+        background: #f6fbf9;
+        border-radius: 14px;
+        border: 1px solid rgba(10, 122, 106, 0.08);
+        transition: background 0.2s;
+    }
+    .toggle-item:hover {
+        background: #eef9f5;
+    }
+    .toggle-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .toggle-emoji {
+        font-size: 1.5rem;
+    }
+    .toggle-label {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--dark);
+    }
+    .toggle-desc {
+        font-size: 0.75rem;
+        color: var(--muted);
+    }
+    .switch {
+        position: relative;
+        width: 52px;
+        height: 28px;
+        flex-shrink: 0;
+    }
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #cbd5d1;
+        transition: .3s;
+        border-radius: 28px;
+    }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .3s;
+        border-radius: 50%;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    input:checked + .slider {
+        background-color: var(--primary);
+    }
+    input:checked + .slider:before {
+        transform: translateX(24px);
+    }
+
+    /* 微藻状态条 */
+    .algae-status-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 16px;
+    }
+    .algae-item {
+        background: #f6fbf9;
+        border-radius: 16px;
+        padding: 16px;
+        border: 1px solid rgba(10, 122, 106, 0.08);
+    }
+    .algae-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        color: var(--dark);
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+    }
+    .progress-bar-bg {
+        height: 10px;
+        background: #e0ece8;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 6px;
+    }
+    .progress-fill {
+        height: 100%;
+        border-radius: 10px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        transition: width 0.6s ease;
+    }
+    .algae-value {
+        font-size: 0.8rem;
+        color: var(--muted);
+        margin-top: 4px;
+        text-align: right;
+    }
+
+    /* 底部日志 */
+    .log-list {
+        max-height: 160px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-right: 6px;
+    }
+    .log-list::-webkit-scrollbar {
+        width: 5px;
+    }
+    .log-list::-webkit-scrollbar-thumb {
+        background: #b8d4cc;
+        border-radius: 10px;
+    }
+    .log-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 0.85rem;
+        padding: 8px 12px;
+        background: #f8fcfb;
+        border-radius: 10px;
+        border-left: 3px solid var(--primary);
+    }
+    .log-time {
+        color: var(--muted);
+        font-size: 0.75rem;
+        white-space: nowrap;
+        font-weight: 600;
+    }
+    .log-msg {
+        color: #1a3d37;
+        line-height: 1.4;
+    }
+
+    /* 自定义图表颜色 */
+    .chart-legend {
+        display: flex;
+        gap: 16px;
+        margin-top: 12px;
+        font-size: 0.8rem;
+        color: var(--muted);
+        justify-content: center;
+    }
+    .legend-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        header { padding: 16px 18px; }
+        .header-title h1 { font-size: 1.3rem; }
+        .metric-value { font-size: 1.6rem; }
+        .card { padding: 18px; }
+    }
 </style>
 </head>
-
 <body>
 <div class="dashboard">
-
-<header>
-    <div>
-        <h1>🌿 智慧微藻遮陽換氣系統</h1>
-        <p>Smart Microalgae Shading · 即時環境監控</p>
-    </div>
-    <div class="system-status">
-        🟢 狀態：<span id="status">連線中...</span>
-        <div>🕒 更新：<span id="updateTime">--</span></div>
-    </div>
-</header>
-
-<main>
-
-<section class="left-panel">
-    <div class="panel-title">📡 即時數據</div>
-
-    <div class="sensor-card">
-        <div class="sensor-icon">🌡️</div>
-        <div class="sensor-name">水溫</div>
-        <div class="sensor-value">
-            <span id="temperature">--</span>
-            <small>°C</small>
-        </div>
-    </div>
-
-    <div class="sensor-card">
-        <div class="sensor-icon">💧</div>
-        <div class="sensor-name">濕度</div>
-        <div class="sensor-value">
-            <span id="humidity">--</span>
-            <small>%</small>
-        </div>
-    </div>
-
-    <div class="sensor-card">
-        <div class="sensor-icon">🏠</div>
-        <div class="sensor-name">室內 CO₂</div>
-        <div class="sensor-value">
-            <span id="co2Indoor">--</span>
-            <small>ppm</small>
-        </div>
-    </div>
-
-    <div class="sensor-card">
-        <div class="sensor-icon">🌳</div>
-        <div class="sensor-name">室外 CO₂</div>
-        <div class="sensor-value">
-            <span id="co2Outdoor">--</span>
-            <small>ppm</small>
-        </div>
-    </div>
-</section>
-
-<section class="center-panel">
-
-    <div class="chart-card">
-        <div class="chart-title">
-            🌡️ 水溫
-            <span class="count-label">10筆</span>
-        </div>
-        <div class="chart-container">
-            <canvas id="temperatureChart"></canvas>
-        </div>
-    </div>
-
-    <div class="chart-card">
-        <div class="chart-title">
-            💧 濕度
-            <span class="count-label">10筆</span>
-        </div>
-        <div class="chart-container">
-            <canvas id="humidityChart"></canvas>
-        </div>
-    </div>
-
-    <div class="chart-card wide">
-        <div class="chart-title">
-            🌫️ 室內與室外 CO₂ 濃度比較
-            <span class="count-label">10筆</span>
-        </div>
-        <div class="chart-container">
-            <canvas id="co2Chart"></canvas>
-        </div>
-    </div>
-
-</section>
-
-<aside class="right-panel">
-    <div class="panel-title">📊 數據統計</div>
-    <div id="statRangeLabel">(最近 10 分鐘)</div>
-
-    <div class="controls">
-        <div class="controls-row">
-            <span class="controls-label">📈 圖表筆數</span>
-            <div class="btn-group" id="chartBtnGroup">
-                <button class="active" onclick="changeChartCount(10)">10筆</button>
-                <button onclick="changeChartCount(20)">20筆</button>
-                <button onclick="changeChartCount(50)">50筆</button>
-                <button onclick="changeChartCount(0)">全部</button>
+    <!-- 顶部栏 -->
+    <header>
+        <div class="header-left">
+            <div class="logo-icon">🌱</div>
+            <div class="header-title">
+                <h1>智慧微藻遮陽換氣系統</h1>
+                <p>Microalgae Smart Shading & Ventilation · 即時監控</p>
             </div>
         </div>
+        <div class="header-status">
+            <span class="status-dot"></span>
+            <span style="font-weight:600;">系統運行中</span>
+            <span style="opacity:0.6; font-size:0.85rem;" id="lastUpdate">--:--:--</span>
+        </div>
+    </header>
 
-        <div class="controls-row">
-            <span class="controls-label">⏱ 統計時間</span>
-            <div class="btn-group" id="statBtnGroup">
-                <button class="active" onclick="changeStatRange(10)">10min</button>
-                <button onclick="changeStatRange(30)">30min</button>
-                <button onclick="changeStatRange(60)">60min</button>
+    <!-- 指标卡片行 -->
+    <div class="metrics-grid">
+        <div class="metric-card" style="border-left-color:#2a9d8f;">
+            <div class="metric-label"><span>🌡️</span> 培養液溫度</div>
+            <div class="metric-value" id="tempVal">26.5<small>°C</small></div>
+            <div class="metric-sub"><span class="trend-up">▲ 0.3°C</span> 較昨日</div>
+        </div>
+        <div class="metric-card" style="border-left-color:#e9c46a;">
+            <div class="metric-label"><span>☀️</span> 光照強度</div>
+            <div class="metric-value" id="lightVal">680<small>μmol/m²s</small></div>
+            <div class="metric-sub"><span class="trend-down">▼ 45</span> 較昨日</div>
+        </div>
+        <div class="metric-card" style="border-left-color:#e76f51;">
+            <div class="metric-label"><span>💧</span> 濕度</div>
+            <div class="metric-value" id="humidityVal">72<small>%</small></div>
+            <div class="metric-sub"><span class="trend-up">▲ 2%</span> 較昨日</div>
+        </div>
+        <div class="metric-card" style="border-left-color:#0a7a6a;">
+            <div class="metric-label"><span>🫧</span> CO₂濃度</div>
+            <div class="metric-value" id="co2Val">520<small>ppm</small></div>
+            <div class="metric-sub"><span class="trend-up">▲ 12</span> 較昨日</div>
+        </div>
+        <div class="metric-card" style="border-left-color:#5f7f78;">
+            <div class="metric-label"><span>🧪</span> pH值</div>
+            <div class="metric-value" id="phVal">7.8</div>
+            <div class="metric-sub"><span class="trend-up">▲ 0.05</span> 較昨日</div>
+        </div>
+    </div>
+
+    <!-- 图表区 -->
+    <div class="charts-row">
+        <div class="card">
+            <div class="card-title"><span class="icon">📈</span> 環境參數趨勢（近12小時）</div>
+            <div class="chart-container">
+                <canvas id="trendChart"></canvas>
+            </div>
+            <div class="chart-legend">
+                <span><span class="legend-dot" style="background:#e76f51;"></span>溫度 (°C)</span>
+                <span><span class="legend-dot" style="background:#e9c46a;"></span>光照 (μmol/m²s)</span>
+                <span><span class="legend-dot" style="background:#2a9d8f;"></span>濕度 (%)</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="icon">🔆</span> 微藻生長活性</div>
+            <div class="chart-container chart-container-sm">
+                <canvas id="algaeChart"></canvas>
+            </div>
+            <div class="algae-status-row" style="margin-top: 20px;">
+                <div class="algae-item">
+                    <div class="algae-header"><span>🟢</span> 葉綠素濃度</div>
+                    <div class="progress-bar-bg"><div class="progress-fill" style="width: 82%;"></div></div>
+                    <div class="algae-value">8.2 mg/L</div>
+                </div>
+                <div class="algae-item">
+                    <div class="algae-header"><span>🔵</span> 生物量</div>
+                    <div class="progress-bar-bg"><div class="progress-fill" style="width: 68%;"></div></div>
+                    <div class="algae-value">2.8 g/L</div>
+                </div>
+                <div class="algae-item">
+                    <div class="algae-header"><span>🟡</span> 光合效率</div>
+                    <div class="progress-bar-bg"><div class="progress-fill" style="width: 91%;"></div></div>
+                    <div class="algae-value">0.91 Fv/Fm</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="statsContainer"></div>
-</aside>
+    <!-- 控制面板 + 日志 -->
+    <div class="control-grid">
+        <!-- 控制面板 -->
+        <div class="card">
+            <div class="card-title"><span class="icon">⚙️</span> 遮陽與換氣控制</div>
+            <div class="control-panel">
+                <div class="toggle-item">
+                    <div class="toggle-info">
+                        <span class="toggle-emoji">☀️</span>
+                        <div>
+                            <div class="toggle-label">自動遮陽</div>
+                            <div class="toggle-desc">光照 > 800 μmol 時自動展開</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="autoShadeToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-item">
+                    <div class="toggle-info">
+                        <span class="toggle-emoji">🌬️</span>
+                        <div>
+                            <div class="toggle-label">智能換氣</div>
+                            <div class="toggle-desc">CO₂ > 600 ppm 或溫度 > 28°C 啟動</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="autoVentToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-item">
+                    <div class="toggle-info">
+                        <span class="toggle-emoji">💡</span>
+                        <div>
+                            <div class="toggle-label">夜間補光</div>
+                            <div class="toggle-desc">維持微藻夜間生長</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="nightLightToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-item">
+                    <div class="toggle-info">
+                        <span class="toggle-emoji">🔄</span>
+                        <div>
+                            <div class="toggle-label">手動遮陽</div>
+                            <div class="toggle-desc">立即展開遮陽網</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" id="manualShadeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
 
-</main>
-
-<footer>隊伍編號:大專-創-N075</footer>
-
+        <!-- 系統日誌 -->
+        <div class="card">
+            <div class="card-title"><span class="icon">📋</span> 系統事件記錄</div>
+            <div class="log-list" id="logList">
+                <div class="log-item">
+                    <span class="log-time">09:42</span>
+                    <span class="log-msg">自動遮陽啟動 — 光照強度達 820 μmol/m²s</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-time">09:15</span>
+                    <span class="log-msg">智能換氣運行中 — CO₂ 濃度 630 ppm</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-time">08:50</span>
+                    <span class="log-msg">系統自檢完成，所有傳感器正常</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-time">08:20</span>
+                    <span class="log-msg">日間模式啟動，開始記錄環境參數</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-time">07:55</span>
+                    <span class="log-msg">微藻培養液 pH 校正完畢 (7.8)</span>
+                </div>
+                <div class="log-item">
+                    <span class="log-time">07:30</span>
+                    <span class="log-msg">遮陽網關閉 — 光照低於閾值</span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-"use strict";
+    (function() {
+        // ========== 時間更新 ==========
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-TW', { hour12: false });
+            document.getElementById('lastUpdate').textContent = timeStr;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
 
-// ==========================================
-// ThingSpeak 設定
-// ==========================================
-const CHANNEL_ID = "3474112";
-const READ_API_KEY = "IT0OTL4TT1QFKXO8";
-const TIMEZONE = "Asia/Taipei";
-
-// Field 1：水溫
-// Field 2：濕度
-// Field 3：停用
-// Field 4：室內 CO2
-// Field 5：室外 CO2
-
-const FIELD_MAP = {
-    temperature: "field1",
-    humidity: "field2",
-    co2Indoor: "field4",
-    co2Outdoor: "field5"
-};
-
-let chartCount = 10;
-let statMinutes = 10;
-let charts = {};
-let loading = false;
-
-const $ = id => document.getElementById(id);
-
-// ==========================================
-// 時間格式
-// ==========================================
-function formatTime(date, full = false) {
-    const options = {
-        timeZone: TIMEZONE,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false
-    };
-
-    if (full) {
-        options.year = "numeric";
-        options.month = "2-digit";
-        options.day = "2-digit";
-    }
-
-    return new Intl.DateTimeFormat(
-        "zh-TW", options
-    ).format(date);
-}
-
-// ==========================================
-// 數值處理
-// ==========================================
-function parseValue(value) {
-    if (value === null ||
-        value === undefined ||
-        String(value).trim() === "") {
-        return null;
-    }
-
-    const number = Number(value);
-    return Number.isFinite(number) ? number : null;
-}
-
-function setValue(id, value, decimals) {
-    $(id).textContent =
-        value === null ? "--" : value.toFixed(decimals);
-}
-
-function co2Color(value) {
-    if (value === null) return "#0a7a6a";
-    if (value >= 1500) return "#dc2626";
-    if (value >= 1000) return "#f97316";
-    return "#087f6f";
-}
-
-// ==========================================
-// 切換圖表筆數
-// ==========================================
-window.changeChartCount = function(count) {
-    chartCount = count;
-
-    document.querySelectorAll(
-        "#chartBtnGroup button"
-    ).forEach(button => {
-        button.classList.toggle(
-            "active",
-            button.textContent ===
-            (count === 0 ? "全部" : count + "筆")
-        );
-    });
-
-    document.querySelectorAll(
-        ".count-label"
-    ).forEach(element => {
-        element.textContent =
-            count === 0 ? "全部" : count + "筆";
-    });
-
-    loadData();
-};
-
-// ==========================================
-// 切換統計時間
-// ==========================================
-window.changeStatRange = function(minutes) {
-    statMinutes = minutes;
-
-    document.querySelectorAll(
-        "#statBtnGroup button"
-    ).forEach(button => {
-        button.classList.toggle(
-            "active",
-            button.textContent === minutes + "min"
-        );
-    });
-
-    $("statRangeLabel").textContent =
-        `(最近 ${minutes} 分鐘)`;
-
-    loadData();
-};
-
-// ==========================================
-// 圖表設定
-// ==========================================
-function createChart(id, datasets, start, end, unit) {
-    if (charts[id]) {
-        charts[id].destroy();
-    }
-
-    const chartDatasets = datasets.map(item => ({
-        label: item.label,
-        data: item.data,
-        borderColor: item.color,
-        backgroundColor: item.color + "18",
-        borderWidth: 3,
-        pointRadius: 4,
-        pointHoverRadius: 7,
-        pointBackgroundColor: item.color,
-        tension: 0.25,
-        fill: false,
-        spanGaps: false
-    }));
-
-    charts[id] = new Chart($(id), {
-        type: "line",
-        data: {
-            datasets: chartDatasets
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            animation: {
-                duration: 300
+        // ========== 圖表初始化 ==========
+        // 趨勢折線圖
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        const trendChart = new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
+                datasets: [
+                    {
+                        label: '溫度 (°C)',
+                        data: [23.2, 22.8, 22.5, 22.9, 24.1, 25.8, 27.2, 28.5, 27.9, 26.3, 24.8, 23.7],
+                        borderColor: '#e76f51',
+                        backgroundColor: 'rgba(231, 111, 81, 0.05)',
+                        borderWidth: 2.5,
+                        pointRadius: 2.5,
+                        pointBackgroundColor: '#e76f51',
+                        tension: 0.35,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: '光照 (μmol/m²s)',
+                        data: [0, 0, 0, 45, 320, 680, 920, 880, 620, 280, 45, 0],
+                        borderColor: '#e9c46a',
+                        backgroundColor: 'rgba(233, 196, 106, 0.05)',
+                        borderWidth: 2.5,
+                        pointRadius: 2.5,
+                        pointBackgroundColor: '#e9c46a',
+                        tension: 0.35,
+                        yAxisID: 'y1'
+                    },
+                    {
+                        label: '濕度 (%)',
+                        data: [78, 79, 80, 79, 75, 70, 64, 61, 65, 70, 74, 77],
+                        borderColor: '#2a9d8f',
+                        backgroundColor: 'rgba(42, 157, 143, 0.05)',
+                        borderWidth: 2.5,
+                        pointRadius: 2.5,
+                        pointBackgroundColor: '#2a9d8f',
+                        tension: 0.35,
+                        yAxisID: 'y2'
+                    }
+                ]
             },
-            interaction: {
-                mode: "nearest",
-                intersect: false
-            },
-            plugins: {
-                legend: {
-                    display: datasets.length > 1,
-                    position: "top",
-                    labels: {
-                        usePointStyle: true,
-                        font: {
-                            size: 13
-                        }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(6, 90, 78, 0.9)',
+                        padding: 10,
+                        cornerRadius: 10,
+                        titleFont: { size: 12 },
+                        bodyFont: { size: 12 }
                     }
                 },
-                tooltip: {
-                    callbacks: {
-                        title: context => {
-                            if (!context.length) return "";
-                            return formatTime(
-                                new Date(context[0].parsed.x),
-                                true
-                            );
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        grid: { color: 'rgba(10, 122, 106, 0.06)' },
+                        ticks: { font: { size: 10 }, color: '#5f7f78' },
+                        title: { display: false }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: false,
+                        position: 'right',
+                        grid: { drawOnChartArea: false }
+                    },
+                    y2: {
+                        type: 'linear',
+                        display: false,
+                        position: 'right',
+                        grid: { drawOnChartArea: false }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 10 }, color: '#5f7f78', maxRotation: 0 }
+                    }
+                }
+            }
+        });
+
+        // 微藻活性雷達圖
+        const algaeCtx = document.getElementById('algaeChart').getContext('2d');
+        const algaeChart = new Chart(algaeCtx, {
+            type: 'radar',
+            data: {
+                labels: ['葉綠素', '生物量', '光合效率', '生長速率', '營養吸收'],
+                datasets: [{
+                    label: '活性指標',
+                    data: [82, 68, 91, 76, 85],
+                    backgroundColor: 'rgba(42, 157, 143, 0.15)',
+                    borderColor: '#2a9d8f',
+                    borderWidth: 2.5,
+                    pointBackgroundColor: '#0a7a6a',
+                    pointBorderColor: '#fff',
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(6, 90, 78, 0.9)',
+                        padding: 8,
+                        cornerRadius: 8
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            stepSize: 25,
+                            font: { size: 9 },
+                            color: '#8aa9a2',
+                            backdropColor: 'transparent'
                         },
-                        label: context => {
-                            const decimals =
-                                unit === "ppm" ? 0 : 1;
-
-                            return (
-                                context.dataset.label + ": " +
-                                context.parsed.y.toFixed(decimals) +
-                                " " + unit
-                            );
+                        grid: { color: 'rgba(10, 122, 106, 0.1)' },
+                        angleLines: { color: 'rgba(10, 122, 106, 0.1)' },
+                        pointLabels: {
+                            font: { size: 10, weight: '600' },
+                            color: '#065a4e'
                         }
                     }
                 }
-            },
-            scales: {
-                x: {
-                    type: "linear",
-                    min: start,
-                    max: end,
-                    ticks: {
-                        maxTicksLimit: 8,
-                        callback: value =>
-                            formatTime(new Date(value))
-                    },
-                    grid: {
-                        display: false
-                    }
-                },
-                y: {
-                    beginAtZero: false,
-                    ticks: {
-                        font: {
-                            size: 11
-                        }
-                    },
-                    grid: {
-                        color: "rgba(0,0,0,0.05)"
-                    }
-                }
+            }
+        });
+
+        // ========== 模擬即時數據更新 (每3秒) ==========
+        const tempEl = document.getElementById('tempVal');
+        const lightEl = document.getElementById('lightVal');
+        const humidityEl = document.getElementById('humidityVal');
+        const co2El = document.getElementById('co2Val');
+        const phEl = document.getElementById('phVal');
+
+        let baseTemp = 26.5;
+        let baseLight = 680;
+        let baseHumidity = 72;
+        let baseCO2 = 520;
+        let basePH = 7.8;
+
+        function randomDelta(base, range, isFloat = false) {
+            const delta = (Math.random() - 0.5) * range;
+            let val = base + delta;
+            if (isFloat) return parseFloat(val.toFixed(1));
+            return Math.round(val);
+        }
+
+        // 更新趨勢圖數據 (推移)
+        function updateTrendChart() {
+            const tempData = trendChart.data.datasets[0].data;
+            const lightData = trendChart.data.datasets[1].data;
+            const humidityData = trendChart.data.datasets[2].data;
+
+            // 移除最前面，添加新隨機數據
+            const lastTemp = tempData[tempData.length - 1];
+            const lastLight = lightData[lightData.length - 1];
+            const lastHumidity = humidityData[humidityData.length - 1];
+
+            tempData.shift();
+            tempData.push(parseFloat((lastTemp + (Math.random() - 0.5) * 1.2).toFixed(1)));
+
+            lightData.shift();
+            lightData.push(Math.max(0, Math.round(lastLight + (Math.random() - 0.5) * 80)));
+
+            humidityData.shift();
+            humidityData.push(Math.min(95, Math.max(40, Math.round(lastHumidity + (Math.random() - 0.5) * 5))));
+
+            // 更新標籤時間
+            const labels = trendChart.data.labels;
+            const now = new Date();
+            const hour = now.getHours().toString().padStart(2, '0');
+            const minute = Math.floor(now.getMinutes() / 10) * 10;
+            const timeLabel = `${hour}:${minute.toString().padStart(2, '0')}`;
+            labels.shift();
+            labels.push(timeLabel);
+
+            trendChart.update('none');
+        }
+
+        // 更新微藻雷達圖
+        function updateAlgaeChart() {
+            const data = algaeChart.data.datasets[0].data;
+            for (let i = 0; i < data.length; i++) {
+                let change = (Math.random() - 0.5) * 8;
+                let newVal = Math.min(98, Math.max(50, data[i] + change));
+                data[i] = Math.round(newVal);
+            }
+            algaeChart.update('none');
+        }
+
+        // 更新指標卡片
+        function updateMetrics() {
+            baseTemp = randomDelta(baseTemp, 0.8, true);
+            baseLight = randomDelta(baseLight, 40);
+            baseHumidity = randomDelta(baseHumidity, 4);
+            baseCO2 = randomDelta(baseCO2, 30);
+            basePH = randomDelta(basePH, 0.1, true);
+
+            // 邊界限制
+            baseTemp = Math.min(32, Math.max(22, baseTemp));
+            baseLight = Math.min(1200, Math.max(0, baseLight));
+            baseHumidity = Math.min(95, Math.max(50, baseHumidity));
+            baseCO2 = Math.min(800, Math.max(350, baseCO2));
+            basePH = Math.min(8.5, Math.max(7.0, basePH));
+
+            tempEl.innerHTML = baseTemp.toFixed(1) + '<small>°C</small>';
+            lightEl.innerHTML = baseLight + '<small>μmol/m²s</small>';
+            humidityEl.innerHTML = baseHumidity + '<small>%</small>';
+            co2El.innerHTML = baseCO2 + '<small>ppm</small>';
+            phEl.innerHTML = basePH.toFixed(1);
+        }
+
+        // 定時更新
+        let tick = 0;
+        setInterval(() => {
+            updateMetrics();
+            tick++;
+            if (tick % 2 === 0) {
+                updateTrendChart();
+                updateAlgaeChart();
+            }
+        }, 3000);
+
+        // 初始化時立即更新一次
+        updateMetrics();
+
+        // ========== 控制開關事件 (僅供演示，可擴展) ==========
+        document.getElementById('autoShadeToggle').addEventListener('change', function(e) {
+            addLog('自動遮陽 ' + (e.target.checked ? '已開啟' : '已關閉'));
+        });
+        document.getElementById('autoVentToggle').addEventListener('change', function(e) {
+            addLog('智能換氣 ' + (e.target.checked ? '已開啟' : '已關閉'));
+        });
+        document.getElementById('nightLightToggle').addEventListener('change', function(e) {
+            addLog('夜間補光 ' + (e.target.checked ? '已開啟' : '已關閉'));
+        });
+        document.getElementById('manualShadeToggle').addEventListener('change', function(e) {
+            addLog('手動遮陽 ' + (e.target.checked ? '展開' : '收起'));
+        });
+
+        function addLog(msg) {
+            const logList = document.getElementById('logList');
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
+            const item = document.createElement('div');
+            item.className = 'log-item';
+            item.innerHTML = `<span class="log-time">${timeStr}</span><span class="log-msg">${msg}</span>`;
+            logList.prepend(item);
+            // 保持最多8条
+            while (logList.children.length > 8) {
+                logList.removeChild(logList.lastChild);
             }
         }
-    });
-}
 
-// ==========================================
-// 產生感測資料點
-// ==========================================
-function getPoints(feeds, field) {
-    return feeds.flatMap(feed => {
-        const value = parseValue(feed[field]);
+        // 每30秒自動產生一條模擬日誌
+        setInterval(() => {
+            const events = [
+                '遮陽網根據光照自動調節',
+                '換氣扇運行中，CO₂濃度穩定',
+                '微藻培養液溫度正常',
+                '系統巡檢完成，無異常',
+                '光照傳感器讀數更新',
+                'pH值自動校正完成'
+            ];
+            const randomEvent = events[Math.floor(Math.random() * events.length)];
+            // 避免頻繁打擾，可以選擇性開啟
+            // addLog(randomEvent);
+        }, 30000);
 
-        if (value === null) return [];
-
-        return [{
-            x: feed.timestamp,
-            y: value
-        }];
-    });
-}
-
-// ==========================================
-// 統計
-// ==========================================
-function getStats(feeds, field) {
-    const values = feeds
-        .map(feed => parseValue(feed[field]))
-        .filter(value => value !== null);
-
-    if (!values.length) {
-        return null;
-    }
-
-    const sum = values.reduce(
-        (total, value) => total + value, 0
-    );
-
-    return {
-        max: Math.max(...values),
-        min: Math.min(...values),
-        avg: sum / values.length
-    };
-}
-
-function renderStats(feeds) {
-    const configs = [
-        {
-            name: "🌡️ 水溫",
-            field: FIELD_MAP.temperature,
-            unit: "°C",
-            decimals: 1
-        },
-        {
-            name: "💧 濕度",
-            field: FIELD_MAP.humidity,
-            unit: "%",
-            decimals: 1
-        },
-        {
-            name: "🏠 室內 CO₂",
-            field: FIELD_MAP.co2Indoor,
-            unit: "ppm",
-            decimals: 0
-        },
-        {
-            name: "🌳 室外 CO₂",
-            field: FIELD_MAP.co2Outdoor,
-            unit: "ppm",
-            decimals: 0
-        }
-    ];
-
-    $("statsContainer").innerHTML =
-        configs.map(config => {
-            const stats = getStats(
-                feeds, config.field
-            );
-
-            function display(key) {
-                if (!stats) return "--";
-                return (
-                    stats[key].toFixed(config.decimals) +
-                    " " + config.unit
-                );
-            }
-
-            return `
-                <div class="stat-section">
-                    <div class="stat-name">
-                        ${config.name}
-                    </div>
-                    <div class="stat-row">
-                        <span>最高</span>
-                        <span class="stat-value">
-                            ${display("max")}
-                        </span>
-                    </div>
-                    <div class="stat-row">
-                        <span>最低</span>
-                        <span class="stat-value">
-                            ${display("min")}
-                        </span>
-                    </div>
-                    <div class="stat-row">
-                        <span>平均</span>
-                        <span class="stat-value">
-                            ${display("avg")}
-                        </span>
-                    </div>
-                </div>
-            `;
-        }).join("");
-}
-
-// ==========================================
-// ThingSpeak API
-// ==========================================
-function getFeedsURL() {
-    return (
-        `https://api.thingspeak.com/channels/` +
-        `${CHANNEL_ID}/feeds.json?` +
-        `api_key=${READ_API_KEY}&results=1000`
-    );
-}
-
-function getLatestURL() {
-    return (
-        `https://api.thingspeak.com/channels/` +
-        `${CHANNEL_ID}/feeds/last.json?` +
-        `api_key=${READ_API_KEY}`
-    );
-}
-
-// ==========================================
-// 讀取最新資料與歷史資料
-// ==========================================
-async function loadData() {
-    if (loading) return;
-    loading = true;
-
-    $("status").textContent = "讀取中...";
-
-    try {
-        const [feedsResponse, latestResponse] =
-            await Promise.all([
-                fetch(getFeedsURL(), {
-                    cache: "no-store"
-                }),
-                fetch(getLatestURL(), {
-                    cache: "no-store"
-                })
-            ]);
-
-        if (!feedsResponse.ok ||
-            !latestResponse.ok) {
-            throw new Error("ThingSpeak HTTP 錯誤");
-        }
-
-        const feedsJSON = await feedsResponse.json();
-        const latest = await latestResponse.json();
-
-        if (!latest || !latest.created_at) {
-            throw new Error("找不到最新資料");
-        }
-
-        const latestTs =
-            new Date(latest.created_at).getTime();
-
-        if (!Number.isFinite(latestTs)) {
-            throw new Error("最新資料時間無效");
-        }
-
-        let allFeeds = (feedsJSON.feeds || [])
-            .map(feed => ({
-                ...feed,
-                timestamp:
-                    new Date(feed.created_at).getTime()
-            }))
-            .filter(feed =>
-                Number.isFinite(feed.timestamp)
-            );
-
-        // 將最新資料合併到歷史資料
-        // 避免圖表沒有顯示最後一筆
-        const latestFeed = {
-            ...latest,
-            timestamp: latestTs
-        };
-
-        const index = allFeeds.findIndex(
-            feed => feed.timestamp === latestTs
-        );
-
-        if (index >= 0) {
-            allFeeds[index] = latestFeed;
-        } else {
-            allFeeds.push(latestFeed);
-        }
-
-        allFeeds.sort(
-            (a, b) => a.timestamp - b.timestamp
-        );
-
-        // ==================================
-        // 即時數據
-        // ==================================
-        const waterTemp = parseValue(
-            latest[FIELD_MAP.temperature]
-        );
-
-        const humidity = parseValue(
-            latest[FIELD_MAP.humidity]
-        );
-
-        const indoorCO2 = parseValue(
-            latest[FIELD_MAP.co2Indoor]
-        );
-
-        const outdoorCO2 = parseValue(
-            latest[FIELD_MAP.co2Outdoor]
-        );
-
-        setValue("temperature", waterTemp, 1);
-        setValue("humidity", humidity, 1);
-        setValue("co2Indoor", indoorCO2, 0);
-        setValue("co2Outdoor", outdoorCO2, 0);
-
-        $("co2Indoor").style.color =
-            co2Color(indoorCO2);
-
-        $("co2Outdoor").style.color =
-            co2Color(outdoorCO2);
-
-        $("updateTime").textContent =
-            formatTime(new Date(latestTs), true);
-
-        // ==================================
-        // 圖表筆數
-        // ==================================
-        const chartFeeds = chartCount === 0
-            ? allFeeds
-            : allFeeds.slice(-chartCount);
-
-        if (!chartFeeds.length) {
-            throw new Error("沒有圖表資料");
-        }
-
-        const firstTs = chartFeeds[0].timestamp;
-        const lastTs =
-            chartFeeds[chartFeeds.length - 1].timestamp;
-
-        // 只有一筆資料時避免 X 軸範圍為 0
-        const start = firstTs === lastTs
-            ? firstTs - 30000
-            : firstTs;
-
-        const end = firstTs === lastTs
-            ? lastTs + 30000
-            : lastTs;
-
-        // ==================================
-        // 水溫圖表
-        // ==================================
-        createChart(
-            "temperatureChart",
-            [{
-                label: "水溫",
-                data: getPoints(
-                    chartFeeds,
-                    FIELD_MAP.temperature
-                ),
-                color: "#e74c3c"
-            }],
-            start,
-            end,
-            "°C"
-        );
-
-        // ==================================
-        // 濕度圖表
-        // ==================================
-        createChart(
-            "humidityChart",
-            [{
-                label: "濕度",
-                data: getPoints(
-                    chartFeeds,
-                    FIELD_MAP.humidity
-                ),
-                color: "#3498db"
-            }],
-            start,
-            end,
-            "%"
-        );
-
-        // ==================================
-        // CO2 雙曲線圖表
-        // ==================================
-        createChart(
-            "co2Chart",
-            [
-                {
-                    label: "室內 CO₂",
-                    data: getPoints(
-                        chartFeeds,
-                        FIELD_MAP.co2Indoor
-                    ),
-                    color: "#e76f51"
-                },
-                {
-                    label: "室外 CO₂",
-                    data: getPoints(
-                        chartFeeds,
-                        FIELD_MAP.co2Outdoor
-                    ),
-                    color: "#3498db"
-                }
-            ],
-            start,
-            end,
-            "ppm"
-        );
-
-        // ==================================
-        // 統計時間範圍
-        // ==================================
-        const statStart =
-            latestTs - statMinutes * 60 * 1000;
-
-        const statFeeds = allFeeds.filter(
-            feed =>
-                feed.timestamp >= statStart &&
-                feed.timestamp <= latestTs
-        );
-
-        renderStats(statFeeds);
-
-        $("status").textContent = "資料連線正常";
-        $("status").style.color = "#7df0d0";
-
-    } catch (error) {
-        console.error("ThingSpeak 錯誤:", error);
-
-        $("status").textContent = "讀取失敗";
-        $("status").style.color = "#fbb5b5";
-    } finally {
-        loading = false;
-    }
-}
-
-// ==========================================
-// 初始化
-// ==========================================
-loadData();
-
-// 每 15 秒更新一次
-setInterval(loadData, 15000);
-
+    })();
 </script>
 </body>
 </html>
