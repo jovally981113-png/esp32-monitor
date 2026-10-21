@@ -36,7 +36,8 @@ body {
 }
 
 /* =========================================
-   頂部標題列：縮小版本
+   頂部綠色區域
+   只縮小高度及留白，不改字體大小
 ========================================= */
 
 header {
@@ -47,9 +48,8 @@ header {
         #0c8b79 100%
     );
     color: white;
-    padding: 10px 28px;
-    height: 94px;
-    min-height: 94px;
+    padding: 8px 28px;
+    min-height: 90px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -78,28 +78,31 @@ header {
     flex-shrink: 0;
 }
 
+/* 保留原本字體大小 */
+
 header h1 {
-    font-size: 30px;
+    font-size: clamp(28px, 2.4vw, 42px);
     font-weight: 800;
-    letter-spacing: 1.5px;
-    line-height: 1.25;
+    letter-spacing: 2px;
+    line-height: 1.3;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 header p {
     margin-top: 4px;
     color: #c4f0e5;
-    font-size: 13px;
-    letter-spacing: 0.5px;
+    font-size: 17px;
+    letter-spacing: 1px;
 }
 
-/* 右側狀態卡片 */
+/* 右側狀態框 */
 
 .system-status {
     background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.20);
     border-radius: 15px;
     padding: 7px 14px;
-    min-width: 260px;
+    min-width: 320px;
     backdrop-filter: blur(10px);
     flex-shrink: 0;
 }
@@ -108,16 +111,16 @@ header p {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 13px;
+    font-size: 17px;
     padding: 3px 0;
 }
 
 .status-dot {
-    width: 9px;
-    height: 9px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: #7df0d0;
-    box-shadow: 0 0 9px #7df0d080;
+    box-shadow: 0 0 12px #7df0d080;
     flex-shrink: 0;
 }
 
@@ -262,7 +265,7 @@ main {
 }
 
 /* =========================================
-   右側統計
+   右側數據統計
 ========================================= */
 
 .right-panel {
@@ -352,12 +355,12 @@ footer {
 }
 
 /* =========================================
-   響應式
+   響應式排版
 ========================================= */
 
 @media(max-width:1200px) {
     header h1 {
-        font-size: 26px;
+        font-size: 30px;
     }
 
     main {
@@ -373,9 +376,8 @@ footer {
     header {
         flex-direction: column;
         align-items: stretch;
-        padding: 14px 16px;
-        height: auto;
-        min-height: 94px;
+        padding: 12px 16px;
+        min-height: 90px;
     }
 
     .brand {
@@ -385,15 +387,14 @@ footer {
     .brand-icon {
         width: 42px;
         height: 42px;
-        font-size: 25px;
     }
 
     header h1 {
-        font-size: 22px;
+        font-size: 25px;
     }
 
     header p {
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .system-status {
@@ -403,7 +404,7 @@ footer {
     }
 
     .status-row {
-        font-size: 12px;
+        font-size: 14px;
     }
 
     main {
@@ -443,10 +444,7 @@ footer {
 <body>
 <div class="dashboard">
 
-<!-- =====================================
-     頂部標題
-===================================== -->
-
+<!-- 頂部標題列 -->
 <header>
     <div class="brand">
         <div class="brand-icon">🌿</div>
@@ -476,10 +474,7 @@ footer {
 
 <main>
 
-<!-- =====================================
-     左側即時數據
-===================================== -->
-
+<!-- 左側即時數據 -->
 <section class="left-panel">
     <div class="panel-title">📡 即時數據</div>
 
@@ -520,10 +515,7 @@ footer {
     </div>
 </section>
 
-<!-- =====================================
-     中間圖表
-===================================== -->
-
+<!-- 中間圖表 -->
 <section class="center-panel">
 
     <div class="chart-card">
@@ -558,56 +550,33 @@ footer {
 
 </section>
 
-<!-- =====================================
-     右側統計
-===================================== -->
-
+<!-- 右側統計 -->
 <aside class="right-panel">
-
     <div class="panel-title">📊 數據統計</div>
     <div id="statRangeLabel">(最近 10 分鐘)</div>
 
     <div class="controls">
-
         <div class="controls-row">
             <span class="controls-label">📈 圖表筆數</span>
-
             <div class="btn-group" id="chartBtnGroup">
-                <button class="active" onclick="changeChartCount(10)">
-                    10筆
-                </button>
-                <button onclick="changeChartCount(20)">
-                    20筆
-                </button>
-                <button onclick="changeChartCount(50)">
-                    50筆
-                </button>
-                <button onclick="changeChartCount(0)">
-                    全部
-                </button>
+                <button class="active" onclick="changeChartCount(10)">10筆</button>
+                <button onclick="changeChartCount(20)">20筆</button>
+                <button onclick="changeChartCount(50)">50筆</button>
+                <button onclick="changeChartCount(0)">全部</button>
             </div>
         </div>
 
         <div class="controls-row">
             <span class="controls-label">⏱ 統計時間</span>
-
             <div class="btn-group" id="statBtnGroup">
-                <button class="active" onclick="changeStatRange(10)">
-                    10min
-                </button>
-                <button onclick="changeStatRange(30)">
-                    30min
-                </button>
-                <button onclick="changeStatRange(60)">
-                    60min
-                </button>
+                <button class="active" onclick="changeStatRange(10)">10min</button>
+                <button onclick="changeStatRange(30)">30min</button>
+                <button onclick="changeStatRange(60)">60min</button>
             </div>
         </div>
-
     </div>
 
     <div id="statsContainer"></div>
-
 </aside>
 
 </main>
@@ -631,7 +600,7 @@ const TIMEZONE = "Asia/Taipei";
 
 // Field 1：水溫
 // Field 2：濕度
-// Field 3：停用
+// Field 3：不使用
 // Field 4：室內 CO2
 // Field 5：室外 CO2
 
@@ -651,7 +620,7 @@ let reloadPending = false;
 const $ = id => document.getElementById(id);
 
 // ==========================================
-// 台灣時間
+// 台灣時間格式
 // ==========================================
 
 function formatTime(date, full = false) {
@@ -725,7 +694,7 @@ function setStatus(message, state) {
 }
 
 // ==========================================
-// 切換圖表筆數
+// 圖表筆數切換
 // ==========================================
 
 window.changeChartCount = function(count) {
@@ -752,7 +721,7 @@ window.changeChartCount = function(count) {
 };
 
 // ==========================================
-// 切換統計時間
+// 統計時間切換
 // ==========================================
 
 window.changeStatRange = function(minutes) {
@@ -774,7 +743,7 @@ window.changeStatRange = function(minutes) {
 };
 
 // ==========================================
-// 建立 Chart.js 圖表
+// Chart.js 圖表
 // ==========================================
 
 function createChart(id, datasets, start, end, unit) {
@@ -894,7 +863,7 @@ function createChart(id, datasets, start, end, unit) {
 }
 
 // ==========================================
-// 取得圖表資料點
+// 圖表資料
 // ==========================================
 
 function getPoints(feeds, field) {
@@ -911,7 +880,7 @@ function getPoints(feeds, field) {
 }
 
 // ==========================================
-// 計算統計資料
+// 統計計算
 // ==========================================
 
 function getStats(feeds, field) {
@@ -935,7 +904,7 @@ function getStats(feeds, field) {
 }
 
 // ==========================================
-// 顯示統計資料
+// 顯示統計
 // ==========================================
 
 function renderStats(feeds) {
@@ -1034,7 +1003,7 @@ function getLatestURL() {
 }
 
 // ==========================================
-// 讀取 ThingSpeak 資料
+// 讀取資料
 // ==========================================
 
 async function loadData() {
@@ -1047,7 +1016,6 @@ async function loadData() {
     setStatus("讀取中...", "loading");
 
     try {
-        // 同時取得歷史與最新資料
         const [feedsResponse, latestResponse] =
             await Promise.all([
                 fetch(getFeedsURL(), {
@@ -1080,10 +1048,6 @@ async function loadData() {
             throw new Error("最新資料時間無效");
         }
 
-        // ==================================
-        // 歷史資料
-        // ==================================
-
         let allFeeds = (feedsJSON.feeds || [])
             .map(feed => ({
                 ...feed,
@@ -1094,7 +1058,6 @@ async function loadData() {
                 Number.isFinite(feed.timestamp)
             );
 
-        // 將最新資料放入歷史資料
         const latestFeed = {
             ...latest,
             timestamp: latestTs
@@ -1110,15 +1073,11 @@ async function loadData() {
             allFeeds.push(latestFeed);
         }
 
-        // 舊資料到新資料
         allFeeds.sort(
             (a, b) => a.timestamp - b.timestamp
         );
 
-        // ==================================
-        // 即時感測資料
-        // ==================================
-
+        // 即時數據
         const waterTemp = parseValue(
             latest[FIELD_MAP.temperature]
         );
@@ -1146,14 +1105,10 @@ async function loadData() {
         $("co2Outdoor").style.color =
             co2Color(outdoorCO2);
 
-        // 更新時間
         $("updateTime").textContent =
             formatTime(new Date(latestTs), true);
 
-        // ==================================
-        // 圖表顯示筆數
-        // ==================================
-
+        // 圖表筆數
         const chartFeeds = chartCount === 0
             ? allFeeds
             : allFeeds.slice(-chartCount);
@@ -1163,11 +1118,9 @@ async function loadData() {
         }
 
         const firstTs = chartFeeds[0].timestamp;
-
         const lastTs =
             chartFeeds[chartFeeds.length - 1].timestamp;
 
-        // 避免只有一筆資料時 X 軸範圍為零
         const start = firstTs === lastTs
             ? firstTs - 30000
             : firstTs;
@@ -1176,10 +1129,7 @@ async function loadData() {
             ? lastTs + 30000
             : lastTs;
 
-        // ==================================
         // 水溫圖表
-        // ==================================
-
         createChart(
             "temperatureChart",
             [{
@@ -1195,10 +1145,7 @@ async function loadData() {
             "°C"
         );
 
-        // ==================================
         // 濕度圖表
-        // ==================================
-
         createChart(
             "humidityChart",
             [{
@@ -1214,10 +1161,7 @@ async function loadData() {
             "%"
         );
 
-        // ==================================
-        // CO2 室內、室外雙曲線
-        // ==================================
-
+        // 室內與室外 CO2 雙曲線
         createChart(
             "co2Chart",
             [
@@ -1243,10 +1187,7 @@ async function loadData() {
             "ppm"
         );
 
-        // ==================================
-        // 統計時間範圍
-        // ==================================
-
+        // 統計時間
         const statStart =
             latestTs - statMinutes * 60 * 1000;
 
@@ -1258,21 +1199,15 @@ async function loadData() {
 
         renderStats(statFeeds);
 
-        // ==================================
-        // 成功
-        // ==================================
-
         setStatus("資料連線正常", "ok");
 
     } catch (error) {
         console.error("ThingSpeak 錯誤:", error);
-
         setStatus("讀取失敗", "error");
 
     } finally {
         loading = false;
 
-        // 若讀取期間切換設定，再讀取一次
         if (reloadPending) {
             reloadPending = false;
             loadData();
@@ -1281,16 +1216,14 @@ async function loadData() {
 }
 
 // ==========================================
-// 系統初始化
+// 初始化
 // ==========================================
 
-// 第一次讀取
 loadData();
 
 // 每 15 秒自動更新
 setInterval(loadData, 15000);
 
 </script>
-
 </body>
 </html>
