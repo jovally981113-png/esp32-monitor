@@ -4,12 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>智慧微藻遮陽換氣系統</title>
+<title>智慧微藻遮陽換氣系統｜花草監控儀表板</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <style>
+/* ==============================
+   基本設定
+============================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -17,11 +20,14 @@
 }
 
 :root {
-    --primary: #0a7a6a;
-    --dark: #065a4e;
-    --light: #e8f6f2;
-    --muted: #5f7f78;
-    --border: #dcece7;
+    --green: #087c68;
+    --dark-green: #075747;
+    --soft-green: #e8f6ed;
+    --mint: #d5f0df;
+    --pink: #f8c8d8;
+    --cream: #fffdf5;
+    --text: #24554a;
+    --muted: #698b80;
 }
 
 html, body {
@@ -31,13 +37,12 @@ html, body {
 
 body {
     font-family: "Microsoft JhengHei", sans-serif;
-    background: var(--light);
-    color: #1a3d37;
+    color: var(--text);
+    background:
+        radial-gradient(circle at 8% 12%, #fce7ed 0%, transparent 23%),
+        radial-gradient(circle at 90% 85%, #d7f3df 0%, transparent 27%),
+        linear-gradient(135deg, #f4fbf4, #e7f5ed);
 }
-
-/* =====================================
-   整體畫面
-===================================== */
 
 .dashboard {
     height: 100vh;
@@ -47,87 +52,159 @@ body {
     overflow: hidden;
 }
 
-/* =====================================
-   頂部
-===================================== */
+/* ==============================
+   SVG 花草共用
+============================== */
+
+.floral-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.flower-decoration {
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.flower-left {
+    width: 125px;
+    height: 90px;
+    left: 12px;
+    bottom: -8px;
+}
+
+.flower-right {
+    width: 130px;
+    height: 95px;
+    right: 12px;
+    bottom: -10px;
+    transform: scaleX(-1);
+}
+
+.leaf-corner {
+    position: absolute;
+    right: 8px;
+    top: 7px;
+    width: 45px;
+    height: 45px;
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+/* ==============================
+   頂部標題
+============================== */
 
 header {
-    background: linear-gradient(
-        135deg,
-        var(--dark),
-        var(--primary)
-    );
-
-    color: white;
-    padding: 12px 24px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-
+    position: relative;
     flex-shrink: 0;
+    min-height: 105px;
+    padding: 13px 190px 12px;
+    background:
+        linear-gradient(120deg, #e6f8e8, #fffdf4 48%, #e1f6e7);
+    border-bottom: 3px solid #b7e1c7;
+    box-shadow: 0 3px 14px #397b5a18;
+    overflow: hidden;
 }
 
-header h1 {
-    font-size: 25px;
+.header-center {
+    position: relative;
+    z-index: 2;
+    text-align: center;
 }
 
-header p {
-    margin-top: 4px;
-    font-size: 13px;
-    color: #c4e8e0;
-}
-
-.system-status {
-    background: #ffffff20;
-    padding: 8px 15px;
-    border-radius: 14px;
-    line-height: 1.6;
-    font-size: 13px;
+.header-center h1 {
+    color: #076650;
+    font-size: clamp(23px, 2.4vw, 35px);
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-shadow: 1px 2px 0 #ffffff;
     white-space: nowrap;
 }
 
-/* =====================================
-   主畫面
-===================================== */
+.header-center p {
+    font-size: 13px;
+    color: #658e79;
+    margin-top: 5px;
+    letter-spacing: 1px;
+}
+
+.title-underline {
+    width: 210px;
+    max-width: 70%;
+    height: 5px;
+    border-radius: 20px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #6dc69b,
+        #f2b8ce,
+        #6dc69b,
+        transparent
+    );
+    margin: 8px auto 0;
+}
+
+.system-status {
+    position: absolute;
+    z-index: 3;
+    right: 15px;
+    top: 16px;
+    background: #ffffffcc;
+    border: 1px solid #cdebd6;
+    border-radius: 12px;
+    padding: 7px 11px;
+    font-size: 11px;
+    line-height: 1.8;
+    color: #477c69;
+    white-space: nowrap;
+}
+
+/* ==============================
+   主要版面
+============================== */
 
 main {
     flex: 1;
     min-height: 0;
-
     display: grid;
-
     grid-template-columns:
         minmax(0, 1fr)
-        minmax(175px, 18%);
-
+        minmax(180px, 18%);
     gap: 10px;
     padding: 10px;
 }
 
-/* =====================================
-   中間主要區域
-===================================== */
-
 .center-panel {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 9px;
     min-height: 0;
     min-width: 0;
 }
 
 .section-title {
     font-size: 17px;
-    font-weight: bold;
-    color: var(--primary);
+    font-weight: 800;
+    color: var(--dark-green);
+    display: flex;
+    align-items: center;
+    gap: 6px;
     flex-shrink: 0;
 }
 
-/* =====================================
+.section-title::after {
+    content: "❀ ─── ❀";
+    font-size: 13px;
+    color: #a8d4b4;
+    font-weight: normal;
+}
+
+/* ==============================
    五個即時數據
-===================================== */
+============================== */
 
 .sensor-grid {
     display: grid;
@@ -137,68 +214,84 @@ main {
 }
 
 .sensor-card {
-    background: white;
-    border-radius: 13px;
-    border-left: 4px solid #1fb3a0;
-    box-shadow: 0 4px 15px #00463c12;
-
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(150deg, #ffffff, #f5fcf5);
+    border: 1px solid #cdebd6;
+    border-bottom: 3px solid #a5dcb7;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px #316d4d12;
     padding: 9px 5px;
-
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
 
-    min-width: 0;
+.sensor-card:nth-child(2n) {
+    background: linear-gradient(150deg, #ffffff, #fff8f9);
+    border-bottom-color: #efc5d3;
 }
 
 .sensor-icon {
     font-size: 23px;
+    position: relative;
+    z-index: 1;
 }
 
 .sensor-name {
-    font-size: 13px;
     color: var(--muted);
+    font-size: 13px;
     margin: 3px 0;
+    position: relative;
+    z-index: 1;
 }
 
 .sensor-value {
-    font-size: clamp(18px, 2.5vw, 29px);
-    font-weight: bold;
-    color: var(--primary);
+    font-size: clamp(19px, 2.5vw, 30px);
+    color: var(--green);
+    font-weight: 900;
     white-space: nowrap;
+    position: relative;
+    z-index: 1;
 }
 
 .sensor-value small {
     font-size: 12px;
+    color: #89a99b;
     font-weight: normal;
-    color: #8ba9a3;
 }
 
-/* =====================================
-   圖表選擇區
-===================================== */
+/* ==============================
+   圖表勾選區
+============================== */
 
 .chart-selector {
-    background: white;
-    border-radius: 13px;
-    padding: 10px 12px;
-    box-shadow: 0 4px 15px #00463c12;
+    position: relative;
+    overflow: hidden;
     flex-shrink: 0;
+    background: linear-gradient(110deg, #ffffff, #f6fcf5);
+    border: 1px solid #d6ebdc;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px #316d4d10;
+    padding: 10px 12px;
 }
 
 .selector-header {
+    position: relative;
+    z-index: 1;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     gap: 8px;
     margin-bottom: 8px;
 }
 
 .selector-title {
     font-size: 14px;
+    color: #236c55;
     font-weight: bold;
-    color: #24564f;
 }
 
 .selector-actions {
@@ -207,20 +300,22 @@ main {
 }
 
 .small-btn {
-    border: none;
-    border-radius: 12px;
-    padding: 5px 9px;
+    background: #e7f6e9;
+    color: #27775a;
+    border: 1px solid #c8e9d0;
+    border-radius: 13px;
+    padding: 5px 10px;
     font-size: 11px;
-    background: #eaf5f2;
-    color: #24564f;
     cursor: pointer;
 }
 
 .small-btn:hover {
-    background: #d1eee6;
+    background: #cfeedd;
 }
 
 .chart-options {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
@@ -230,144 +325,141 @@ main {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-
     padding: 6px 9px;
-
-    border-radius: 18px;
-    border: 1px solid var(--border);
-
-    background: #f7fbfa;
-    color: #416c64;
-
+    background: #ffffff;
+    border: 1px solid #d9e9df;
+    border-radius: 20px;
     font-size: 12px;
+    color: #4d7768;
     cursor: pointer;
     user-select: none;
 }
 
 .chart-option:has(input:checked) {
-    background: #dff5ee;
-    border-color: #55bda8;
-    color: #087465;
+    background: #e0f5e8;
+    border-color: #75c69c;
+    color: #116d4c;
     font-weight: bold;
 }
 
 .chart-option input {
-    accent-color: var(--primary);
+    accent-color: #16875c;
     cursor: pointer;
 }
 
-/* =====================================
-   動態圖表區
-===================================== */
+/* ==============================
+   動態圖表
+============================== */
 
 .chart-grid {
     flex: 1;
     min-height: 0;
     min-width: 0;
-
     display: grid;
-    gap: 10px;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
+    gap: 9px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-auto-rows: minmax(0, 1fr);
 }
 
-/* 一張圖 */
 .chart-grid[data-count="1"] {
     grid-template-columns: 1fr;
     grid-template-rows: minmax(0, 1fr);
 }
 
-/* 兩張圖 */
 .chart-grid[data-count="2"] {
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-rows: minmax(0, 1fr);
 }
 
-/* 三張圖：第三張佔整排 */
 .chart-grid[data-count="3"] {
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-    grid-template-rows:
-        repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 
-.chart-grid[data-count="3"]
-.chart-card:last-child {
+.chart-grid[data-count="3"] .chart-card:last-child {
     grid-column: span 2;
 }
 
-/* 四張圖 */
 .chart-grid[data-count="4"] {
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-    grid-template-rows:
-        repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 
-/* 五、六張圖 */
 .chart-grid[data-count="5"],
 .chart-grid[data-count="6"] {
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-    grid-template-rows:
-        repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 
-/* 五張時最後一張橫向放大 */
-.chart-grid[data-count="5"]
-.chart-card:last-child {
+.chart-grid[data-count="5"] .chart-card:last-child {
     grid-column: span 2;
 }
 
-/* 圖表卡片 */
-
 .chart-card {
-    background: white;
-    border-radius: 14px;
-    box-shadow: 0 4px 15px #00463c12;
-
+    position: relative;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #dcefe1;
+    border-radius: 15px;
     padding: 10px;
-
+    box-shadow: 0 4px 14px #316d4d12;
     display: flex;
     flex-direction: column;
-
     min-height: 0;
     min-width: 0;
-    overflow: hidden;
+}
+
+.chart-card::before {
+    content: "✿";
+    position: absolute;
+    right: 12px;
+    top: 3px;
+    font-size: 24px;
+    color: #f4d2de;
+    opacity: 0.75;
+    pointer-events: none;
+}
+
+.chart-card::after {
+    content: "❧";
+    position: absolute;
+    left: 8px;
+    bottom: 1px;
+    font-size: 22px;
+    color: #c3e8ce;
+    opacity: 0.65;
+    pointer-events: none;
 }
 
 .chart-title {
+    position: relative;
+    z-index: 1;
     font-size: 14px;
     font-weight: bold;
-    color: #1a4d44;
+    color: #245c4a;
     margin-bottom: 5px;
-
     display: flex;
-    align-items: center;
     gap: 7px;
+    align-items: center;
     flex-wrap: wrap;
-
     flex-shrink: 0;
 }
 
 .chart-title span {
     font-size: 10px;
     font-weight: normal;
-    color: var(--muted);
-    background: var(--light);
-    padding: 3px 8px;
+    color: #709185;
+    background: #e9f6ed;
     border-radius: 12px;
+    padding: 3px 8px;
 }
 
 .chart-container {
+    position: relative;
+    z-index: 1;
     flex: 1;
     min-height: 0;
     min-width: 0;
-    position: relative;
 }
 
 .chart-container canvas {
@@ -375,55 +467,57 @@ main {
     height: 100% !important;
 }
 
-/* 沒有選圖表 */
-
 .empty-charts {
     grid-column: 1 / -1;
     display: flex;
-    align-items: center;
     justify-content: center;
-
-    background: white;
-    border-radius: 14px;
-
-    color: #7a9d95;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #dcefe1;
+    border-radius: 15px;
+    color: #709185;
     font-size: 15px;
     text-align: center;
     padding: 20px;
 }
 
-/* =====================================
+/* ==============================
    右側統計
-===================================== */
+============================== */
 
 .right-panel {
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px #00463c12;
-
-    padding: 10px;
-
-    display: flex;
-    flex-direction: column;
-
+    position: relative;
+    overflow: hidden;
     min-height: 0;
     min-width: 0;
-    overflow: hidden;
+    padding: 11px;
+    background: linear-gradient(180deg, #ffffff, #f7fcf7);
+    border: 1px solid #d6eadb;
+    border-radius: 15px;
+    box-shadow: 0 4px 14px #316d4d12;
+    display: flex;
+    flex-direction: column;
 }
 
 .panel-title {
-    color: var(--primary);
+    position: relative;
+    z-index: 1;
+    color: #146d51;
     font-size: 18px;
     font-weight: bold;
 }
 
 #statRangeLabel {
+    position: relative;
+    z-index: 1;
     font-size: 12px;
     color: var(--muted);
     margin-top: 4px;
 }
 
 .controls {
+    position: relative;
+    z-index: 1;
     margin: 10px 0 5px;
     flex-shrink: 0;
 }
@@ -448,38 +542,37 @@ main {
 .btn-group button {
     border: 0;
     border-radius: 16px;
-    background: #eaf5f2;
-    color: #24564f;
-
+    background: #e8f5eb;
+    color: #2b7059;
     padding: 6px 9px;
     font-size: 12px;
-
     cursor: pointer;
 }
 
 .btn-group button.active {
-    background: var(--primary);
+    background: #14865e;
     color: white;
 }
 
 #statsContainer {
+    position: relative;
+    z-index: 1;
     flex: 1;
     min-height: 0;
-
     display: flex;
     flex-direction: column;
     justify-content: space-around;
 }
 
 .stat-section {
-    border-top: 1px solid #e6f0ed;
+    border-top: 1px dashed #c9e4d2;
     padding: 5px 0;
 }
 
 .stat-name {
-    color: #24564f;
     font-size: 13px;
     font-weight: bold;
+    color: #28654d;
     margin-bottom: 3px;
 }
 
@@ -487,49 +580,74 @@ main {
     display: flex;
     justify-content: space-between;
     gap: 5px;
-
-    font-size: 12px;
-    color: #66837d;
     padding: 2px 0;
+    font-size: 12px;
+    color: #688579;
 }
 
 .stat-value {
     font-weight: bold;
-    color: var(--primary);
+    color: var(--green);
     white-space: nowrap;
 }
 
-/* =====================================
+/* ==============================
    底部
-===================================== */
+============================== */
 
 footer {
+    position: relative;
+    flex-shrink: 0;
     text-align: center;
     padding: 5px;
-    color: #8aa8a0;
+    color: #6e9a7c;
     font-size: 11px;
-    flex-shrink: 0;
+    background: #e5f4e7;
+    border-top: 1px solid #cbe8d2;
 }
 
-/* =====================================
-   較矮螢幕
-===================================== */
+footer::before {
+    content: "🌸  🌿  ❀";
+    margin-right: 12px;
+}
+
+footer::after {
+    content: "❀  🌿  🌸";
+    margin-left: 12px;
+}
+
+/* ==============================
+   矮螢幕調整
+============================== */
 
 @media (max-height: 760px) {
     header {
-        padding: 8px 18px;
+        min-height: 80px;
+        padding-top: 8px;
+        padding-bottom: 8px;
     }
 
-    header h1 {
-        font-size: 21px;
+    .header-center h1 {
+        font-size: 24px;
+    }
+
+    .header-center p {
+        font-size: 11px;
+    }
+
+    .flower-left,
+    .flower-right {
+        width: 95px;
+        height: 70px;
     }
 
     main {
-        gap: 8px;
         padding: 8px;
+        gap: 8px;
     }
 
-    .center-panel {
+    .center-panel,
+    .chart-grid {
         gap: 7px;
     }
 
@@ -554,10 +672,6 @@ footer {
         font-size: 11px;
     }
 
-    .chart-grid {
-        gap: 7px;
-    }
-
     .chart-card {
         padding: 7px;
     }
@@ -571,9 +685,27 @@ footer {
     }
 }
 
-/* =====================================
-   平板與手機
-===================================== */
+/* ==============================
+   響應式
+============================== */
+
+@media (max-width: 1050px) {
+    header {
+        padding-left: 120px;
+        padding-right: 120px;
+    }
+
+    .system-status {
+        position: static;
+        width: fit-content;
+        margin: 8px auto 0;
+    }
+
+    header {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+}
 
 @media (max-width: 950px) {
     .dashboard {
@@ -602,13 +734,21 @@ footer {
 
 @media (max-width: 650px) {
     header {
-        flex-direction: column;
-        align-items: flex-start;
+        padding: 15px 10px;
+    }
+
+    .header-center h1 {
+        white-space: normal;
+        font-size: 23px;
+    }
+
+    .flower-left,
+    .flower-right {
+        opacity: 0.3;
     }
 
     .sensor-grid {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .sensor-card {
@@ -634,41 +774,124 @@ footer {
 
 <div class="dashboard">
 
+<!-- ==============================
+     頂部
+============================== -->
+
 <header>
-    <div>
-        <h1>🌿 智慧微藻遮陽換氣系統</h1>
-        <p>
-            Smart Microalgae Shading · 即時環境監控
-        </p>
+
+    <!-- 左側花草 SVG -->
+    <div class="flower-decoration flower-left">
+        <svg class="floral-svg" viewBox="0 0 150 110">
+            <path d="M18 115 Q35 65 52 22"
+                  fill="none"
+                  stroke="#68ad78"
+                  stroke-width="3"/>
+            <path d="M38 75 Q13 52 12 76 Q25 91 38 75"
+                  fill="#8acb94"/>
+            <path d="M43 55 Q69 38 67 61 Q54 70 43 55"
+                  fill="#a1dca3"/>
+            <path d="M27 93 Q57 80 53 103 Q37 109 27 93"
+                  fill="#74bb87"/>
+
+            <g transform="translate(54 23)">
+                <ellipse cx="0" cy="-14" rx="10" ry="17" fill="#f6b9cd"/>
+                <ellipse cx="14" cy="-3" rx="10" ry="17" transform="rotate(72 14 -3)" fill="#f9d1df"/>
+                <ellipse cx="9" cy="14" rx="10" ry="17" transform="rotate(144 9 14)" fill="#f4b5c9"/>
+                <ellipse cx="-9" cy="14" rx="10" ry="17" transform="rotate(216 -9 14)" fill="#f9d1df"/>
+                <ellipse cx="-14" cy="-3" rx="10" ry="17" transform="rotate(288 -14 -3)" fill="#f4b5c9"/>
+                <circle r="9" fill="#f6cf70"/>
+                <circle r="3" fill="#e9a54c"/>
+            </g>
+
+            <path d="M95 115 Q98 78 108 54"
+                  fill="none"
+                  stroke="#80bd84"
+                  stroke-width="3"/>
+            <path d="M101 85 Q78 72 83 92 Q94 100 101 85"
+                  fill="#a0d7a4"/>
+
+            <g transform="translate(109 51) scale(.55)">
+                <ellipse cx="0" cy="-14" rx="10" ry="17" fill="#ffffff"/>
+                <ellipse cx="14" cy="-3" rx="10" ry="17" transform="rotate(72 14 -3)" fill="#fff4e4"/>
+                <ellipse cx="9" cy="14" rx="10" ry="17" transform="rotate(144 9 14)" fill="#ffffff"/>
+                <ellipse cx="-9" cy="14" rx="10" ry="17" transform="rotate(216 -9 14)" fill="#fff4e4"/>
+                <ellipse cx="-14" cy="-3" rx="10" ry="17" transform="rotate(288 -14 -3)" fill="#ffffff"/>
+                <circle r="9" fill="#e9c45f"/>
+            </g>
+        </svg>
+    </div>
+
+    <div class="header-center">
+        <h1>🌿 智慧微藻遮陽換氣系統 🌸</h1>
+        <p>Smart Microalgae Shading · 智慧環境即時監控平台</p>
+        <div class="title-underline"></div>
+    </div>
+
+    <!-- 右側花草 SVG -->
+    <div class="flower-decoration flower-right">
+        <svg class="floral-svg" viewBox="0 0 150 110">
+            <path d="M18 115 Q35 65 52 22"
+                  fill="none"
+                  stroke="#68ad78"
+                  stroke-width="3"/>
+            <path d="M38 75 Q13 52 12 76 Q25 91 38 75"
+                  fill="#8acb94"/>
+            <path d="M43 55 Q69 38 67 61 Q54 70 43 55"
+                  fill="#a1dca3"/>
+            <path d="M27 93 Q57 80 53 103 Q37 109 27 93"
+                  fill="#74bb87"/>
+
+            <g transform="translate(54 23)">
+                <ellipse cx="0" cy="-14" rx="10" ry="17" fill="#f6b9cd"/>
+                <ellipse cx="14" cy="-3" rx="10" ry="17" transform="rotate(72 14 -3)" fill="#f9d1df"/>
+                <ellipse cx="9" cy="14" rx="10" ry="17" transform="rotate(144 9 14)" fill="#f4b5c9"/>
+                <ellipse cx="-9" cy="14" rx="10" ry="17" transform="rotate(216 -9 14)" fill="#f9d1df"/>
+                <ellipse cx="-14" cy="-3" rx="10" ry="17" transform="rotate(288 -14 -3)" fill="#f4b5c9"/>
+                <circle r="9" fill="#f6cf70"/>
+            </g>
+
+            <path d="M95 115 Q98 78 108 54"
+                  fill="none"
+                  stroke="#80bd84"
+                  stroke-width="3"/>
+            <path d="M101 85 Q78 72 83 92 Q94 100 101 85"
+                  fill="#a0d7a4"/>
+
+            <g transform="translate(109 51) scale(.55)">
+                <ellipse cx="0" cy="-14" rx="10" ry="17" fill="#ffffff"/>
+                <ellipse cx="14" cy="-3" rx="10" ry="17" transform="rotate(72 14 -3)" fill="#fff4e4"/>
+                <ellipse cx="9" cy="14" rx="10" ry="17" transform="rotate(144 9 14)" fill="#ffffff"/>
+                <ellipse cx="-9" cy="14" rx="10" ry="17" transform="rotate(216 -9 14)" fill="#fff4e4"/>
+                <ellipse cx="-14" cy="-3" rx="10" ry="17" transform="rotate(288 -14 -3)" fill="#ffffff"/>
+                <circle r="9" fill="#e9c45f"/>
+            </g>
+        </svg>
     </div>
 
     <div class="system-status">
-        🟢 狀態：
-        <span id="status">連線中...</span>
-        <div>
-            🕒 更新：
-            <span id="updateTime">--</span>
-        </div>
+        🌱 系統狀態：<span id="status">連線中...</span>
+        <div>🕒 更新時間：<span id="updateTime">--</span></div>
     </div>
+
 </header>
 
 <main>
 
-<!-- ================================
-     中間主要區域
-================================ -->
+<!-- ==============================
+     主要監控區
+============================== -->
 
 <section class="center-panel">
 
     <div class="section-title">
-        📡 即時環境監測
+        即時環境監測
     </div>
-
-    <!-- 五個即時數據 -->
 
     <div class="sensor-grid">
 
         <div class="sensor-card">
+            <div class="leaf-corner">🌿</div>
             <div class="sensor-icon">🌡️</div>
             <div class="sensor-name">水溫</div>
             <div class="sensor-value">
@@ -678,6 +901,7 @@ footer {
         </div>
 
         <div class="sensor-card">
+            <div class="leaf-corner">🌸</div>
             <div class="sensor-icon">💧</div>
             <div class="sensor-name">濕度</div>
             <div class="sensor-value">
@@ -687,6 +911,7 @@ footer {
         </div>
 
         <div class="sensor-card">
+            <div class="leaf-corner">🍃</div>
             <div class="sensor-icon">🏠</div>
             <div class="sensor-name">室內 CO₂</div>
             <div class="sensor-value">
@@ -696,6 +921,7 @@ footer {
         </div>
 
         <div class="sensor-card">
+            <div class="leaf-corner">🌼</div>
             <div class="sensor-icon">🌳</div>
             <div class="sensor-name">室外 CO₂</div>
             <div class="sensor-value">
@@ -705,6 +931,7 @@ footer {
         </div>
 
         <div class="sensor-card">
+            <div class="leaf-corner">🌿</div>
             <div class="sensor-icon">⚡</div>
             <div class="sensor-name">電壓</div>
             <div class="sensor-value">
@@ -715,90 +942,62 @@ footer {
 
     </div>
 
-    <!-- ================================
-         圖表選擇
-    ================================ -->
+    <!-- 圖表選擇 -->
 
     <div class="chart-selector">
 
         <div class="selector-header">
+
             <div class="selector-title">
-                📈 自訂圖表顯示
+                🌸 自訂圖表顯示
             </div>
 
             <div class="selector-actions">
-                <button
-                    class="small-btn"
-                    onclick="selectAllCharts()"
-                >
+                <button class="small-btn" onclick="selectAllCharts()">
                     全選
                 </button>
-
-                <button
-                    class="small-btn"
-                    onclick="clearAllCharts()"
-                >
+                <button class="small-btn" onclick="clearAllCharts()">
                     清除
                 </button>
             </div>
+
         </div>
 
         <div class="chart-options">
 
             <label class="chart-option">
-                <input
-                    type="checkbox"
-                    value="temperature"
-                    checked
-                    onchange="updateSelectedCharts()"
-                >
+                <input type="checkbox" value="temperature"
+                       checked onchange="updateSelectedCharts()">
                 🌡️ 水溫
             </label>
 
             <label class="chart-option">
-                <input
-                    type="checkbox"
-                    value="humidity"
-                    checked
-                    onchange="updateSelectedCharts()"
-                >
+                <input type="checkbox" value="humidity"
+                       checked onchange="updateSelectedCharts()">
                 💧 濕度
             </label>
 
             <label class="chart-option">
-                <input
-                    type="checkbox"
-                    value="co2Indoor"
-                    onchange="updateSelectedCharts()"
-                >
+                <input type="checkbox" value="co2Indoor"
+                       onchange="updateSelectedCharts()">
                 🏠 室內 CO₂
             </label>
 
             <label class="chart-option">
-                <input
-                    type="checkbox"
-                    value="co2Outdoor"
-                    onchange="updateSelectedCharts()"
-                >
+                <input type="checkbox" value="co2Outdoor"
+                       onchange="updateSelectedCharts()">
                 🌳 室外 CO₂
             </label>
 
             <label class="chart-option">
-                <input
-                    type="checkbox"
-                    value="voltage"
-                    onchange="updateSelectedCharts()"
-                >
+                <input type="checkbox" value="voltage"
+                       onchange="updateSelectedCharts()">
                 ⚡ 電壓
             </label>
 
             <label class="chart-option">
-                <input
-                    type="checkbox"
-                    value="co2Compare"
-                    checked
-                    onchange="updateSelectedCharts()"
-                >
+                <input type="checkbox" value="co2Compare"
+                       checked onchange="updateSelectedCharts()">
                 🌫️ 室內＋室外 CO₂ 比較
             </label>
 
@@ -806,81 +1005,39 @@ footer {
 
     </div>
 
-    <!-- 動態產生圖表 -->
-
-    <div
-        class="chart-grid"
-        id="chartGrid"
-        data-count="3"
-    ></div>
+    <div class="chart-grid" id="chartGrid" data-count="3"></div>
 
 </section>
 
-<!-- ================================
+<!-- ==============================
      右側統計
-================================ -->
+============================== -->
 
 <aside class="right-panel">
 
-    <div class="panel-title">
-        📊 數據統計
-    </div>
-
-    <div id="statRangeLabel">
-        (最近 10 分鐘)
-    </div>
+    <div class="panel-title">🌿 數據統計</div>
+    <div id="statRangeLabel">(最近 10 分鐘)</div>
 
     <div class="controls">
 
         <div class="controls-row">
-            <span class="controls-label">
-                📈 圖表筆數
-            </span>
+            <span class="controls-label">📈 圖表筆數</span>
 
-            <div
-                class="btn-group"
-                id="chartBtnGroup"
-            >
-                <button
-                    class="active"
-                    onclick="changeChartCount(10)"
-                >10筆</button>
-
-                <button
-                    onclick="changeChartCount(20)"
-                >20筆</button>
-
-                <button
-                    onclick="changeChartCount(50)"
-                >50筆</button>
-
-                <button
-                    onclick="changeChartCount(0)"
-                >全部</button>
+            <div class="btn-group" id="chartBtnGroup">
+                <button class="active" onclick="changeChartCount(10)">10筆</button>
+                <button onclick="changeChartCount(20)">20筆</button>
+                <button onclick="changeChartCount(50)">50筆</button>
+                <button onclick="changeChartCount(0)">全部</button>
             </div>
         </div>
 
         <div class="controls-row">
-            <span class="controls-label">
-                ⏱ 統計時間
-            </span>
+            <span class="controls-label">⏱ 統計時間</span>
 
-            <div
-                class="btn-group"
-                id="statBtnGroup"
-            >
-                <button
-                    class="active"
-                    onclick="changeStatRange(10)"
-                >10min</button>
-
-                <button
-                    onclick="changeStatRange(30)"
-                >30min</button>
-
-                <button
-                    onclick="changeStatRange(60)"
-                >60min</button>
+            <div class="btn-group" id="statBtnGroup">
+                <button class="active" onclick="changeStatRange(10)">10min</button>
+                <button onclick="changeStatRange(30)">30min</button>
+                <button onclick="changeStatRange(60)">60min</button>
             </div>
         </div>
 
@@ -893,7 +1050,7 @@ footer {
 </main>
 
 <footer>
-    隊伍編號:大專-創-N075
+    智慧微藻遮陽換氣系統 · 隊伍編號：大專-創-N075
 </footer>
 
 </div>
@@ -901,20 +1058,13 @@ footer {
 <script>
 "use strict";
 
-// ==========================================
-// ThingSpeak 設定
-// ==========================================
+/* ======================================
+   ThingSpeak 設定
+====================================== */
 
 const CHANNEL_ID = "3474112";
 const READ_API_KEY = "IT0OTL4TT1QFKXO8";
 const TIMEZONE = "Asia/Taipei";
-
-// Field 1：水溫
-// Field 2：濕度
-// Field 3：停用
-// Field 4：室內 CO2
-// Field 5：室外 CO2
-// Field 6：電壓
 
 const FIELD_MAP = {
     temperature: "field1",
@@ -924,9 +1074,9 @@ const FIELD_MAP = {
     voltage: "field6"
 };
 
-// ==========================================
-// 圖表設定
-// ==========================================
+/* ======================================
+   六種圖表設定
+====================================== */
 
 const CHART_CONFIG = {
 
@@ -937,7 +1087,7 @@ const CHART_CONFIG = {
             {
                 label: "水溫",
                 field: "field1",
-                color: "#e74c3c"
+                color: "#e76f67"
             }
         ]
     },
@@ -949,7 +1099,7 @@ const CHART_CONFIG = {
             {
                 label: "濕度",
                 field: "field2",
-                color: "#3498db"
+                color: "#5a9fd6"
             }
         ]
     },
@@ -961,7 +1111,7 @@ const CHART_CONFIG = {
             {
                 label: "室內 CO₂",
                 field: "field4",
-                color: "#e76f51"
+                color: "#e98c6c"
             }
         ]
     },
@@ -973,7 +1123,7 @@ const CHART_CONFIG = {
             {
                 label: "室外 CO₂",
                 field: "field5",
-                color: "#3498db"
+                color: "#56a6b3"
             }
         ]
     },
@@ -985,7 +1135,7 @@ const CHART_CONFIG = {
             {
                 label: "電壓",
                 field: "field6",
-                color: "#e5a000"
+                color: "#d7a33b"
             }
         ]
     },
@@ -997,21 +1147,21 @@ const CHART_CONFIG = {
             {
                 label: "室內 CO₂",
                 field: "field4",
-                color: "#e76f51"
+                color: "#e98c6c"
             },
             {
                 label: "室外 CO₂",
                 field: "field5",
-                color: "#3498db"
+                color: "#56a6b3"
             }
         ]
     }
 
 };
 
-// ==========================================
-// 全域變數
-// ==========================================
+/* ======================================
+   全域變數
+====================================== */
 
 let chartCount = 10;
 let statMinutes = 10;
@@ -1030,9 +1180,9 @@ let selectedCharts = [
 
 const $ = id => document.getElementById(id);
 
-// ==========================================
-// 時間格式
-// ==========================================
+/* ======================================
+   時間格式
+====================================== */
 
 function formatTime(date, full = false) {
 
@@ -1050,15 +1200,12 @@ function formatTime(date, full = false) {
         options.day = "2-digit";
     }
 
-    return new Intl.DateTimeFormat(
-        "zh-TW",
-        options
-    ).format(date);
+    return new Intl.DateTimeFormat("zh-TW", options).format(date);
 }
 
-// ==========================================
-// 數值處理
-// ==========================================
+/* ======================================
+   數值處理
+====================================== */
 
 function parseValue(value) {
 
@@ -1072,39 +1219,27 @@ function parseValue(value) {
 
     const number = Number(value);
 
-    return Number.isFinite(number)
-        ? number
-        : null;
+    return Number.isFinite(number) ? number : null;
 }
 
 function setValue(id, value, decimals) {
 
     $(id).textContent =
-        value === null
-            ? "--"
-            : value.toFixed(decimals);
+        value === null ? "--" : value.toFixed(decimals);
 }
 
 function co2Color(value) {
 
-    if (value === null) {
-        return "#0a7a6a";
-    }
+    if (value === null) return "#087c68";
+    if (value >= 1500) return "#dc2626";
+    if (value >= 1000) return "#f97316";
 
-    if (value >= 1500) {
-        return "#dc2626";
-    }
-
-    if (value >= 1000) {
-        return "#f97316";
-    }
-
-    return "#087f6f";
+    return "#087c68";
 }
 
-// ==========================================
-// 取得勾選圖表
-// ==========================================
+/* ======================================
+   圖表勾選
+====================================== */
 
 function getSelectedCharts() {
 
@@ -1115,23 +1250,13 @@ function getSelectedCharts() {
     ).map(input => input.value);
 }
 
-// ==========================================
-// 更新選擇的圖表
-// ==========================================
-
 window.updateSelectedCharts = function() {
 
     selectedCharts = getSelectedCharts();
 
     buildChartCards();
-
     renderCharts();
-
 };
-
-// ==========================================
-// 全選圖表
-// ==========================================
 
 window.selectAllCharts = function() {
 
@@ -1144,10 +1269,6 @@ window.selectAllCharts = function() {
     updateSelectedCharts();
 };
 
-// ==========================================
-// 清除圖表
-// ==========================================
-
 window.clearAllCharts = function() {
 
     document.querySelectorAll(
@@ -1159,33 +1280,27 @@ window.clearAllCharts = function() {
     updateSelectedCharts();
 };
 
-// ==========================================
-// 建立圖表卡片
-// ==========================================
+/* ======================================
+   動態建立圖表卡片
+====================================== */
 
 function buildChartCards() {
 
-    // 先銷毀舊圖表
     Object.values(charts).forEach(chart => {
-        if (chart) {
-            chart.destroy();
-        }
+        if (chart) chart.destroy();
     });
 
     charts = {};
 
     const grid = $("chartGrid");
-
     grid.innerHTML = "";
-
-    grid.dataset.count =
-        selectedCharts.length;
+    grid.dataset.count = selectedCharts.length;
 
     if (!selectedCharts.length) {
 
         grid.innerHTML = `
             <div class="empty-charts">
-                請在上方勾選想顯示的圖表
+                🌷 請在上方勾選想顯示的圖表 🌿
             </div>
         `;
 
@@ -1197,7 +1312,6 @@ function buildChartCards() {
         const config = CHART_CONFIG[key];
 
         const card = document.createElement("div");
-
         card.className = "chart-card";
 
         const title = document.createElement("div");
@@ -1209,9 +1323,7 @@ function buildChartCards() {
         const countLabel = document.createElement("span");
         countLabel.className = "count-label";
         countLabel.textContent =
-            chartCount === 0
-                ? "全部"
-                : chartCount + "筆";
+            chartCount === 0 ? "全部" : chartCount + "筆";
 
         title.appendChild(titleText);
         title.appendChild(countLabel);
@@ -1223,19 +1335,15 @@ function buildChartCards() {
         canvas.id = "chart_" + key;
 
         container.appendChild(canvas);
-
         card.appendChild(title);
         card.appendChild(container);
-
         grid.appendChild(card);
-
     });
-
 }
 
-// ==========================================
-// 切換圖表筆數
-// ==========================================
+/* ======================================
+   圖表筆數切換
+====================================== */
 
 window.changeChartCount = function(count) {
 
@@ -1248,13 +1356,8 @@ window.changeChartCount = function(count) {
         button.classList.toggle(
             "active",
             button.textContent ===
-            (
-                count === 0
-                    ? "全部"
-                    : count + "筆"
-            )
+                (count === 0 ? "全部" : count + "筆")
         );
-
     });
 
     document.querySelectorAll(
@@ -1262,18 +1365,15 @@ window.changeChartCount = function(count) {
     ).forEach(element => {
 
         element.textContent =
-            count === 0
-                ? "全部"
-                : count + "筆";
-
+            count === 0 ? "全部" : count + "筆";
     });
 
     renderCharts();
 };
 
-// ==========================================
-// 切換統計時間
-// ==========================================
+/* ======================================
+   統計時間切換
+====================================== */
 
 window.changeStatRange = function(minutes) {
 
@@ -1287,7 +1387,6 @@ window.changeStatRange = function(minutes) {
             "active",
             button.textContent === minutes + "min"
         );
-
     });
 
     $("statRangeLabel").textContent =
@@ -1296,47 +1395,34 @@ window.changeStatRange = function(minutes) {
     renderStatsFromCache();
 };
 
-// ==========================================
-// 取得曲線資料
-// ==========================================
+/* ======================================
+   取得圖表資料點
+====================================== */
 
 function getPoints(feeds, field) {
 
     return feeds.flatMap(feed => {
 
-        const value = parseValue(
-            feed[field]
-        );
+        const value = parseValue(feed[field]);
 
-        if (value === null) {
-            return [];
-        }
+        if (value === null) return [];
 
         return [{
             x: feed.timestamp,
             y: value
         }];
-
     });
 }
 
-// ==========================================
-// 建立 Chart.js 圖表
-// ==========================================
+/* ======================================
+   建立 Chart.js 圖表
+====================================== */
 
-function createChart(
-    key,
-    config,
-    feeds,
-    start,
-    end
-) {
+function createChart(key, config, feeds, start, end) {
 
     const canvas = $("chart_" + key);
 
-    if (!canvas) {
-        return;
-    }
+    if (!canvas) return;
 
     if (charts[key]) {
         charts[key].destroy();
@@ -1346,10 +1432,7 @@ function createChart(
 
         label: item.label,
 
-        data: getPoints(
-            feeds,
-            item.field
-        ),
+        data: getPoints(feeds, item.field),
 
         borderColor: item.color,
 
@@ -1403,17 +1486,12 @@ function createChart(
                     position: "top",
 
                     labels: {
-
                         usePointStyle: true,
-
                         boxWidth: 9,
-
                         font: {
                             size: 11
                         }
-
                     }
-
                 },
 
                 tooltip: {
@@ -1422,17 +1500,12 @@ function createChart(
 
                         title: context => {
 
-                            if (!context.length) {
-                                return "";
-                            }
+                            if (!context.length) return "";
 
                             return formatTime(
-                                new Date(
-                                    context[0].parsed.x
-                                ),
+                                new Date(context[0].parsed.x),
                                 true
                             );
-
                         },
 
                         label: context => {
@@ -1447,19 +1520,13 @@ function createChart(
                             return (
                                 context.dataset.label +
                                 ": " +
-                                context.parsed.y.toFixed(
-                                    decimals
-                                ) +
+                                context.parsed.y.toFixed(decimals) +
                                 " " +
                                 config.unit
                             );
-
                         }
-
                     }
-
                 }
-
             },
 
             scales: {
@@ -1469,7 +1536,6 @@ function createChart(
                     type: "linear",
 
                     min: start,
-
                     max: end,
 
                     ticks: {
@@ -1481,16 +1547,12 @@ function createChart(
                         },
 
                         callback: value =>
-                            formatTime(
-                                new Date(value)
-                            )
-
+                            formatTime(new Date(value))
                     },
 
                     grid: {
                         display: false
                     }
-
                 },
 
                 y: {
@@ -1504,40 +1566,30 @@ function createChart(
                     },
 
                     grid: {
-                        color: "rgba(0,0,0,0.05)"
+                        color: "rgba(20,100,50,0.06)"
                     }
-
                 }
-
             }
-
         }
-
     });
 }
 
-// ==========================================
-// 更新所有選取的圖表
-// ==========================================
+/* ======================================
+   更新圖表
+====================================== */
 
 function renderCharts() {
 
-    if (!allFeedsCache.length) {
-        return;
-    }
+    if (!allFeedsCache.length) return;
 
     const feeds = chartCount === 0
         ? allFeedsCache
         : allFeedsCache.slice(-chartCount);
 
-    if (!feeds.length) {
-        return;
-    }
+    if (!feeds.length) return;
 
     const firstTs = feeds[0].timestamp;
-
-    const lastTs =
-        feeds[feeds.length - 1].timestamp;
+    const lastTs = feeds[feeds.length - 1].timestamp;
 
     const start = firstTs === lastTs
         ? firstTs - 30000
@@ -1556,14 +1608,12 @@ function renderCharts() {
             start,
             end
         );
-
     });
-
 }
 
-// ==========================================
-// 統計計算
-// ==========================================
+/* ======================================
+   統計計算
+====================================== */
 
 function getStats(feeds, field) {
 
@@ -1571,9 +1621,7 @@ function getStats(feeds, field) {
         .map(feed => parseValue(feed[field]))
         .filter(value => value !== null);
 
-    if (!values.length) {
-        return null;
-    }
+    if (!values.length) return null;
 
     const sum = values.reduce(
         (total, value) => total + value,
@@ -1587,9 +1635,9 @@ function getStats(feeds, field) {
     };
 }
 
-// ==========================================
-// 顯示統計
-// ==========================================
+/* ======================================
+   顯示統計
+====================================== */
 
 function renderStats(feeds) {
 
@@ -1635,25 +1683,17 @@ function renderStats(feeds) {
     $("statsContainer").innerHTML =
         configs.map(config => {
 
-            const stats = getStats(
-                feeds,
-                config.field
-            );
+            const stats = getStats(feeds, config.field);
 
             function display(key) {
 
-                if (!stats) {
-                    return "--";
-                }
+                if (!stats) return "--";
 
                 return (
-                    stats[key].toFixed(
-                        config.decimals
-                    ) +
+                    stats[key].toFixed(config.decimals) +
                     " " +
                     config.unit
                 );
-
             }
 
             return `
@@ -1688,40 +1728,33 @@ function renderStats(feeds) {
             `;
 
         }).join("");
-
 }
 
-// ==========================================
-// 由快取重新計算統計
-// ==========================================
+/* ======================================
+   重新計算統計
+====================================== */
 
 function renderStatsFromCache() {
 
-    if (!latestFeedCache) {
-        return;
-    }
+    if (!latestFeedCache) return;
 
-    const latestTs =
-        latestFeedCache.timestamp;
+    const latestTs = latestFeedCache.timestamp;
 
     const statStart =
-        latestTs -
-        statMinutes * 60 * 1000;
+        latestTs - statMinutes * 60 * 1000;
 
-    const statFeeds =
-        allFeedsCache.filter(feed =>
-
+    const statFeeds = allFeedsCache.filter(
+        feed =>
             feed.timestamp >= statStart &&
             feed.timestamp <= latestTs
-
-        );
+    );
 
     renderStats(statFeeds);
 }
 
-// ==========================================
-// ThingSpeak API
-// ==========================================
+/* ======================================
+   ThingSpeak API
+====================================== */
 
 function getFeedsURL() {
 
@@ -1741,9 +1774,9 @@ function getLatestURL() {
     );
 }
 
-// ==========================================
-// 更新五個即時數據
-// ==========================================
+/* ======================================
+   五個即時數據
+====================================== */
 
 function renderLatestData(latest) {
 
@@ -1773,200 +1806,134 @@ function renderLatestData(latest) {
     setValue("co2Outdoor", co2Outdoor, 0);
     setValue("voltage", voltage, 2);
 
-    $("co2Indoor").style.color =
-        co2Color(co2Indoor);
-
-    $("co2Outdoor").style.color =
-        co2Color(co2Outdoor);
+    $("co2Indoor").style.color = co2Color(co2Indoor);
+    $("co2Outdoor").style.color = co2Color(co2Outdoor);
 
     $("updateTime").textContent =
-        formatTime(
-            new Date(latest.timestamp),
-            true
-        );
+        formatTime(new Date(latest.timestamp), true);
 }
 
-// ==========================================
-// 讀取 ThingSpeak 資料
-// ==========================================
+/* ======================================
+   讀取 ThingSpeak
+====================================== */
 
 async function loadData() {
 
-    if (loading) {
-        return;
-    }
+    if (loading) return;
 
     loading = true;
 
     $("status").textContent = "讀取中...";
-    $("status").style.color = "#ffffff";
+    $("status").style.color = "#4b8067";
 
     try {
 
-        const [
-            feedsResponse,
-            latestResponse
-        ] = await Promise.all([
+        const [feedsResponse, latestResponse] =
+            await Promise.all([
 
-            fetch(getFeedsURL(), {
-                cache: "no-store"
-            }),
+                fetch(getFeedsURL(), {
+                    cache: "no-store"
+                }),
 
-            fetch(getLatestURL(), {
-                cache: "no-store"
-            })
+                fetch(getLatestURL(), {
+                    cache: "no-store"
+                })
 
-        ]);
+            ]);
 
-        if (
-            !feedsResponse.ok ||
-            !latestResponse.ok
-        ) {
-            throw new Error(
-                "ThingSpeak HTTP 錯誤"
-            );
+        if (!feedsResponse.ok || !latestResponse.ok) {
+            throw new Error("ThingSpeak HTTP 錯誤");
         }
 
-        const feedsJSON =
-            await feedsResponse.json();
+        const feedsJSON = await feedsResponse.json();
+        const latest = await latestResponse.json();
 
-        const latest =
-            await latestResponse.json();
-
-        if (
-            !latest ||
-            !latest.created_at
-        ) {
-            throw new Error(
-                "找不到最新資料"
-            );
+        if (!latest || !latest.created_at) {
+            throw new Error("找不到最新資料");
         }
 
         const latestTs =
-            new Date(
-                latest.created_at
-            ).getTime();
+            new Date(latest.created_at).getTime();
 
         if (!Number.isFinite(latestTs)) {
-            throw new Error(
-                "最新資料時間無效"
-            );
+            throw new Error("最新資料時間無效");
         }
 
-        let allFeeds =
-            (feedsJSON.feeds || [])
+        let allFeeds = (feedsJSON.feeds || [])
 
             .map(feed => ({
-
                 ...feed,
-
-                timestamp:
-                    new Date(
-                        feed.created_at
-                    ).getTime()
-
+                timestamp: new Date(
+                    feed.created_at
+                ).getTime()
             }))
 
             .filter(feed =>
-                Number.isFinite(
-                    feed.timestamp
-                )
+                Number.isFinite(feed.timestamp)
             );
 
-        // 合併最新一筆資料
         const latestFeed = {
             ...latest,
             timestamp: latestTs
         };
 
         const index = allFeeds.findIndex(
-            feed =>
-                feed.timestamp === latestTs
+            feed => feed.timestamp === latestTs
         );
 
         if (index >= 0) {
-
             allFeeds[index] = {
                 ...allFeeds[index],
                 ...latestFeed
             };
-
         } else {
-
             allFeeds.push(latestFeed);
-
         }
 
         allFeeds.sort(
-            (a, b) =>
-                a.timestamp - b.timestamp
+            (a, b) => a.timestamp - b.timestamp
         );
 
-        // 儲存快取
         allFeedsCache = allFeeds;
         latestFeedCache = latestFeed;
 
-        // 更新五個即時數據
         renderLatestData(latestFeed);
-
-        // 更新選擇的圖表
         renderCharts();
-
-        // 更新統計
         renderStatsFromCache();
 
-        $("status").textContent =
-            "資料連線正常";
-
-        $("status").style.color =
-            "#7df0d0";
+        $("status").textContent = "資料連線正常";
+        $("status").style.color = "#087c68";
 
     } catch (error) {
 
-        console.error(
-            "ThingSpeak 錯誤:",
-            error
-        );
+        console.error("ThingSpeak 錯誤:", error);
 
-        $("status").textContent =
-            "讀取失敗";
-
-        $("status").style.color =
-            "#fbb5b5";
+        $("status").textContent = "讀取失敗";
+        $("status").style.color = "#dc2626";
 
     } finally {
-
         loading = false;
-
     }
 }
 
-// ==========================================
-// 初始化
-// ==========================================
+/* ======================================
+   初始化
+====================================== */
 
-// 建立預設圖表卡片
 buildChartCards();
-
-// 讀取 ThingSpeak
 loadData();
 
-// 每 15 秒更新一次
+// 每 15 秒更新
 setInterval(loadData, 15000);
 
-// 視窗大小改變時重新調整圖表
+// 視窗大小變化時重新調整圖表
 window.addEventListener("resize", () => {
 
     Object.values(charts).forEach(chart => {
-
-        if (chart) {
-            chart.resize();
-        }
-
+        if (chart) chart.resize();
     });
 
 });
-
 </script>
 
 </body>
